@@ -1,14 +1,22 @@
 package com.learning.pojo;
 
-public class User {
-    private String userName;
+import java.io.Serializable;
+
+import org.springframework.stereotype.Service;
+@Service
+public class User implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private String uid;
     private String password;
     private int position;
-    public String getUserName() {
-        return userName;
+    public String getUid() {
+        return uid;
     }
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
     public String getPassword() {
         return password;

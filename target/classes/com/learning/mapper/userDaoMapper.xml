@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.dao.UserDao">
+	<select id="getNumsOfOneUserName" resultType="int">
+		SELECT count(*) FROM user
+		 WHERE 
+		 uid LIKE  CONCAT(#{0},'') AND 
+		 password LIKE  CONCAT(#{1},'')
+	</select>
+	<select id="getLoginUser" resultType="com.learning.pojo.User">
+		SELECT * FROM user
+		 WHERE 
+		 uid LIKE  CONCAT(#{0},'') AND 
+		 password LIKE  CONCAT(#{1},'')
+	</select>
+	<insert 
+	id="insertUser" 
+	parameterType="com.learning.pojo.User"
+	>
+		INSERT INTO user (
+			uid,
+			password,
+			position
+		) VALUES(
+			uid,
+			password,
+			position
+		);
+	
+	</insert>
+	
+	
+	
+</mapper>

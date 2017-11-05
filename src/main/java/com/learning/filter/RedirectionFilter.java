@@ -38,14 +38,14 @@ public class RedirectionFilter implements Filter{
         HttpServletResponse response=(HttpServletResponse)(res);
         String uri=request.getRequestURI();
         //去掉前面的learning
-        User user=(User)request.getAttribute("user");
+        User user=(User)request.getSession().getAttribute("user");
         System.out.println("before uri:"+uri);
         String rootPrefix=uri.substring(0, uri.indexOf(ConstantUtil.URL_PREFIX, 1));
         uri=uri.substring(uri.indexOf(ConstantUtil.URL_PREFIX, 1));
         System.out.println("after uri:"+uri);
         if(uri.endsWith(".jsp")){
             //不能访问,重定向到根目录
-            //if(!response.isCommitted())response.sendRedirect(ConstantUtil.MAIN_URL);
+            if(!response.isCommitted())response.sendRedirect(rootPrefix);//根目录
             return ;
             
         }
@@ -62,7 +62,8 @@ public class RedirectionFilter implements Filter{
         }else if(user !=null){
             //登录
             if(uri.endsWith("login") || uri.equals("/")){
-                //if(!response.isCommitted())response.sendRedirect(ConstantUtil.MAIN_URL);
+                //定向到
+                if(!response.isCommitted())response.sendRedirect(rootPrefix+ConstantUtil.MAIN_URL);
                 return ;
                 
             }else {
