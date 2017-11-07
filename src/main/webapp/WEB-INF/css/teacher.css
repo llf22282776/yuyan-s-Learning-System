@@ -1,11 +1,96 @@
 @CHARSET "UTF-8";
-.rootContainer{
-    padding: 10px 10px 10px;
 
-
+.rootContainer {
+	padding: 10px 10px 10px;
 }
-.contentDiv{
-	border-radius:5px;
+
+.contentDiv {
+	border-radius: 5px;
+}
+
+.iconSubject {
+	font-size: 56px;
+}
+
+.eleIcon {
+	font-size: 30px;
+}
+
+.addIcon {
+	color: #2980b9;
+}
+
+.addIcon:hover,.addIcon focus {
+	color: #3498db;
+}
+
+.cancelIcon {
+	color: #c0392b;
+}
+
+.cancelIcon:hover,.cancelIcon focus {
+	color: #e74c3c;
+}
+
+.sureIcon {
+	color: #27ae60
+}
+
+.sureIcon:hover,.sureIcon focus {
+	color: #2ecc71;
+}
+
+.subIconLink {
+	font-size: 56px;
+}
+
+.buttomLineDiv {
+	border-bottom: #cccccc;
+	border-bottom-style: dashed;
+}
+
+.topLineDiv {
+	border-top: #cccccc;
+	border-top-style: dashed;
+}
+
+.oneLineRadio {
+	width: 220px;
+	padding-right: 20px;
+	position: relative;
+	float: left;
+}
+
+.linePic {
+	width: 200px;
+	height: 350px;
+	max-width: 100%;
+	left: 0px;
+}
+
+input.fileInputNoView[type="file"] {
+	display: none;
+}
+.inputGroup{
+	width:100%
 	
 	
 }
+.audioStartButton{
+	color:#2980b9;
+	
+	
+}
+.audioStartButton:hover,.audioStartButton focus {
+	color: #3498db;
+}
+.audioStopButton{
+	color:#c0392b;
+	
+	
+}
+.audioStopButton:hover,.audioStopButton focus {
+	color: #e74c3c;
+	
+}
+
