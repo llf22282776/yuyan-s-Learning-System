@@ -145,7 +145,7 @@
 								<c:forEach begin="0" end="3" varStatus="status">
 									<div class="oneLineRadio col-md-12" index=${status.index}>
 										<div class="row">
-											<div class="picPainter" completed="false">
+											<div class="picPainter getter" completed="false">
 												<img id="linePic${status.index}" class="linePic"
 													src="${pageContext.request.contextPath}/img/temp.png" />
 											</div>
@@ -162,7 +162,7 @@
 										</div>
 										<div class="row">
 
-											<div class="mp3Getter" completed="false">
+											<div class="mp3Getter getter" completed="false">
 												<a title="录制音频" id="" class="audioButton eleIcon"
 													data-toggle="tooltip"> <span class="fui-mic eleIcon"></span>
 												</a>
@@ -204,7 +204,7 @@
 
 										</div>
 										<div class="row">
-											<div class="wordGetter" completed="false">
+											<div class="wordGetter getter" completed="false">
 												<div class="form-group  has-feedback inputGroup">
 													<input type="text" value="" placeholder="单词"
 														class="form-control wordInput" /> <span
@@ -213,7 +213,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="scoreGetter" completed="false">
+											<div class="scoreGetter getter" completed="false">
 												<div class="form-group inputGroup">
 													<input type="text" value="" placeholder="分数"
 														class="form-control numberOnlyInput scoreInput" />
@@ -237,7 +237,7 @@
 										<label for="chooseInput${status.index+1}"
 											class="col-sm-1 control-label" style="text-align: right;">${status.index+1}.</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control chooseInput"
+											<input type="text" class="form-control chooseInput" completed="false"
 												id="chooseInput${status.index+1}" placeholder="填写选择题的选项">
 										</div>
 									</div>
@@ -262,7 +262,7 @@
 						</div>
 						<div class="col-md-6" style="text-align: right">
 							<a title="确定" id="subjectSureButton" lastDiv="subjectTotalDiv"
-								class="subIconLink  " data-toggle="tooltip" href="#"> <span
+								class="subIconLink  " data-toggle="tooltip"> <span
 								class="fui-check-circle iconSubject sureIcon"></span>
 							</a>
 
@@ -305,8 +305,10 @@
 		text : "",
 		word : "",
 		pic : "",
-		score : ""
+		score : "",
+		audio:""
 	};
+	var audios=[];
 	var MediaUtils = {
 		    /**
 		     * 获取用户媒体设备(处理兼容的问题)
@@ -518,6 +520,19 @@
 		$(".chooseInput").blur(function(){
 			chooseInputCheck($(this));
 		});
+		$("#subjectSureButton").click(function(){
+			
+			subjectSureButtonClick($(this));
+			
+			
+		});
+		//上传试卷时间
+		$("#subjectSubmitButton").click(function(){
+			
+			upLoadPaper($(this));
+
+		});
+		
 	});
 
 	function topMenuClick(thisEle) {
@@ -621,8 +636,11 @@
 		//1.创建一个audio
 		var audioEle=$("<video></video>");
 		//2 设置属性
-		
 		var url = URL.createObjectURL(recorderFile);
+		//3 保存这个音频文件
+		var index=thisEle.closest(".oneLineRadio").eq(0).attr("index");
+		audios["index"+index]=recorderFile;//保存在这里面，好提取
+		
 		audioEle.attr("src",url);
 		
 		
@@ -692,7 +710,7 @@
 	}
 	function subjectSureButtonClick(thisEle){
 		//1 将element组成一个subject
-		var type=paresInt($(".nowRadio").eq(0).attr("subjectType"));
+		var type=parseInt($(".nowRadio").eq(0).attr("subjectType"));
 		if(combineElementsToSubject(type)){
 			//2 将subject添加到当前试卷的subjectList里面去和面板里面
 			addSubjectToPaperList();
@@ -702,18 +720,21 @@
 			swal({ 
 				  title: "提示", 
 				  text: "出题成功!干的不错", 
-				  type: "sucess",
+				  type: "success",
 				  showCancelButton: false, 
 				  confirmButtonText: "确定", 
-				  closeOnConfirm: false
-				},
-				function(){
-				//返回上一个页面
-					thisEle.closest(".subjectFootDiv").find(".cancelButton").eq(0).click();
+				  closeOnConfirm: true
+				}).then(function(){
+			
+				
+					//返回上一个页面
+						thisEle.closest(".subjectFootDiv").find(".cancelButton").eq(0).click();
+					
+					
 				});
 			
 		}else{
-			swal("","请填写完全 图片/音频/单词/分数 或者 每个选项的文本","warning");
+			swal("","请填写完全","warning");
 			
 		}
 		
@@ -724,55 +745,214 @@
 	function combineElementsToSubject(type){
 		// 0 连线 1 选择 2 填空
 		//1.判断每个元素是否completed=true 如果不是return false
-		if(checkCompletedByType(type)){
+		if(!checkCompletedByType(type)){
 			return false;
 		}
 		//2.提取每个元素，组成一个元素列表
-		
+		var elementsGetted=getElementsByType(type);
 		//3.添加进nowSubject里面
-		
+		nowSubject.elements=elementsGetted;
+		nowSubject.type=type;
+		nowSubject.title=$("#subjectName").val();
+		//现在算下总分
+		nowSubject.totalScore=0;
+		if(nowSubject.type==0){
+			//连线题单独算分
+			for(var i=0;i<nowSubject.elements.length;i++){
+				nowSubject.totalScore+=paresInt(nowSubject.elements[i].score);
+			}
+			
+		}else if(nowSubject.type==1){
+			//选择题就2分
+			nowSubject.totalScore=2;
+			
+			
+		}
+		return true;
 	}
 	function getElementsByType(type){
-		//返回一个elements的数组
-		
-		
+		//根据题目类型返回一个elements的数组
+		var elements=[];//最后返回的数组
+		if(type == 0){
+			//连线题，每个选项需要提取 : 文字 图形 音频 分数，填充在element对象的相应字段里面
+			$(".oneLineRadio").each(function(index,ele){
+				ele=$(ele);
+				var element={};
+				//1.图片数据
+				ele.find(".linePic").eq(0).cropper('getCroppedCanvas').toBlob(function (blob) {
+					element.pic=blob;
+				});
+				//2 声音数据
+				element.audio=audios["index"+ele.attr("index")];
+				//3 单词
+				element.word=ele.find(".wordInput").eq(0).val();
+				//4.分数
+				element.score=ele.find(".scoreInput").eq(0).val();
+				//5 文本元素(没有)
+				element.text="";
+				elements.push(element);
+				
+			});
+			
+			
+		}else if(type == 1){
+			//选择题 提取四个选项,每个选项只用提取
+			$(".chooseInput").each(function(index,ele){
+				//遍历每一个
+				ele=$(ele);
+				var elememt={};
+				element.text=ele.val();
+				elements.push(element);
+				
+			});			
+		}
+		return elements;
 	}
 	function checkCompletedByType(type){
 		//根据type判断响应的区域是否已经完成
 		if(type==0){
 			//连线题，几个getter是否都是completed的状态
-			
-			
+			var isComplete=true;
+			$(".getter").each(function(index,ele){
+				ele=$(ele);
+				if(ele.attr("completed")  == "false")isComplete=false;
+				
+			});
+			return isComplete;
 		}else if(type == 1){
 			//选择题,几输入框是否是填写完全状态
+			var isComplete=true;
+			$(".chooseInput").each(function(index,ele){
+				ele=$(ele);
+				if(ele.attr("completed")  ==  "false")isComplete=false;
+				
+			});
+			return isComplete;
+			
 			
 		}else if(type==2){
 			//填空题，没想好
 			return false;
 			
 		}
-		
+		return false;
 	}
 	function addSubjectToPaperList(){
-		//。1.添加进paper的list里面
+		//1.添加进paper的list里面
+		paper.subjects.push(nowSubject);
+		paper.subjectsNum++;//题目加1
+		paper.totalScore+=nowSubject.totalScore;
 		// 2.添加在外面的面板上
-		
+		addSubjectTototalDivList();
 	}
 	function addSubjectTototalDivList(){
-		//让刚刚添加的题在
+		//让刚刚添加的题在面板上显示出来
+		//一个卡片的形式
+		//创建一个div
+		var subjectCard= $("<div class='row subjectCard'><div class='col-md-1 subjectCardIndex'></div><div class='col-md-1 subjectCardIcon'></div><div class='col-md-8 subjectCardTitle'></div><div class='col-md-1 subjectCardDelete'></div><div>");
+		$(".overviewSubjectDiv").eq(0).append(subjectCard);
+		
+		
+		
+		//题型搞上去
+		//设置icon
+			var iconEle=$("<span></span>");
+		if(nowSubject.type == 0){
+		
+		
+			subjectCard.find(".subjectCardIcon").eq(0).append(iconEle);
+			iconEle.addClass("fui-image");
+			
+		}else if(nowSubject.type == 1){
+		
+			
+			subjectCard.find(".subjectCardIcon").eq(0).append(iconEle);
+			iconEle.addClass("fui-radio-checked");
+			
+		}
+		//设置标题
+		subjectCard.find(".subjectCardTitle").eq(0).text(nowSubject.title);
+		//设置删除按钮
+		var aEle=$("<a></a>");
+		var deleteIcon=$("<span></span>");
+		subjectCard.find(".subjectCardDelete").eq(0).append(aEle);
+		aEle.append(deleteIcon);
+		deleteIcon.addClass("fui-cross-circle");
+		aEle.addClass("deleteSubjectButton");
+		$(".deleteSubjectButton").unbind("click");
+		//给这个添加click函数
+		$(".deleteSubjectButton").bind("click",(function(){
+			subjectDeleteButtonClick($(this));
+		}));
+		//接下来搞顺序
+		$(".subjectCard").each(function(index,element){
+			element=$(element);
+			element.find(".subjectCardIndex").eq(0).text(index);
+
+		});
+		
 		
 	}
 	function cleanSubjectArea(){
 		//清理全部题型的div的残留，确保数据依然保存着
+		/*1.选择题清空
+		  1.completed false
+		  2.pic替换成temp
+		  3.音频删除
+		  4.填空框清空
+		  
+		*/
+		$(".getter").attr("completed",false);
+		$(".linePic").cropper("replace","${pageContext.request.contextPath}/img/temp.png");
+		$(".audioRow").empty();
+		$(".wordInput").val("");
+		$(".scoreInput").val("");
+		/*
+			选择题区域清空
 		
 		
-	}
-	function cleanSpecSubjectArea(type){
-		//清理一个特定的题型区域
+		*/
+		$(".chooseInput").val("");
+		$(".chooseInput").attr("completed",false);
+		$("#subjectName").val("");
 		
+		//数据结构清
 		
+		  nowSubject = {
+				type : -1,
+				title : "",
+				totalScore:0,
+				elements : []
+
+			};
 	}
 	
+	function subjectDeleteButtonClick(thisEle){
+		//删除按钮点击
+		//1.获得index从paper里面删除
+		var index=parseInt( thisEle.closest(".subjectCard").find(".subjectCardIndex").text());
+		var deleteOne=paper.subjects.splice(index,1);
+		//2.总分- 数量-
+		paper.subejectsNum--;
+		paper.totalScore-=deleteOne[0].totalScore;
+		
+		//3 从面板里面删除
+		thisEle.closest(".subjectCard").remove();
+		;
+		//4 重新排序
+		$(".subjectCard").each(function(index,element){
+			element=$(element);
+			element.find(".subjectCardIndex").eq(0).text(index);
+
+		});
+		
+	}
+	function upLoadPaper(thisEle){
+		
+		
+		
+		
+	}
 	
 </script>
 
