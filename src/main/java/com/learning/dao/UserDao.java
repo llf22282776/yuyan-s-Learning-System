@@ -10,7 +10,7 @@ public interface UserDao {
     public User getLoginUser(String uid,String password);
     
     //3.添加一个用户
-    public int insertUser(String uid,String password,int position);
+    public int insertUser(String uid,String password,int position,String uname);
     
     
 }

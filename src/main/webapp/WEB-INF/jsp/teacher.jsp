@@ -38,6 +38,9 @@
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
+<script src="${pageContext.request.contextPath}/js/audioPlugs.js"></script>
+<script
+	src="${pageContext.request.contextPath}/js/menclickAndsubject.js"></script>
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/img/icons/svg/student.ico" />
 </head>
@@ -66,6 +69,8 @@
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
+
+						<li><a>${userName}</a></li>
 						<li><a href="${pageContext.request.contextPath}/logOut"><i
 								style="font-size: 25px;" class="fa fa-sign-out"
 								aria-hidden="true"></i></a></li>
@@ -82,6 +87,17 @@
 			<div id="publishContentDiv" style="display: none"
 				class="jumbotron contentDiv subjectsDiv">
 				<div style="display: block" class="container sDiv subjectTotalDiv">
+					<div class="paperTitleDiv buttomLineDiv row pbl">
+						<div class="form-group  has-feedback">
+							<input type="text" value="" placeholder="试卷标题"
+								class="form-control paperTitleInput" /> <span
+								class="form-control-feedback fui-new"></span>
+						</div>
+
+
+					</div>
+
+
 					<div class="overviewSubjectDiv row pbl">
 						<!-- 这个div里面放置总卡片 ，初始情况没有-->
 					</div>
@@ -233,12 +249,18 @@
 
 							<c:forEach begin="0" end="3" varStatus="status">
 								<div class="row">
-									<div class="form-group">
-										<label for="chooseInput${status.index+1}"
-											class="col-sm-1 control-label" style="text-align: right;">${status.index+1}.</label>
+									<div class="form-group chooseSubjectGroup">
+
+										<label class="radio radio-inline col-sm-1"
+											for="chooseInputRadio${status.index+1}"> <input
+											name="optionsRadios3" type="radio" data-toggle="radio"
+											value="" id="chooseInputRadio${status.index+1}"
+											class="chooseRadio" index="${status.index}" required>
+										</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control chooseInput" completed="false"
-												id="chooseInput${status.index+1}" placeholder="填写选择题的选项">
+											<input type="text" class="form-control chooseInput"
+												completed="false" id="chooseInput${status.index+1}"
+												placeholder="填写选择题的选项">
 										</div>
 									</div>
 								</div>
@@ -275,7 +297,94 @@
 			<div id="queryContentDiv" style="display: none"
 				class="jumbotron contentDiv queryDiv"></div>
 			<div id="addContentDiv" style="display: none"
-				class="jumbotron contentDiv addDiv"></div>
+				class="jumbotron contentDiv addDiv">
+				<div class="container jumbotron addContent">
+
+					<div class=" groupRow row" completed=false>
+						<div class="col-sm-11">
+							<div class="form-group row has-feedback">
+								<input type="text" value="" placeholder="姓名"
+									class="form-control inputGer addContentInput addNameInput" />
+								<span class="form-control-feedback fui-heart"></span>
+							</div>
+						</div>
+						<div class="col-sm-1">
+							<span class="msgSpan"></span>
+						</div>
+					</div>
+					<div style="display: none" class="row tipText">姓名中不可以有空格和非法字符</div>
+
+
+					<div class=" groupRow row" completed=false>
+						<div class="col-sm-11">
+							<div class="form-group row has-feedback">
+								<input type="text" value="" placeholder="账号"
+									class="form-control inputGer addContentInput addUidInput" /> <span
+									class="form-control-feedback fui-user"></span>
+							</div>
+						</div>
+						<div class="col-sm-1">
+							<span class="msgSpan"></span>
+						</div>
+					</div>
+
+					<div style="display: none" class="row tipText">只允许数字，字母和，下划线</div>
+
+
+					<div class=" groupRow row" completed=false>
+						<div class="col-sm-11">
+							<div class="form-group row has-feedback">
+								<input type="password" value="" placeholder="密码"
+									class="form-control inputGer addContentInput addPasswordInput" />
+								<span class="form-control-feedback fui-lock"></span>
+							</div>
+						</div>
+						<div class="col-sm-1">
+							<span class="msgSpan"></span>
+						</div>
+					</div>
+					<div style="display: none" class="row tipText">密码长度大于6位小于16位，只能有数字,字母,下划线</div>
+
+
+					<div class=" groupRow row " completed=false>
+						<div class="col-sm-11">
+							<div class="form-group row has-feedback">
+								<input type="password" value="" placeholder="确认密码"
+									class="form-control inputGer checkPassWordInput" /> <span
+									class="form-control-feedback fui-lock"></span>
+							</div>
+						</div>
+						<div class="col-sm-1">
+							<span class="msgSpan"></span>
+						</div>
+					</div>
+					<div style="display: none" class="row tipText">密码不一致</div>
+
+					<div class=" groupRow row">
+						<label class="radio radio-inline" for="teacherRadio"> <input
+							name="optionsRadios4" type="radio" data-toggle="radio" value=""
+							id="teacherRadio" class="addRadio nowAddRadio" position=1
+							required checked> 老师
+						</label> <label class="radio  radio-inline" for="studentRadio"> <input
+							name="optionsRadios4" type="radio" data-toggle="radio" value=""
+							id="studentRadio" class="addRadio" position=0 required>
+							学生
+						</label>
+					</div>
+					<div class=" groupRow row">
+						<a title="提交" id="addUserButton" class="subIconLink" >
+							<span class="fui-check-circle iconSubject"></span>
+						</a>
+
+					</div>
+				</div>
+
+
+
+
+
+
+			</div>
 			<div style="display: block" class="jumbotron contentDiv tempDiv">
 				<div class="" style="text-align: center">
 					<h3>全国最大的在线考试中心上线啦~</h3>
@@ -288,17 +397,19 @@
 </body>
 <script>
 	var paper = {
-		subjects:[],
-		date:"2017-10-10 10:10:00",
-		title:"一张试卷",
-		totalScore:100,
-		subjectsNum:0,
+		subjects : [],
+		date : "2017-10-10 10:10:00",
+		title : "一张试卷",
+		totalScore : 0,
+		subjectsNum : 0,
+		pid : -1,
 	};
 	var nowSubject = {
 		type : 0,
 		title : "",
-		totalScore:10,
-		elements : []
+		totalScore : 10,
+		elements : [],
+		index : 0
 
 	};
 	var element = {
@@ -306,125 +417,11 @@
 		word : "",
 		pic : "",
 		score : "",
-		audio:""
+		audio : ""
 	};
-	var audios=[];
-	var MediaUtils = {
-		    /**
-		     * 获取用户媒体设备(处理兼容的问题)
-		     * @param videoEnable {boolean} - 是否启用摄像头
-		     * @param audioEnable {boolean} - 是否启用麦克风
-		     * @param callback {Function} - 处理回调
-		     */
-		    getUserMedia: function (videoEnable, audioEnable, callback) {
-		        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
-		            || navigator.msGetUserMedia || window.getUserMedia;
-		        var constraints = {video: videoEnable, audio: audioEnable};
-		        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-		            navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-		                callback(false, stream);
-		            })['catch'](function(err) {
-		                callback(err);
-		            });
-		        } else if (navigator.getUserMedia) {
-		            navigator.getUserMedia(constraints, function (stream) {
-		                callback(false, stream);
-		            }, function (err) {
-		                callback(err);
-		            });
-		        } else {
-		            callback(new Error('Not support userMedia'));
-		        }
-		    },
+	var audios = [];
+	var lastIndex = 0;
 
-		    /**
-		     * 关闭媒体流
-		     * @param stream {MediaStream} - 需要关闭的流
-		     */
-		    closeStream: function (stream) {
-		        if (typeof stream.stop === 'function') {
-		            stream.stop();
-		        }
-		        else {
-		            let trackList = [stream.getAudioTracks(), stream.getVideoTracks()];
-
-		            for (let i = 0; i < trackList.length; i++) {
-		                let tracks = trackList[i];
-		                if (tracks && tracks.length > 0) {
-		                    for (let j = 0; j < tracks.length; j++) {
-		                        let track = tracks[j];
-		                        if (typeof track.stop === 'function') {
-		                            track.stop();
-		                        }
-		                    }
-		                }
-		            }
-		        }
-		    }
-		}; 
-	// 用于存放 MediaRecorder 对象和音频Track，关闭录制和关闭媒体设备需要用到
-	var recorder, mediaStream;
-
-	// 用于存放录制后的音频文件对象和录制结束回调
-	var recorderFile, stopRecordCallback;
-	//录制回调
-	// 用于存放是否开启了视频录制
-	var videoEnabled = false;
-
-	// 录制短语音
-	function startRecord(enableVideo) {
-	    videoEnabled = enableVideo;
-	    MediaUtils.getUserMedia(enableVideo, true, function (err, stream) {
-	        if (err) {
-	            throw err;
-	        } else {
-	            // 通过 MediaRecorder 记录获取到的媒体流
-	            recorder = new MediaRecorder(stream);
-	            mediaStream = stream;
-	            var chunks = [], startTime = 0;
-	            recorder.ondataavailable = function(e) {
-	                chunks.push(e.data);
-	            };
-	            recorder.onstop = function (e) {
-	                recorderFile = new Blob(chunks, { 'type' : recorder.mimeType });
-	                chunks = [];
-	                if (null != stopRecordCallback) {
-	                    stopRecordCallback();
-	                }
-	            };
-	            recorder.start();
-	        }
-	    });
-	}
-
-	// 停止录制
-	function stopRecord(callback) {
-	    stopRecordCallback = callback;
-	    // 终止录制器
-	    recorder.stop();
-	    // 关闭媒体流
-	    MediaUtils.closeStream(mediaStream);
-	}
-
-	// 播放录制的音频
-	function playRecord() {
-	    var url = URL.createObjectURL(recorderFile);
-	    var dom = document.createElement(videoEnabled ? 'video' : 'audio');
-	    dom.autoplay = true;
-	    dom.src = url;
-	    if (videoEnabled) {
-	        dom.width = 640;
-	        dom.height = 480;
-	        dom.style.zIndex = '9999999';
-	        dom.style.position = 'fixed';
-	        dom.style.left = '0';
-	        dom.style.right = '0';
-	        dom.style.top = '0';
-	        dom.style.bottom = '0';
-	        dom.style.margin = 'auto';
-	        document.body.appendChild(dom);
-	    }
-	}
 	$(document).ready(function() {
 		//刚刚加载进来
 		//设置提示
@@ -474,486 +471,250 @@
 
 		});
 		//上传音频点击事件
-		$(".audioButton").click(function(){
-			
+		$(".audioButton").click(function() {
+
 			audioUploadClick($(this));
-			
-			
+
 		});
 		//音频开始录制点击事件
-		
-		$(".audioStartButton").click(function(){
+
+		$(".audioStartButton").click(function() {
 			//开始录制声音
 			startWordAudioRecord($(this));
 		});
 		//音频结束录制点击事件
-		$(".audioStopButton").click(function(){
+		$(".audioStopButton").click(function() {
 			//结束录制声音
 			stopWordAudioRecord($(this));
 		});
 		//音频确认录制点击事件
-		$(".audioSureButton").click(function(){
+		$(".audioSureButton").click(function() {
 			//
 			sureAudioRecord($(this));
 		});
 		//数字输入框输入事件
-		$(".numberOnlyInput").keypress(function(evt){
-			  var ev = evt.which?evt.which:window.event.keyCode;
-			    if(ev>=48&&ev<=57 || ev==8){
-			        return true;    
-			    }else{
-			        return false;
-			    }
+		$(".numberOnlyInput").keypress(function(evt) {
+			var ev = evt.which ? evt.which : window.event.keyCode;
+			if (ev >= 48 && ev <= 57 || ev == 8) {
+				return true;
+			} else {
+				return false;
+			}
 		}).focus(function() {
-            this.style.imeMode='disabled';
-        });;
-		//数字/单词输入框光标离开
-		$(".wordInput").blur(function(){
-			wordInputCheck($(this));
-			
+			this.style.imeMode = 'disabled';
 		});
-		$(".scoreInput").blur(function(){
+		//题目框输入事件
+		$(".paperTitleInput").keypress(function(evt) {
+			var t = $(this).val().trim();
+			if (t != "") {
+				return true;
+			} else {
+				return false;
+			}
+		});
+		$("#subjectHelpButton").click(function() {
+			//
+			swal("", "我微信号:llf_soft,仅限姑娘联系，谢谢", "info");
+
+		});
+		//  数字/单词输入框光标离开
+		$(".wordInput").blur(function() {
+			wordInputCheck($(this));
+
+		});
+		$(".scoreInput").blur(function() {
 			scoreInputCheck($(this));
-				
-			});
+
+		});
 		//选择题选项
-		$(".chooseInput").blur(function(){
+		$(".chooseInput").blur(function() {
 			chooseInputCheck($(this));
 		});
-		$("#subjectSureButton").click(function(){
-			
+		$("#subjectSureButton").click(function() {
+
 			subjectSureButtonClick($(this));
-			
-			
+
 		});
 		//上传试卷时间
-		$("#subjectSubmitButton").click(function(){
-			
+		$("#subjectSubmitButton").click(function() {
+
 			upLoadPaper($(this));
 
+		});
+
+		//选择题选项被点击
+		$(".chooseRadio").click(function() {
+			radioChooseClick($(this));
+
+		});
+		//添加人员输入框
+		$(".addContentInput").blur(function() {
+			userInputBlur($(this));
+
+		});
+		//检察密码输入框
+		$(".checkPassWordInput").blur(function() {
+			checkPasswordEqual($(this));
+		});
+		//position radio选项
+		$(".addRadio").click(function() {
+			positionRadioClick($(this));
+		});
+		$("#addUserButton").click(function() {
+			sumitPeople($(this));
 		});
 		
 	});
 
-	function topMenuClick(thisEle) {
-		//顶部菜单发生点击事件
-		//1.去掉所有的active效果
-		$(".menuItem").removeClass("active");
-		//2.给这个元素添加active的class
-		thisEle.addClass("active");
-		//3.切换content
-		changeContentDiv(thisEle.attr("contentId"));
-	}
-	function changeContentDiv(contentId) {
-		//1.隐藏所有contentDiv
-		$(".contentDiv").css("display", "none");
+	function checkNumOrLitterOrsubLine(thisEle) {
+		//是不是数字字母和下划线,如果是姓名
+		var reg1 = /(^\s+)|(\s+$)/g;
+		var reg2 = /^[\w]{6,12}$/;
+		if (thisEle.hasClass("addNameInput")) {
+			//执行第一个reg1
+			return !reg1.test(thisEle.val());
+		} else {
+			return reg2.test(thisEle.val());
 
-		//2.显示这个id的DIV
-		$("#" + contentId).css("display", "block");
-
-	}
-	function subjectAddButtonClick() {
-		//添加题目按钮被电击
-		//1.所有sDiv都为none
-		$(".sDiv").css("display", "none");
-		//2 设置subjectContentDiv为block
-		$(".subjectContentDiv").css("display", "block");
-		//点一下
-		$("#lineRadio").click();
-		//设置一下lineRadio选中
-		
-		$("#lineRadio").prop("checked",true);
-	}
-	function subjectRadioClick(thisEle) {
-		//题型单选框被点击
-		//1.所有题型面板sContDiv隐藏
-		$(".sContDiv").css("display", "none");
-		//2.让这个radio对应的div显示出来
-		$("." + thisEle.attr("id") + "-subjectDiv").css("display", "block");
-		//3.让其他radio失去nowRadio属性
-		$(".subjectRadio").removeClass("nowRadio");
-		//4.让自己获得nowRadio属性
-		thisEle.addClass("nowRadio");
-	}
-	function cancelButtonClick(thisEle) {
-		//返回按钮触犯
-		//1 从lastDiv获得上一个div 从levelDiv获得同级div
-		$("." + thisEle.attr("levelDiv")).css("display", "none");
-		$("." + thisEle.attr("lastDiv")).css("display", "block");
-
-	}
-	function picButtonClick(thisEle) {
-		//1.打开文件上传框
-		thisEle.closest(".row").find(".picInput").eq(0).click();
-
-		//2.选择图片文件
-		//3.在onchange函数里面，更改剪裁区图片	
-
-	}
-	function picFileChange(thisEle) {
-		//1.更改cropper显示图片
-		var oFReader = new FileReader();
-		var file = thisEle.get(0).files[0];
-		oFReader.readAsDataURL(file);
-		oFReader.onloadend = function(oFRevent) {
-			var src = oFRevent.target.result;
-			thisEle.closest(".oneLineRadio").find(".linePic").eq(0).cropper(
-					"replace", src);
-			//2.更改complete属性为true 
-			thisEle.closest(".oneLineRadio").find(".picPainter").attr(
-					"completed", true);
-			console.log("change!");
 		}
 
 	}
-	function startWordAudioRecord(thisEle){
-		//通过这个函数开始录制声音
-		//1.清空原来的audio的div ,清空原来的播放器
-		thisEle.closest(".modal-body").find(".audioRow").eq(0).empty();
-		//2.开始录制
-		startRecord(false);
-		//4.设置completed false
-		
-		thisEle.closest(".mp3Getter").attr("completed",false);
-		//3.开始按钮置false，结束按钮置true
-		changeAudioButton(thisEle,true);
-		
-	}
-	function changeAudioButton(thisEle,isPlay){
-		thisEle.parent().find(".audioStartButton").eq(0).css("display",isPlay==true?"none":"block");
-		thisEle.parent().find(".audioStopButton").eq(0).css("display",isPlay==true?"block":"none");
-		
-	}
-	function stopWordAudioRecord(thisEle){
-		//这里要做的事情
-		//1.停止录制 	//2 添加一个播放器,src放置成刚刚录制的src
-		stopRecord(function(){
-			stopAudioCallBack(thisEle);
-		});
-	}
-	function stopAudioCallBack(thisEle){
-		
-		//1.创建一个audio
-		var audioEle=$("<video></video>");
-		//2 设置属性
-		var url = URL.createObjectURL(recorderFile);
-		//3 保存这个音频文件
-		var index=thisEle.closest(".oneLineRadio").eq(0).attr("index");
-		audios["index"+index]=recorderFile;//保存在这里面，好提取
-		
-		audioEle.attr("src",url);
-		
-		
-		//3.在audioRow上放置
-		thisEle.closest(".modal-body").find(".audioRow").eq(0).append(audioEle);
-		audioEle.css("width","100%");
-		audioEle.css("height","40px");
-		audioEle.attr("autoplay","");
-		audioEle.attr("controls","");
-		//4.设置按钮
-		changeAudioButton(thisEle,false);
-		
-	}
-	function sureAudioRecord(thisEle){
-		
-		
-		//1 判断audioDiv里面有没有audio,
-		var length=thisEle.closest(".modal-body").find(".audioRow").eq(0).children().length;
-		//如果有，completed置为true，没有弹出框警告
-		if(length<1){
-			swal("","你没有录音","warning");
-			
-		}else {
-			
-			thisEle.closest(".mp3Getter").attr("completed",true);
-			thisEle.closest(".audioRecordModal").modal("hide");
+	function userInputBlur(thisEle) {
+		//检察是不是合适
+		if (checkNumOrLitterOrsubLine(thisEle) == false) {
+			//显示出下面的div
+			//显示错
+			changeDivRightOrWrong(thisEle, false);
+		} else {
+			//收起div
+			//显示对
+			changeDivRightOrWrong(thisEle, true);
+
 		}
+
 	}
-	function audioUploadClick(thisEle){
-		//点击了上传音频的按钮
-		//1.打开模态框
-		thisEle.parent().find(".audioRecordModal").eq(0).modal("show");
+	function changeDivRightOrWrong(thisEle, type) {
+		var textDivEle = thisEle.closest(".groupRow").next();//
+		var spanEle = thisEle.closest(".groupRow").find(".msgSpan");
+		if (type == false) {
+
+			textDivEle.css("display", "block");
+			spanEle.removeClass("fui-check");
+			spanEle.addClass("fui-cross");
+			spanEle.removeClass("rightIcon");
+			spanEle.addClass("wrongIcon");
+			thisEle.closest(".groupRow").attr("completed", false);
+		} else {
+
+			textDivEle.css("display", "none");
+			spanEle.removeClass("fui-cross")
+			spanEle.addClass("fui-check");
+			spanEle.removeClass("wrongIcon");
+			spanEle.addClass("rightIcon");
+			thisEle.closest(".groupRow").attr("completed", true);
+		}
+
 	}
-	function wordInputCheck(thisEle){
-		//检查是否长度小于1，如果不是，completed true
-		if(thisEle.val().length>=1){
-			thisEle.closest(".wordGetter").attr("completed",true);
+	function checkPasswordEqual(thisEle) {
+		if (thisEle.closest(".addContent").find(".addPasswordInput").val() == thisEle
+				.val()) {
+			changeDivRightOrWrong(thisEle, true);
+
+		} else {
+			changeDivRightOrWrong(thisEle, false);
+
+		}
+
+	}
+	function positionRadioClick(thisEle) {
+
+		//nowAddRadio放在这个属性上
+		$(".positionRadio").removeClass("nowAddRadio");
+		thisEle.removeClass("nowAddRadio");
+
+	}
+	function sumitPeople(){
+		if(completeCheck() == false){
 			
-		}else {
-			thisEle.closest(".wordGetter").attr("completed",false);
+			swal("错误","请填写完全","warning");
+			return ;
 		}
 		
-	}
-	function chooseInputCheck(thisEle){
-		//检查是否长度小于1，如果不是，completed true
-		if(thisEle.val().length>=1){
-			thisEle.attr("completed",true);
-			
-		}else {
-			
-			thisEle.attr("completed",false);
-			
-		}
 		
-	}
-	function scoreInputCheck(thisEle){
-		//检查是否为数字，如果是，complete true
-		if(thisEle.val().length>=1 && isNaN(parseInt(thisEle.val()))==false){
-			thisEle.closest(".scoreGetter").attr("completed",true);
-			
-		}
-		else {
-			
-			thisEle.closest(".scoreGetter").attr("completed",false);
-		}
 		
-	}
-	function subjectSureButtonClick(thisEle){
-		//1 将element组成一个subject
-		var type=parseInt($(".nowRadio").eq(0).attr("subjectType"));
-		if(combineElementsToSubject(type)){
-			//2 将subject添加到当前试卷的subjectList里面去和面板里面
-			addSubjectToPaperList();
-			//3.清空出题区域
-			cleanSubjectArea();
-			//4.弹出提示，表示成功，点击确定返回上一个页面
-			swal({ 
-				  title: "提示", 
-				  text: "出题成功!干的不错", 
-				  type: "success",
-				  showCancelButton: false, 
-				  confirmButtonText: "确定", 
-				  closeOnConfirm: true
-				}).then(function(){
-			
+		swal({
+			  title: '提示',
+			  text: "确定现在要添加吗",
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: '是的',
+			  cancelButtonText: '我再想想吧',
+			}).then(function () {
 				
-					//返回上一个页面
-						thisEle.closest(".subjectFootDiv").find(".cancelButton").eq(0).click();
+				$.ajax({
+					url: "${pageContext.request.contextPath}/insertUser" ,  
+			        type: 'POST',  
+			        dataType:"JSON",
+			        contentType:"application/json",
+			        async: true,  
+			        data: JSON.stringify(combineToUserJson()),
+					success:function(data){
+						if(data.result == true || data.result == "true"){
+							swal("","添加成功","success");
+							clearAddArea();
+						}else {
+							
+							swal("错误","添加失败","error");
+						}
+							
+						
+					},
+					error:function(){
+						
+						swal("错误","网络错误,添加失败","error");
+					}
 					
 					
-				});
-			
-		}else{
-			swal("","请填写完全","warning");
-			
-		}
-		
-		
-		
+				})
+				
+			},function(){
+				
+				
+				
+				
+			})
 		
 	}
-	function combineElementsToSubject(type){
-		// 0 连线 1 选择 2 填空
-		//1.判断每个元素是否completed=true 如果不是return false
-		if(!checkCompletedByType(type)){
-			return false;
-		}
-		//2.提取每个元素，组成一个元素列表
-		var elementsGetted=getElementsByType(type);
-		//3.添加进nowSubject里面
-		nowSubject.elements=elementsGetted;
-		nowSubject.type=type;
-		nowSubject.title=$("#subjectName").val();
-		//现在算下总分
-		nowSubject.totalScore=0;
-		if(nowSubject.type==0){
-			//连线题单独算分
-			for(var i=0;i<nowSubject.elements.length;i++){
-				nowSubject.totalScore+=paresInt(nowSubject.elements[i].score);
+	function completeCheck(){
+		var completed=true;
+		$(".inputGer").each(function(index,ele){
+			ele=$(ele).closest(".groupRow");
+			if(ele.attr("completed")==false || ele.attr("completed")=="false" ){
+				completed=false;
+				
+				
 			}
 			
-		}else if(nowSubject.type==1){
-			//选择题就2分
-			nowSubject.totalScore=2;
 			
-			
-		}
-		return true;
-	}
-	function getElementsByType(type){
-		//根据题目类型返回一个elements的数组
-		var elements=[];//最后返回的数组
-		if(type == 0){
-			//连线题，每个选项需要提取 : 文字 图形 音频 分数，填充在element对象的相应字段里面
-			$(".oneLineRadio").each(function(index,ele){
-				ele=$(ele);
-				var element={};
-				//1.图片数据
-				ele.find(".linePic").eq(0).cropper('getCroppedCanvas').toBlob(function (blob) {
-					element.pic=blob;
-				});
-				//2 声音数据
-				element.audio=audios["index"+ele.attr("index")];
-				//3 单词
-				element.word=ele.find(".wordInput").eq(0).val();
-				//4.分数
-				element.score=ele.find(".scoreInput").eq(0).val();
-				//5 文本元素(没有)
-				element.text="";
-				elements.push(element);
-				
-			});
-			
-			
-		}else if(type == 1){
-			//选择题 提取四个选项,每个选项只用提取
-			$(".chooseInput").each(function(index,ele){
-				//遍历每一个
-				ele=$(ele);
-				var elememt={};
-				element.text=ele.val();
-				elements.push(element);
-				
-			});			
-		}
-		return elements;
-	}
-	function checkCompletedByType(type){
-		//根据type判断响应的区域是否已经完成
-		if(type==0){
-			//连线题，几个getter是否都是completed的状态
-			var isComplete=true;
-			$(".getter").each(function(index,ele){
-				ele=$(ele);
-				if(ele.attr("completed")  == "false")isComplete=false;
-				
-			});
-			return isComplete;
-		}else if(type == 1){
-			//选择题,几输入框是否是填写完全状态
-			var isComplete=true;
-			$(".chooseInput").each(function(index,ele){
-				ele=$(ele);
-				if(ele.attr("completed")  ==  "false")isComplete=false;
-				
-			});
-			return isComplete;
-			
-			
-		}else if(type==2){
-			//填空题，没想好
-			return false;
-			
-		}
-		return false;
-	}
-	function addSubjectToPaperList(){
-		//1.添加进paper的list里面
-		paper.subjects.push(nowSubject);
-		paper.subjectsNum++;//题目加1
-		paper.totalScore+=nowSubject.totalScore;
-		// 2.添加在外面的面板上
-		addSubjectTototalDivList();
-	}
-	function addSubjectTototalDivList(){
-		//让刚刚添加的题在面板上显示出来
-		//一个卡片的形式
-		//创建一个div
-		var subjectCard= $("<div class='row subjectCard'><div class='col-md-1 subjectCardIndex'></div><div class='col-md-1 subjectCardIcon'></div><div class='col-md-8 subjectCardTitle'></div><div class='col-md-1 subjectCardDelete'></div><div>");
-		$(".overviewSubjectDiv").eq(0).append(subjectCard);
-		
-		
-		
-		//题型搞上去
-		//设置icon
-			var iconEle=$("<span></span>");
-		if(nowSubject.type == 0){
-		
-		
-			subjectCard.find(".subjectCardIcon").eq(0).append(iconEle);
-			iconEle.addClass("fui-image");
-			
-		}else if(nowSubject.type == 1){
-		
-			
-			subjectCard.find(".subjectCardIcon").eq(0).append(iconEle);
-			iconEle.addClass("fui-radio-checked");
-			
-		}
-		//设置标题
-		subjectCard.find(".subjectCardTitle").eq(0).text(nowSubject.title);
-		//设置删除按钮
-		var aEle=$("<a></a>");
-		var deleteIcon=$("<span></span>");
-		subjectCard.find(".subjectCardDelete").eq(0).append(aEle);
-		aEle.append(deleteIcon);
-		deleteIcon.addClass("fui-cross-circle");
-		aEle.addClass("deleteSubjectButton");
-		$(".deleteSubjectButton").unbind("click");
-		//给这个添加click函数
-		$(".deleteSubjectButton").bind("click",(function(){
-			subjectDeleteButtonClick($(this));
-		}));
-		//接下来搞顺序
-		$(".subjectCard").each(function(index,element){
-			element=$(element);
-			element.find(".subjectCardIndex").eq(0).text(index);
-
 		});
+		return completed;
+		
+	}
+	function combineToUserJson(){
+		user={};
+		user.uid=$(".addUidInput").val();
+		user.uname=$(".addNameInput").val();
+		user.position=$(".nowAddRadio").attr("position");
+		user.password=$(".addPasswordInput").val();
+		return user;
+		
+	}
+	function clearAddArea(){
+		
+		$(".inputGer").val("");
 		
 		
 	}
-	function cleanSubjectArea(){
-		//清理全部题型的div的残留，确保数据依然保存着
-		/*1.选择题清空
-		  1.completed false
-		  2.pic替换成temp
-		  3.音频删除
-		  4.填空框清空
-		  
-		*/
-		$(".getter").attr("completed",false);
-		$(".linePic").cropper("replace","${pageContext.request.contextPath}/img/temp.png");
-		$(".audioRow").empty();
-		$(".wordInput").val("");
-		$(".scoreInput").val("");
-		/*
-			选择题区域清空
-		
-		
-		*/
-		$(".chooseInput").val("");
-		$(".chooseInput").attr("completed",false);
-		$("#subjectName").val("");
-		
-		//数据结构清
-		
-		  nowSubject = {
-				type : -1,
-				title : "",
-				totalScore:0,
-				elements : []
-
-			};
-	}
-	
-	function subjectDeleteButtonClick(thisEle){
-		//删除按钮点击
-		//1.获得index从paper里面删除
-		var index=parseInt( thisEle.closest(".subjectCard").find(".subjectCardIndex").text());
-		var deleteOne=paper.subjects.splice(index,1);
-		//2.总分- 数量-
-		paper.subejectsNum--;
-		paper.totalScore-=deleteOne[0].totalScore;
-		
-		//3 从面板里面删除
-		thisEle.closest(".subjectCard").remove();
-		;
-		//4 重新排序
-		$(".subjectCard").each(function(index,element){
-			element=$(element);
-			element.find(".subjectCardIndex").eq(0).text(index);
-
-		});
-		
-	}
-	function upLoadPaper(thisEle){
-		
-		
-		
-		
-	}
-	
 </script>
 
 

@@ -11,7 +11,9 @@ public class User implements Serializable{
     private static final long serialVersionUID = 1L;
     private String uid;
     private String password;
+    private String uname;
     private int position;
+   
     public String getUid() {
         return uid;
     }
@@ -30,5 +32,12 @@ public class User implements Serializable{
     public void setPosition(int position) {
         this.position = position;
     }
+    public String getUname() {
+        return uname;
+    }
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+    
     
 }

@@ -71,50 +71,82 @@
 input.fileInputNoView[type="file"] {
 	display: none;
 }
-.inputGroup{
-	width:100%
-	
-	
+
+.inputGroup {
+	width: 100%
 }
-.audioStartButton{
-	color:#2980b9;
-	
-	
+
+.audioStartButton {
+	color: #2980b9;
 }
+
 .audioStartButton:hover,.audioStartButton:focus {
 	color: #3498db;
 }
-.audioStopButton{
-	color:#c0392b;
-	
-	
+
+.audioStopButton {
+	color: #c0392b;
 }
+
 .audioStopButton:hover,.audioStopButton:focus {
 	color: #e74c3c;
-	
 }
-.subjectCard{
-background-color: #f9f9f9;
-border-radius: 10px;
-height: 100px;
-padding-top: 20px;
-font-size: 30px;
-    margin-bottom: 10px;
+
+.subjectCard {
+	background-color: #f9f9f9;
+	border-radius: 10px;
+	height: 100px;
+	padding-top: 20px;
+	font-size: 30px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	text-align: center;
 }
-.subjectCardIcon>.fui-radio-checked{
+
+.subjectCard>.subjectCardTitle {
+	text-align: left;
+}
+
+.subjectCardIcon>.fui-radio-checked {
 	color: darkseagreen;
 }
-.subjectCardIcon>.fui-image{
+
+.subjectCardIcon>.fui-image {
 	color: lightsalmon;
 }
 
-.deleteSubjectButton:hover,.deleteSubjectButton:focus{
+.deleteSubjectButton:hover,.deleteSubjectButton:focus {
+	color: #e74c3c;
+}
+
+.deleteSubjectButton {
+	color: #c0392b;
+}
+.addContent{
+	background-color: #fafaff;
+border-radius: 42px;
+margin-left: 24%;
+margin-right: 20%;
+width: 50%;
+text-align: center;
+	
+	
+}
+
+.addContent>.groupRow{
+	width: 60%;
+margin-left: 20%;
+	margin-top: 20px;
+	 
+}
+.addContent>.groupRow:last-child{
+	margin-bottom: -10px;
+	
+	
+}
+.wrongIcon{
 	color:#e74c3c;
-	
 }
-
-.deleteSubjectButton{
-	color:#c0392b;
-	
+.rightIcon{
+	color:#2ecc71;
 }
-

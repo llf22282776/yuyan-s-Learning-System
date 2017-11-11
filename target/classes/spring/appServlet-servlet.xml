@@ -115,6 +115,7 @@
 	<mvc:resources mapping="/fonts/**" location="/WEB-INF/fonts/" />
 	<mvc:resources mapping="/font/**" location="/WEB-INF/font/" />
 	<mvc:resources mapping="/assets/**" location="/WEB-INF/assets/" />
+	<mvc:resources mapping="/upload/**" location="/WEB-INF/upload/" />
 	<!-- <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer"> 
 		<property name="resourceLoaderPath"> <value>/WEB-INF/jsp/</value> </property> 
 		<property name="velocityProperties"> <props> <prop key="input.encoding">utf-8</prop> 
