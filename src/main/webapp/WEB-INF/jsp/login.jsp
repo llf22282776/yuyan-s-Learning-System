@@ -29,7 +29,7 @@
 		<div class="login-screen">
 			<div class="login-icon">
 				<img
-					src="${pageContext.request.contextPath}/img/icons/svg/calendar.svg"
+					src="${pageContext.request.contextPath}/img/icons/svg/ice.svg"
 					alt="" />
 				<h4>
 					<strong>欢迎来到</strong> <small style="line-height: 22px;">在线学习课堂</small>
@@ -93,7 +93,7 @@
 		});
 		$(".login-link").bind("click", function() {
 
-			swal("嗷", "该!", "info");
+			swal("", "账号是需要添加的，请联系微信号:llf_soft,本人帅哥", "info");
 
 		});
 		$(".login-field").bind("keydown", function(e) {

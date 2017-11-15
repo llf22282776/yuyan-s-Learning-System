@@ -13,9 +13,29 @@
 		#{pname},
 		#{pdate},
 		#{totalScore}
-		); 
- 
+		);
+
 	</insert>
+	<select id="getPapersUserNotDoItYet" resultType="com.learning.pojo.Paper">
+		SELECT P.* FROM
+		paper p
+		WHERE p.pid not in (select up.pid from user u,user_paper up
+		WHERE u.uid = up.uid and u.uid =#{0} ) ;
+	</select>
+
+	<select id="getPapersNumUserNotDoItYet" resultType="int">
+		SELECT
+		count(*) FROM paper p
+		WHERE p.pid not in (select up.pid from user
+		u,user_paper up WHERE u.uid = up.uid and u.uid =#{0} ) ;
+	</select>
+
+	<select id="testPaperDone" resultType="int">
+		SELECT count(*) FROM
+		user_paper up
+		WHERE up.pid = #{1} AND up.uid=#{0} ;
+	</select>
+
 
 
 </mapper>
