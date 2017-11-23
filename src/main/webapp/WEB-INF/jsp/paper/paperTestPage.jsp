@@ -706,6 +706,22 @@
 	function initStateVar() {
 		//设置环境变量
 		//题目切换完后，设置下subjectStamp
+		subjectStamp = {
+			startTime : "",
+			endTime : "",
+			wordSelectList : [ false, false, false, false ],//文字选取情况，这个值会在鼠标抬起的时候读，用于渲染形状
+			selectList : [ -1, -1, -1, -1 ],//选择的情况，索引和值为一对
+			choosenIndex : -1,//选择题的选项
+			textList : [ "", "", "", "" ],//填空题的列表
+			selectPairNum : -1,//连线时，单击上册图层选择的pairNum,
+			x:-1,
+			y:-1
+		};
+		
+		
+		
+		
+		
 		//开始时间设置一下
 	}
 
