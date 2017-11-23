@@ -27,6 +27,11 @@
 
 	</insert>
 	
+	<select id="getSubjectsByPid" resultType="com.learning.pojo.Subject">
+		SELECT s.* FROM subject s ,paper_subject ps WHERE ps.pid = #{0} and ps.sid = s.sid order by s.sid;
+	
+	</select>
+	
 </mapper>
 	
 	

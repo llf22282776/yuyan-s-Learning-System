@@ -11,4 +11,6 @@ public interface SubjectDao {
     
     //获得一个试卷的所有subject
     public Subject[] getSubjectsByPid(int pid);
+    
+    //获得一个
 }

@@ -9,7 +9,7 @@
 		video,
 		word,
 		score
- 
+
 		) VALUES(
 		#{pic},
 		#{video},
@@ -21,13 +21,15 @@
 	<insert id="insertIntoS_Line">
 		INSERT INTO subject_line (
 		sid,
-		lid
+		lid,
+		index
 		) VALUES(
 		#{0},
-		#{1}
+		#{1},
+		#{3}
 		);
 
-	</insert> 
+	</insert>
 	<insert id="insertIntoChoose" parameterType="com.learning.pojo.ChooseElement"
 		useGeneratedKeys="true" keyProperty="cid">
 		INSERT INTO choose (
@@ -38,7 +40,7 @@
 
 	</insert>
 	<insert id="insertIntoS_choose">
-		INSERT INTO subject_choose( 
+		INSERT INTO subject_choose(
 		sid,
 		cid,
 		answerId
@@ -49,4 +51,21 @@
 		);
 
 	</insert>
+
+	<select id="getLinesBySid" resultType="com.learning.pojo.LineElement">
+		SELECT l.* FROM line l
+		,subject_line sl WHERE sl.sid = #{0} AND sl.lid = l.lid order by l.lid;
+	</select>
+	<select id="getChoosesBySid" resultType="com.learning.pojo.ChooseElement">
+		SELECT c.* FROM choose c ,subject_choose sc WHERE sc.sid = #{0} AND sc.cid =
+		c.cid order by c.cid;
+	</select>
+	<select id="getRightChoosenIndex" resultType="int">
+		SELECT answerId FROM subject_choose sc where sc.sid = #{0} limit 1;
+	
+	</select>
+	
+	<select id="getLinesSeq" resultType="com.learning.pojo.Subject_line">
+		SELECT * FROM subject_line sl where sl.sid = #{0} order by sl.lid;
+	</select>
 </mapper>

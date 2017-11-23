@@ -45,8 +45,8 @@
 <body>
 	<div class="rootContainer">
 		<%@include file="../common/header.jsp"%>
-		<div class="jumbotron">
-			<div class="container contentDiv paperListDiv">
+		<div class="jumbotron contentDiv">
+			<div class="container  paperListDiv">
 
 				<div class="paperListDivContent  row pbl">
 				
@@ -58,7 +58,7 @@
 							
 						>
 						<div class="paperCard row">
-						<div class="col-md-1">${paper.getPid()}</div>
+						<div class="col-md-1 paperPidDiv">${paper.getPid()}</div>
 						<div class="col-md-1">
 							<span class="fui-calendar"></span>
 						</div>
@@ -100,6 +100,57 @@
 	$(document).ready(function(){
 	    $("#refreshPaperButton").click(function (){
 	    	location.href=location.href;
+	    
+	    });
+	    $(".paperCard").click(function(){
+	    	swal({
+				  title: '提示',
+				  text: "确定要开始做这套卷子吗",
+				  type: 'warning',
+				 
+				  showCancelButton: true,
+				  confirmButtonText: '是的',
+				  cancelButtonText: '我再想想吧',
+				}).then(function () {
+					
+					$.ajax({
+						url: "${pageContext.request.contextPath}/getPaperMetaMsg" ,  
+				        type: 'POST',  
+				        async: true,  
+				        dataType:"json", 
+				        data: {
+				        	pid:$(".paperPidDiv").text(),
+				        },
+						success:function(data){
+							if(data.result == true || data.result == "true"){
+								//现在让location.href=那个特定的request
+								location.href="${pageContext.request.contextPath}/paperTestPage"
+								
+								
+								
+								
+							}else {
+								
+								swal("错误","该试卷可能已完成，无法作答，请刷新网页或联系管理员","error");
+							}
+								
+							
+						},
+						error:function(){
+							
+							swal("错误","网络错误，无法获取试卷","error");
+						}
+						
+						
+					})
+					
+				},function(){
+					
+					
+					
+					
+				});
+	    	
 	    	
 	    	
 	    });

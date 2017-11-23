@@ -566,73 +566,7 @@
 		
 	});
 
-	function checkNumOrLitterOrsubLine(thisEle) {
-		//是不是数字字母和下划线,如果是姓名
-		var reg1 = /(^\s+)|(\s+$)/g;
-		var reg2 = /^[\w]{6,12}$/;
-		if (thisEle.hasClass("addNameInput")) {
-			//执行第一个reg1
-			return !reg1.test(thisEle.val());
-		} else {
-			return reg2.test(thisEle.val());
-
-		}
-
-	}
-	function userInputBlur(thisEle) {
-		//检察是不是合适
-		if (checkNumOrLitterOrsubLine(thisEle) == false) {
-			//显示出下面的div
-			//显示错
-			changeDivRightOrWrong(thisEle, false);
-		} else {
-			//收起div
-			//显示对
-			changeDivRightOrWrong(thisEle, true);
-
-		}
-
-	}
-	function changeDivRightOrWrong(thisEle, type) {
-		var textDivEle = thisEle.closest(".groupRow").next();//
-		var spanEle = thisEle.closest(".groupRow").find(".msgSpan");
-		if (type == false) {
-
-			textDivEle.css("display", "block");
-			spanEle.removeClass("fui-check");
-			spanEle.addClass("fui-cross");
-			spanEle.removeClass("rightIcon");
-			spanEle.addClass("wrongIcon");
-			thisEle.closest(".groupRow").attr("completed", false);
-		} else {
-
-			textDivEle.css("display", "none");
-			spanEle.removeClass("fui-cross")
-			spanEle.addClass("fui-check");
-			spanEle.removeClass("wrongIcon");
-			spanEle.addClass("rightIcon");
-			thisEle.closest(".groupRow").attr("completed", true);
-		}
-
-	}
-	function checkPasswordEqual(thisEle) {
-		if (thisEle.closest(".addContent").find(".addPasswordInput").val() == thisEle
-				.val()) {
-			changeDivRightOrWrong(thisEle, true);
-
-		} else {
-			changeDivRightOrWrong(thisEle, false);
-
-		}
-
-	}
-	function positionRadioClick(thisEle) {
-
-		//nowAddRadio放在这个属性上
-		$(".positionRadio").removeClass("nowAddRadio");
-		thisEle.removeClass("nowAddRadio");
-
-	}
+	
 	function sumitPeople(){
 		if(completeCheck() == false){
 			
@@ -685,35 +619,213 @@
 			})
 		
 	}
-	function completeCheck(){
-		var completed=true;
-		$(".inputGer").each(function(index,ele){
-			ele=$(ele).closest(".groupRow");
-			if(ele.attr("completed")==false || ele.attr("completed")=="false" ){
-				completed=false;
-				
-				
-			}
+	
+	function upLoadPaper(thisEle){
+		//先判断下是否合法
+		if(checkPaperMsgCompleted()==-1){
+			//没有题目
+			swal("干吗","你看看有题吗？","question");
 			
 			
-		});
-		return completed;
+		}else 
+			
+			if(checkPaperMsgCompleted() == 0){
+			//没有标题
+			swal("","试卷标题呢","question");
+		}else {
+			
+			//1.给试卷打上时间,把标题放入数据结构里面
+			paper.date=new Date().Format("yyyy-MM-dd hh:mm:ss");//时间
+			paper.title=$(".paperTitleInput").val();
+			var errorHappened=false;
+			//4.点击上传，询问是否确定上传
+			swal({
+				  title: '提示',
+				  text: "确定现在要发布这个试卷吗",
+				  type: 'warning',
+				  showCancelButton: true,
+				  confirmButtonText: '是的',
+				  cancelButtonText: '我再想想吧',
+				}).then(function () {
+					
+					 //先上传源信息
+					  $(".paperSubmitTextDiv").text("正在传输试卷源信息...");
+						$.ajax({
+								url: "${pageContext.request.contextPath}/paperUpload" ,  
+						        type: 'POST',  
+						        dataType:"JSON",
+						        contentType:"application/json",
+						        async: false,  
+						        data: JSON.stringify(getPaperMsg()),  
+								success:function(data){
+									 //上传成功了就成功了
+									 if(data.result =="true" || data.result ==true){
+										 //取pid
+										 paper.pid=data.des;
+										 
+										 return;
+									 }
+									 swal({
+										 title:"错误",
+										 text:"试卷上传失败因为"+data.des,
+										 type:"error"
+									 });
+									 errorHappened=true;
+								},
+								error:function(e){
+									 swal({
+										 title:"错误",
+										 text:"试卷上传失败，网络错误",
+										 type:"error"
+										 
+									 });
+									 errorHappened=true;
+									
+								}
+								
+							})
+						if(errorHappened)return;	
+					//这里就开始显示一个带有进度条的，不可点击外侧关闭的进度框
+					 swal({
+						 title: '',
+						 showCloseButton: false,
+						 showCancelButton: false,
+						 showConfirmButton:false,
+						 allowOutsideClick:false,
+						 allowEscapeKey:false,
+						 allowEnterKey:false,
+						 html:"<div><div class='row pbl paperSubmitTextDiv'></div>"+
+						 "<div  class='row pbl sliperDiv'></div></div>",
+						 onOpen:function(){
+							 //打开后要做的事情		
+							 //1.读取lastIndex
+							 //设置一个滑动条，总码数/初始位置
+							   var errorHappened=false;
+							  $(".sliperDiv").slider({
+									    min: 1,
+									    max: paper.subjects.length,
+									    value: 1,
+									    orientation: "horizontal",
+									    range: "min",
+									    slide: function( event, ui ) {
+									   		  return false;
+									       
+									    }
+									}).addSliderSegments($(".sliperDiv").slider("option").max);
+							 //3 for 循环，index小于lastIndex的时候，从lastIndex开始,每完成一个进度条前进，文字改变
+							 for(var i=0;i<paper.subjects.length;i++){
+								 //设置文本
+								 $(".paperSubmitTextDiv").text("正在传输第 "+(i+1)+" 道题");
+								 //设置滑动条
+								 $(".sliperDiv").slider("value",(i+1));
+								 
+								
+								 if(i<lastIndex)continue;//仅仅只是
+								 //不然就要上传
+								 //构建一个formdata的对象
+								 var dataForm=createSubjectFormdata(i);
+								 $.ajax({
+									 url: paper.subjects[i].sid==undefined||paper.subjects[i].sid==null?"${pageContext.request.contextPath}/subjectUpload":"${pageContext.request.contextPath}/subjectUploadAlreadyExist" ,  
+							         type: 'POST',  
+							         data: dataForm,  
+							         dataType:"JSON",
+							         async: false,  
+							         cache: false,  
+							         contentType: false,  
+							         processData: false,  
+									 success:function(data){
+										 //上传成功了就成功了
+										 if(data.result =="true" || data.result ==true)return ;
+										 //失败了结束
+										 swal("错误","第"+i+"道题因为"+data.des+"上传失败，再次点击上传即可从断电处继续","error");
+									            	
+									      //重新记一下
+									     lastIndex=i;
+									     errorHappened=true;
+									            	
+									             
+									 },
+									 error: function (returndata) {  
+										 swal("错误","第"+i+"道题上传失败，再次点击上传即可从断电处继续","error")
+											//重新记一下
+						            		lastIndex=i;
+						            		//
+						            		errorHappened=true;
+									            
+							          }
+								 });
+								 
+								 if(errorHappened)break;
+							 }
+							 
+							 
+							 //没完成一次循环，设置文本和进度条的位置
+							 //5 全部完成，重置lastIndex,显示上传成功，关闭对话框
+							//情况paper区域
+							if(errorHappened)return;
+							cleanPaper();
+							swal("","发布试卷成功!","success");
+							 
+							 
+							 
+							 
+						 }
+						 
+						 
+						 
+						 
+					 });
+					 
+					 
+					 
+				}, function (dismiss) {
+					
+				});
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
 		
 	}
-	function combineToUserJson(){
-		user={};
-		user.uid=$(".addUidInput").val();
-		user.uname=$(".addNameInput").val();
-		user.position=$(".nowAddRadio").attr("position");
-		user.password=$(".addPasswordInput").val();
-		return user;
+	function cleanSubjectArea(){
+		//清理全部题型的div的残留，确保数据依然保存着
+		/*1.选择题清空
+		  1.completed false
+		  2.pic替换成temp
+		  3.音频删除
+		  4.填空框清空
+		  
+		*/
+		$(".getter").attr("completed",false);
+		$(".linePic").cropper("replace","${pageContext.request.contextPath}/img/temp.png");
+		$(".audioRow").empty();
+		$(".wordInput").val("");
+		$(".scoreInput").val("");
+		/*
+			选择题区域清空
 		
-	}
-	function clearAddArea(){
 		
-		$(".inputGer").val("");
+		*/
+		$(".chooseInput").val("");
+		$(".chooseInput").attr("completed",false);
+		$("#subjectName").val("");
 		
+		//数据结构清
 		
+		  nowSubject = {
+				type : -1,
+				title : "",
+				totalScore:0,
+				elements : [],
+				index:0
+			};
 	}
 </script>
 

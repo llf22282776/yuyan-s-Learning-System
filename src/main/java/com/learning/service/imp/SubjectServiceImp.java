@@ -102,6 +102,9 @@ public class SubjectServiceImp implements SubjectService{
         if(num<0)return false;
         //判断类型
         if(type == ConstantUtil.SUBJECT_LINE){
+            //生成随机的顺序
+            
+            Object[] randomNums=ConstantUtil.randomSeq(0, 3);//[0,3]
             for(int i=0;i<subjectFromJs.getAudioFiles().size();i++){
                 LineElement line = new LineElement();
                 line.setPic(subjectFromJs.getPicUrl().elementAt(i));
@@ -111,7 +114,7 @@ public class SubjectServiceImp implements SubjectService{
                 elementDao.insertIntoLine(line);
                 int lid=line.getLid();
                 //插入关联表
-                elementDao.insertIntoS_Line(sid, lid);
+                elementDao.insertIntoS_Line(sid, lid,(int)randomNums[i]);
                 
             }
         }else if(type == ConstantUtil.SUBJECT_CHOOSE){

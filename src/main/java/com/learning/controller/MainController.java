@@ -88,9 +88,9 @@ public class MainController {
         System.out.println("userName:" + usr.getUname());
         req.setAttribute("userName", usr.getUname());
         if (usr.getPosition() == ConstantUtil.STUDENT) {
-           int num = paperServiceImp.getStudentNotTodoPaperNums(usr.getUid());
-           System.out.println("num:"+num);
-           req.setAttribute("paperNums", num);
+            int num = paperServiceImp.getStudentNotTodoPaperNums(usr.getUid());
+            System.out.println("num:" + num);
+            req.setAttribute("paperNums", num);
             return "student";// 返回学生界面
 
         } else {
@@ -99,8 +99,6 @@ public class MainController {
 
     }
 
-    
-    
     @RequestMapping(value = "/logOut", method = { RequestMethod.POST,
             RequestMethod.GET })
     public String logOut(HttpServletRequest req, HttpServletResponse res) {
@@ -257,22 +255,22 @@ public class MainController {
         // 注意重定向到合适的地方去
         User user = (User) req.getSession().getAttribute("user");
         if (user == null || user.getPosition() == ConstantUtil.TEACHER) {
-            //老师或者没登录
-            return "redirect:/"; //重定向
-        }else {
-            //1.先获取一下，未做试卷
-            List<Paper> paperList= paperServiceImp.getStudentNotTodoPaperList(user.getUid());
-            
-            //2.放到attribute里面去
-            //3 返回这个页面
-            System.out.println("paperList'size:"+paperList.size());
+            // 老师或者没登录
+            return "redirect:/"; // 重定向
+        } else {
+            // 1.先获取一下，未做试卷
+            List<Paper> paperList = paperServiceImp
+                    .getStudentNotTodoPaperList(user.getUid());
+
+            // 3 返回这个页面
+            System.out.println("paperList'size:" + paperList.size());
             req.setAttribute("userName", user.getUname());
             req.setAttribute("paperList", paperList);
-          
+
             req.setAttribute("length", paperList.size());
-            
-            return "paper/paperList"; 
-            
+
+            return "paper/paperList";
+
         }
 
     }
@@ -280,40 +278,40 @@ public class MainController {
     @RequestMapping(value = "/paperTestPage", method = { RequestMethod.POST,
             RequestMethod.GET })
     public String paperTestPage(HttpServletRequest req, HttpServletResponse res) {
-        //返回一个网页，这个网页异步请求题目
-        //不是每个请求都要返回网站，如果本身没有session里面没有，pid
-        if(testUser(req,ConstantUtil.STUDENT) || req.getSession().getAttribute("pid") == null)return "redirect:/";
-        
+        // 返回一个网页，这个网页异步请求题目
+        // 不是每个请求都要返回网站，如果本身没有session里面没有，pid
+        if (testUser(req, ConstantUtil.STUDENT) == false
+                || req.getSession().getAttribute("pid") == null)
+            return "redirect:/";
+
         setUsername(req);
         return "paper/paperTestPage";
-        
+
     }
-    
-    
-    
+
     @RequestMapping(value = "/getPaperMetaMsg", method = { RequestMethod.POST,
             RequestMethod.GET })
     @ResponseBody
-    public JSONObject getPaperMetaMsg(HttpServletRequest req, HttpServletResponse res) {
-       
+    public JSONObject getPaperMetaMsg(HttpServletRequest req,
+            HttpServletResponse res) {
+
         CommonRes commonRes = new CommonRes();
-        
+
         try {
-          //1.获取pid
+            // 1.获取pid
             User usr = (User) req.getSession().getAttribute("user");
-            int pid=Integer.parseInt(req.getParameter("pid"));
-            if(paperServiceImp.testPaperDone(usr.getUid(),pid) ==false){
-                //没有做过
+            int pid = Integer.parseInt(req.getParameter("pid"));
+            if (paperServiceImp.testPaperDone(usr.getUid(), pid) == false) {
+                // 没有做过
                 req.getSession().setAttribute("pid", pid);
                 commonRes.setDes("");
                 commonRes.setSucceed(true);
-            }else {
-                
+            } else {
+
                 commonRes.setDes("");
                 commonRes.setSucceed(false);
             }
-            
-            
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             e.printStackTrace();
@@ -321,38 +319,38 @@ public class MainController {
             commonRes.setSucceed(false);
             // TODO: handle exception
         }
-        
-        
+
         return JSONObject.parseObject(JSONObject.toJSONString(commonRes));
-        
+
     }
-   
-    
-    
-    
+
     @RequestMapping(value = "/getTestPaper", method = { RequestMethod.POST,
             RequestMethod.GET })
     @ResponseBody
-    public JSONObject getTestPaper(HttpServletRequest req, HttpServletResponse res) {
-    
-        PaperMix paperMix=null;
+    public JSONObject getTestPaper(HttpServletRequest req,
+            HttpServletResponse res) {
+
+        PaperMix paperMix = null;
         try {
-          //1.获取pid uid
-            
-            int pid=(int)req.getSession().getAttribute("pid");
-            //这里组织一下,如果失效了，那么就设置result false
-           paperMix= paperServiceImp.getPaperMixDetail(pid);
-            //移除pid
+            // 1.获取pid uid
+
+            int pid = (int) req.getSession().getAttribute("pid");
+            // 这里组织一下,如果失效了，那么就设置result false
+            paperMix = paperServiceImp.getPaperMixDetail(pid);
+            if(paperMix.getSubjects().size()>0)paperMix.setResult(true);
+            // 移除pid
             req.getSession().removeAttribute("pid");
         } catch (Exception e) {
+            paperMix = new PaperMix();
+            paperMix.setResult(false);
             LOGGER.error(e.getMessage());
             e.printStackTrace();
-            
+
             // TODO: handle exception
         }
         return JSONObject.parseObject(JSONObject.toJSONString(paperMix));
     }
-    
+
     private SubjectFromJs getSubjectsFromWeb(HttpServletRequest req, int type,
             int pid) {
         SubjectFromJs subjectFromJs = new SubjectFromJs();
@@ -389,18 +387,20 @@ public class MainController {
         }
         return subjectFromJs;
     }
-    private boolean testUser(HttpServletRequest req,int postion_required){
+
+    private boolean testUser(HttpServletRequest req, int postion_required) {
         User usr = (User) req.getSession().getAttribute("user");
-        if(usr == null)return false;
-        else if(usr.getPosition()!=postion_required)return false;
+        if (usr == null)
+            return false;
+        else if (usr.getPosition() != postion_required)
+            return false;
         return true;
-        
-        
+
     }
-    private void setUsername(HttpServletRequest req){
+
+    private void setUsername(HttpServletRequest req) {
         User usr = (User) req.getSession().getAttribute("user");
-       req.setAttribute("userName", usr.getUname());
-        
-        
+        req.setAttribute("userName", usr.getUname());
+
     }
 }
