@@ -81,6 +81,10 @@
 										if (data.result == true
 												|| data.result == "true") {
 											//开始初始化试卷
+											//1.去掉等待面板
+											$(".contentDiv").css("display","none");
+											$(".subjectDiv").css("display","block");
+											initPaper(".subjectDiv", -1, data);
 
 										} else {
 											//返回到首页
@@ -207,7 +211,7 @@
 
 		} else {
 			//需要检查
-			var subjectType = testpaper.paper.subjects[testpaper.nowSubjectIndex];
+			var subjectType = testPaper.paper.subjects[testPaper.nowSubjectIndex];
 			if (subjectType == 0) {
 				//连线题
 				var isComplete = true;
@@ -234,12 +238,16 @@
 		//保存subject 
 		if (testPaper.paperType == -1) {
 			//答题模式,保存,就是放到原来的paper里面去
-			var thisSubject = testPaper.paper.subjects[testPaper.nowSubjectIndex];//这个题的对象抽出来 
-			thisSubject.selectList = subjectStamp.selectList;
-			thisSubject.choosenIndex = subjectStamp.choosenIndex;
-			thisSubject.textList = subjectStamp.textList; //根据type，其中一个会有用
-			thisSubject.startTime = subjectStamp.startTime;
-			thisSubject.endTime = subjectStamp.endTime;
+			if(testPaper.nowSubjectIndex != -1){
+				var thisSubject = testPaper.paper.subjects[testPaper.nowSubjectIndex];//这个题的对象抽出来 
+				thisSubject.selectList = subjectStamp.selectList;
+				thisSubject.choosenIndex = subjectStamp.choosenIndex;
+				thisSubject.textList = subjectStamp.textList; //根据type，其中一个会有用
+				thisSubject.startTime = subjectStamp.startTime;
+				thisSubject.endTime = subjectStamp.endTime;
+				
+				
+			}
 			//这里还要记个分
 
 		}
@@ -271,7 +279,11 @@
 	function paintSubject() {
 		//绘制答题区域
 		//1取下一题，判断类型，进行渲染
-		var nextSubject = testpaper.paper.subjects[testPaper.nowSubjectIndex];
+		var nextSubject = testPaper.paper.subjects[testPaper.nowSubjectIndex];
+		var className=testPaper.className;
+		//设置标题
+		$(className).find(".subjectHeader").text((testPaper.nowSubjectIndex+1)+"."+nextSubject.title);
+		
 		if (nextSubject.type == 0) {
 			//吧连线题元素添加到里面去
 
@@ -279,13 +291,13 @@
 
 			//连线题
 			paintCanvas($(className).find(".subjectContent").find(
-					"#linePainter").eq(0), testpaper.paperType, nextSubject);
+					"#linePainter").eq(0), testPaper.paperType, nextSubject);
 
 		} else if (nextSubject.type == 1) {
 			//选择题
 			$(className).find(".subjectContent").append(chooseSubjectEle);
 			paintChoose($(className).find(".subjectContent").find(
-					".chooseSubjectContent"), testpaper.paperType, nextSubject);
+					".chooseSubjectContent"), testPaper.paperType, nextSubject);
 
 		}
 
@@ -575,7 +587,7 @@
 		//2.设置文本
 		
 		radiosEle.find(".paperChooseRadio").each(function(index,ele){
-			ele=$(ele);
+			ele=$(ele).closest(".row");
 			ele.find("h4").text(subject.texts[index]);
 			
 			

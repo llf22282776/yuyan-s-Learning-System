@@ -65,8 +65,8 @@
 
 	<script>
 		$("#loginButton").bind("click", function() {
-			var passport = $('#passwordInput').val();
-			var password = $('#userNameInput').val();
+			var passport = $('#userNameInput').val();
+			var password = $('#passwordInput').val();
 
 
 			$.ajax({

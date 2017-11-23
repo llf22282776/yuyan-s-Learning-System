@@ -103,6 +103,8 @@
 	    
 	    });
 	    $(".paperCard").click(function(){
+	    	
+	    	var ele=$(this);
 	    	swal({
 				  title: '提示',
 				  text: "确定要开始做这套卷子吗",
@@ -119,7 +121,7 @@
 				        async: true,  
 				        dataType:"json", 
 				        data: {
-				        	pid:$(".paperPidDiv").text(),
+				        	pid:ele.find(".paperPidDiv").text(),
 				        },
 						success:function(data){
 							if(data.result == true || data.result == "true"){

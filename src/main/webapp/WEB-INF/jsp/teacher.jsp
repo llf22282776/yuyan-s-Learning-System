@@ -328,7 +328,7 @@
 						</div>
 					</div>
 
-					<div style="display: none" class="row tipText">只允许数字，字母和，下划线</div>
+					<div style="display: none" class="row tipText"></div>
 
 
 					<div class=" groupRow row" completed=false>
@@ -505,12 +505,7 @@
 		});
 		//题目框输入事件
 		$(".paperTitleInput").keypress(function(evt) {
-			var t = $(this).val().trim();
-			if (t != "") {
-				return true;
-			} else {
-				return false;
-			}
+			
 		});
 		$("#subjectHelpButton").click(function() {
 			//
