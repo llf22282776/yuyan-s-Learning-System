@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>梁玉燕的在线学习课堂</title>
+<title>梁宇雁的在线学习课堂</title>
 
 <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
 
