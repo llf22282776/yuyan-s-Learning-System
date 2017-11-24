@@ -20,7 +20,7 @@
 
 .lineSubjectContent {
 	text-align: center;
-	width:100%
+	width: 100%
 }
 
 .contentDiv.subjectDiv {
@@ -31,38 +31,72 @@
 	min-height: 600px;
 	margin-left: 18%;
 }
+
 .subjectDiv {
 	
 }
+
 .linePainter {
 	width: 900px;
 	height: 400px;
 }
-.subjectHeader{
-	text-align:left;
-	padding-left:15px;
-	font-size:30px;
-}
-.jumbotron.contentDiv{
 
-	
-} 
-.subjectRooter{
-	padding-top:10px
-	
+.subjectHeader {
+	text-align: left;
+	padding-left: 15px;
+	font-size: 30px;
+	margin-bottom: 10px;
+}
+
+.jumbotron.contentDiv {
 	
 }
+
+.subjectRooter {
+	padding-top: 10px
+}
+
 .waitTextDiv {
 	text-align: center;
 	font-size: 33px;
 }
-.subjectAudioView{
-	display:none;
-	width:100px;
-	height:100px;
-	
+
+.subjectAudioView {
+	display: none;
+	width: 100px;
+	height: 100px;
 }
-.scoreDiv{
-	display:none;
+
+.scoreDiv {
+	display: none;
+}
+
+.subjectChooseGroup>.col-sm-8 {
+	text-align: left;
+}
+
+.viewable {
+	display: none;
+}
+
+.radio-inline>strong {
+	font-size: 25px;
+	line-height: 16px;
+}
+
+.subjectChooseGroup {
+	text-align: left;
+	padding-left: 7%;
+}
+
+.subjectHeader>.col-xs-1 {
+	text-align: right;
+	color: cornflowerblue;
+	font-size: 40px;
+	line-height: normal;
+}
+
+}
+.subjectHeader>.col-xs-10 {
 	
 }
