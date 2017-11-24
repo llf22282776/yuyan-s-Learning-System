@@ -387,9 +387,9 @@
 			</div>
 			<div style="display: block" class="jumbotron contentDiv tempDiv">
 				<div class="" style="text-align: center">
-					<h3>全国最大的在线考试中心上线啦~</h3>
-					<h3>性感美女在线出题~</h3>
-					<h3>1秒到账，好玩停不下来</h3>
+					<h3>欢迎来带小可爱梁羽雁的在线课堂~</h3>
+					<h3>^_^</h3>
+					<h3></h3>
 				</div>
 			</div>
 		</div>
