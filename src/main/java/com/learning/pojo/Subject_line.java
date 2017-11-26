@@ -20,12 +20,12 @@ public class Subject_line implements Serializable{
     public void setLid(int lid) {
         this.lid = lid;
     }
-    public int getIndex() {
-        return index;
+    public int getIndex_() {
+        return index_;
     }
-    public void setIndex(int index) {
-        this.index = index;
+    public void setIndex(int index_) {
+        this.index_ = index_;
     }
     private int lid;
-    private int index;
+    private int index_;
 }

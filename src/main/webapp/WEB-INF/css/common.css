@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+.rootContainer {
+    padding: 10px 10px 10px;
+}
+
+.contentDiv {
+    border-radius: 5px;
+    width: 100%;
+}
+
+.buttomLineDiv {
+    border-bottom: #cccccc;
+    border-bottom-style: dashed;
+}
+
+.iconSubject {
+    font-size: 56px;
+}

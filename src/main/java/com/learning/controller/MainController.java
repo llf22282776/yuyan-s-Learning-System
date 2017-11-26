@@ -22,6 +22,7 @@ import com.learning.pojo.CommonRes;
 import com.learning.pojo.Paper;
 import com.learning.pojo.PaperMix;
 import com.learning.pojo.PaperMsg;
+import com.learning.pojo.PaperQueryState;
 import com.learning.pojo.SubjectFromJs;
 import com.learning.pojo.User;
 import com.learning.service.PaperService;
@@ -80,7 +81,7 @@ public class MainController {
         return JSONObject.parseObject(JSONObject.toJSONString(commonRes));
 
     }
-
+    
     @RequestMapping(value = "/main", method = { RequestMethod.POST,
             RequestMethod.GET })
     public String main(HttpServletRequest req, HttpServletResponse res) {
@@ -350,7 +351,134 @@ public class MainController {
         }
         return JSONObject.parseObject(JSONObject.toJSONString(paperMix));
     }
+    
+    
+    
+    
+    /**
+     * 
+     * 此接口用于获取已做过试卷
+     * 
+     * */
+    @RequestMapping(value = "/getDonePaper", method = { RequestMethod.POST,
+            RequestMethod.GET })
+    @ResponseBody
+    public JSONObject getDonePaper(HttpServletRequest req,
+            HttpServletResponse res) {
 
+        PaperMix paperMix = null;
+        try {
+            // 1.获取pid uid
+
+            int pid = (int) req.getSession().getAttribute("check_pid");
+            // 这里组织一下,如果失效了，那么就设置result false
+            paperMix = paperServiceImp.getDonePaperMix(pid);
+            if(paperMix.getSubjects().size()>0)paperMix.setResult(true);
+            // 移除pid
+            req.getSession().removeAttribute("check_pid");
+        } catch (Exception e) {
+            paperMix = new PaperMix();
+            paperMix.setResult(false);
+            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+
+            // TODO: handle exception
+        }
+        return JSONObject.parseObject(JSONObject.toJSONString(paperMix));
+    }
+    /**
+     * 
+     * 此接口用于获取详情jsp页面
+     * 
+     * */
+    @RequestMapping(value = "/checkPaperDetail", method = { RequestMethod.POST,
+            RequestMethod.GET })
+
+    public String checkPaperDetail(HttpServletRequest req, HttpServletResponse res) {
+     
+        if(StringUtil.isBlank(req.getParameter("pid") )){
+            return "redirect:/main";
+        
+        
+        }
+        return "redirect:/getStudentNodoingPaperPage";
+
+    }
+    /**
+     * 
+     * 此接口用于提交试卷
+     * 
+     * */
+    @RequestMapping(value = "/submitPaper", method = { RequestMethod.POST,
+            RequestMethod.GET })
+    @ResponseBody
+    public JSONObject submitPaper(@RequestBody PaperMix paper ,HttpServletRequest req, HttpServletResponse res) {
+        CommonRes commonRes = new CommonRes();
+        commonRes.setDes("");
+        if(paper ==null || testUser(req, ConstantUtil.STUDENT) == false){
+            commonRes.setSucceed(false); 
+        }else {
+            //在这里保存试卷
+            User user=(User) req.getSession().getAttribute("user");
+            try {
+                boolean isSucceed= paperServiceImp.saveTestPaperResult(paper,user.getUid());
+                commonRes.setSucceed(isSucceed); 
+            } catch (Exception e) {
+                // TODO: handle exception
+                LOGGER.error(e.getMessage());
+                commonRes.setDes(e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+        
+        return JSONObject.parseObject(JSONObject.toJSONString(commonRes));
+
+    }
+    /**
+     * 此接口用于返回查询结果
+     * 
+     * 
+     * */
+    
+    @RequestMapping(value = "/getQueryResult", method = { RequestMethod.POST,
+            RequestMethod.GET })
+    
+    public String getQueryResult(@RequestBody PaperQueryState paper ,HttpServletRequest req, HttpServletResponse res) {
+      
+    
+        if(paper ==null){
+            return "redirect:/main";
+        }else {
+            List<Paper> list=paperServiceImp.getQueryPapers(paper, getUser(req));
+            req.setAttribute("paperList", list);
+            
+        }
+        
+        return "common/cardList";
+
+    }
+    
+    
+    
+    /**
+     * 
+     * 此接口用于获取查询页面，
+     * 
+     * */
+    @RequestMapping(value = "/getQueryListPage", method = { RequestMethod.POST,
+            RequestMethod.GET })
+
+    public String getQueryListPage(HttpServletRequest req, HttpServletResponse res) {
+        
+        if (testUser(req, ConstantUtil.STUDENT) == false)
+            return "redirect:/";
+        else {
+           setUsername(req);
+           return "paper/checkListPage";}
+        
+        
+    }
     private SubjectFromJs getSubjectsFromWeb(HttpServletRequest req, int type,
             int pid) {
         SubjectFromJs subjectFromJs = new SubjectFromJs();
@@ -402,5 +530,10 @@ public class MainController {
         User usr = (User) req.getSession().getAttribute("user");
         req.setAttribute("userName", usr.getUname());
 
+    }
+    private User getUser(HttpServletRequest req){
+        User usr = (User) req.getSession().getAttribute("user");
+        return usr;
+        
     }
 }

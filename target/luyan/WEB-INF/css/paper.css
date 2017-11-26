@@ -1,0 +1,102 @@
+@CHARSET "UTF-8";
+
+.rootContainer {
+	padding: 10px 10px 10px;
+}
+
+.contentDiv {
+	border-radius: 5px;
+	width: 100%;
+}
+
+.buttomLineDiv {
+	border-bottom: #cccccc;
+	border-bottom-style: dashed;
+}
+
+.iconSubject {
+	font-size: 56px;
+}
+
+.lineSubjectContent {
+	text-align: center;
+	width: 100%
+}
+
+.contentDiv.subjectDiv {
+	text-align: center;
+	max-width: 1000px;
+	min-width: 400px;
+	max-height: 650px;
+min-height: 650px;
+	margin-left: 18%; 
+}
+
+.subjectDiv {
+	
+}
+
+.linePainter {
+	width: 900px;
+	height: 400px;
+}
+
+.subjectHeader {
+	text-align: left;
+	padding-left: 15px;
+	font-size: 30px;
+	margin-bottom: 10px;
+}
+
+.jumbotron.contentDiv {
+	
+}
+
+.subjectRooter {
+	padding-top: 10px
+}
+
+.waitTextDiv {
+	text-align: center;
+	font-size: 33px;
+}
+
+.subjectAudioView {
+	display: none;
+	width: 100px;
+	height: 100px;
+}
+
+.scoreDiv {
+	display: none;
+}
+
+.subjectChooseGroup>.col-sm-8 {
+	text-align: left;
+}
+
+.viewable {
+	display: none;
+}
+
+.radio-inline>strong {
+	font-size: 25px;
+	line-height: 16px;
+}
+
+.subjectChooseGroup {
+	text-align: left;
+	padding-left: 7%;
+}
+
+.subjectHeader>.col-xs-1 {
+	text-align: right;
+	color: cornflowerblue;
+	font-size: 40px;
+	line-height: normal;
+}
+
+}
+.subjectHeader>.col-xs-10 {
+	
+}

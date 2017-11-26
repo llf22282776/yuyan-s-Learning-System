@@ -22,14 +22,20 @@
 	text-align: center;
 	width: 100%
 }
+.lineSubjectContent {
+	text-align: center;
+	width: 100%
+}
+#linePainter {
 
+}
 .contentDiv.subjectDiv {
 	text-align: center;
 	max-width: 1000px;
-	min-width: 400px;
-	max-height: 600px;
-	min-height: 600px;
-	margin-left: 18%;
+	min-width: 1000px;
+	max-height: 650px;
+	min-height: 650px;
+	margin-left: 18%; 
 }
 
 .subjectDiv {
@@ -37,8 +43,7 @@
 }
 
 .linePainter {
-	width: 900px;
-	height: 400px;
+	
 }
 
 .subjectHeader {
@@ -96,7 +101,42 @@
 	line-height: normal;
 }
 
-}
+
 .subjectHeader>.col-xs-10 {
 	
+}
+.specRow{
+	position: relative;
+	float:left;
+	padding-left:10px;
+	min-width:900px;
+	max-width:900px;
+	
+}
+.specRow.textRow>.wordSubjectDiv{
+	text-align:center;
+	fontSize:25px;
+	min-width:210px;
+	max-width:210px;
+	min-height:30px;
+	max-height:30px;
+	float: left;
+	padding-left: 10px;
+	border-style: solid;
+	line-height: 1;
+	border-radius: 25px;
+}
+.specRow.painterRow{
+	width:100%;
+
+	
+}
+.specRow.picRow>.picSubjectDiv{
+float: left;
+	min-width:210px;
+	max-width:210px;
+	min-height:150px;
+	max-height:150px;
+	padding-left: 10px;
+
 }

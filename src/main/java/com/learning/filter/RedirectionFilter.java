@@ -54,7 +54,8 @@ public class RedirectionFilter implements Filter{
             uri.startsWith("/font") ||
             uri.startsWith("/js") || 
             uri.startsWith("/img") ||
-            uri.startsWith("/assets") 
+            uri.startsWith("/assets") ||
+            uri.startsWith("/upload")
                 ){
             
             chain.doFilter(req, res);

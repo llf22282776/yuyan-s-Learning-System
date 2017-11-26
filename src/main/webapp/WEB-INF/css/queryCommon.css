@@ -1,0 +1,108 @@
+@CHARSET "UTF-8";
+
+.paperCard {
+	background-color: #f9f9f9;
+	border-radius: 10px;
+	height: 138px;
+	padding-top: 20px;
+	font-size: 30px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	border: turquoise;
+	transition:all  .2s;
+}
+.paperListDiv{
+		text-align: center;
+	
+}
+.paperListDiv>.row:last-child{
+
+	padding-top: 40px;
+
+}
+
+#queryContainer{
+	margin-left: 10%;
+	margin-right: 10%;
+	width: 80%;
+	margin-top: 20px;
+	
+	
+}
+#queryDatePicker{
+	color: #1bc5a3;
+	font-size: 40px;
+	line-height: 1;
+
+}
+#queryDatePicker:hover,#queryDatePicker:focus{
+	color: #37e1bf;
+
+
+}
+#querySubmitButton{
+	color: #3498db;
+	font-size: 40px;
+	line-height: 1;
+}
+
+#querySubmitButton:hover,#querySubmitButton:focus {
+	color: #52b6f9;
+}
+.queryHeaderRow>.row>.col-md-1:first-child{
+	text-align: right;
+
+
+}
+.queryHeaderRow>.row>.col-md-1:last-child{
+	text-align: left;
+
+
+}
+
+.queryHeaderRow{
+	border-bottom-style: dashed;
+	border-bottom-color: white;
+	margin-bottom: 20px;
+
+	
+}
+.paperCard >.col-md-1 {
+
+	padding-top: 20px;
+}
+.paperCard >.col-md-1>span.fui-calendar{
+	padding-top: 20px;
+	color: salmon;
+}
+.paperCard >.col-md-10 {
+	
+	text-align: left;
+	padding-left: 50px;
+}
+
+.paperTitle{
+	
+	font-size:31px;
+
+	
+}
+.paperDate{
+	
+	font-size:16px;
+	color: #bbbbbb;
+	
+}
+.paperCard:hover{
+	background-color: #f9f9f9;
+	border-radius: 50px;
+	border: turquoise;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+	border-style: solid;
+}
+#queryDatePickerInput{
+	display:none;
+}

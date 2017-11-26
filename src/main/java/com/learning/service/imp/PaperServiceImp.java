@@ -2,10 +2,13 @@ package com.learning.service.imp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,10 +24,17 @@ import com.learning.pojo.LineElement;
 import com.learning.pojo.Paper;
 import com.learning.pojo.PaperMix;
 import com.learning.pojo.PaperMsg;
+import com.learning.pojo.PaperQueryState;
 import com.learning.pojo.Subject;
 import com.learning.pojo.SubjectMix;
 import com.learning.pojo.Subject_line;
+import com.learning.pojo.User;
+import com.learning.pojo.User_paper;
+import com.learning.pojo.User_subject;
+import com.learning.pojo.User_subject_choose;
+import com.learning.pojo.User_subject_line;
 import com.learning.service.PaperService;
+import com.learning.service.SubjectService;
 import com.learning.util.ConstantUtil;
 
 @Service
@@ -37,6 +47,9 @@ public class PaperServiceImp implements PaperService {
     private ElementDao elementDao;
     @Resource
     private SubjectDao subjectDao;
+    @Resource
+    private SubjectService subjetServiceImp;
+    
     private static Logger LOGGER = LoggerFactory
             .getLogger(PaperServiceImp.class);
 
@@ -139,14 +152,14 @@ public class PaperServiceImp implements PaperService {
                 Subject_line[] sub_lines=elementDao.getLinesSeq(s.getSid());
                 for(LineElement l:lineElements){
                     subjectMix.getWords().add(l.getWord());
-                    subjectMix.getAudios().add(l.getVideo());
-                    subjectMix.getPics().add(l.getPic());
+                    subjectMix.getAudios().add(ConstantUtil.UPLOAD_WEB+ConstantUtil.AUDIO_PATH+l.getVideo());
+                    subjectMix.getPics().add(ConstantUtil.UPLOAD_WEB+ConstantUtil.IMG_PATH+l.getPic());
                     subjectMix.getEid().add(l.getLid());
                     
                 }
                 for(Subject_line sub_line:sub_lines){
                     //吧顺序也放进来
-                    subjectMix.getIndexSeq().add(sub_line.getIndex());
+                    subjectMix.getIndexList().add(sub_line.getIndex_());
                 }
                 
             }
@@ -169,6 +182,112 @@ public class PaperServiceImp implements PaperService {
     }
         
         
+    }
+
+    @Override
+    public PaperMix getDonePaperMix(int check_pid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, timeout = 1, isolation = Isolation.DEFAULT)
+    public boolean saveTestPaperResult(PaperMix paperMix,String uid) throws Exception {
+        // TODO Auto-generated method stub
+        //1.插u_p
+        //2.插U-s
+        //3.插u-s-l或u-s-c
+        int totalScore=0;
+        String startTime = null;
+        String endTime =null;
+        for(int i=0;i<paperMix.getSubjects().size();i++){
+            //遍历每一个题，计算分数
+            SubjectMix subjectMix=paperMix.getSubjects().get(i);
+            if(subjectMix.getType()== ConstantUtil.SUBJECT_LINE){
+                //计算然后插入表里面
+                List<User_subject_line> user_subject_lines=subjetServiceImp.countLineSubjet(subjectMix, uid,paperMix.getPid());
+                subjetServiceImp.insertUser_subject_lines(user_subject_lines);
+              
+            }else if(subjectMix.getType()== ConstantUtil.SUBJECT_CHOOSE){
+                List<User_subject_choose> user_subject_chooses= subjetServiceImp.countChooseSubjet(subjectMix, uid,paperMix.getPid());
+                subjetServiceImp.insertUser_subject_chooses(user_subject_chooses);
+                
+            }
+            
+           User_subject user_subject= subjetServiceImp.countSubject(subjectMix, uid,paperMix.getPid());
+           totalScore+=user_subject.getScore();
+             
+           if(i == 0){
+               startTime = subjectMix.getStartTime();
+               
+               
+           }
+           if(i == paperMix.getSubjects().size()-1){
+               endTime = subjectMix.getEndTime();
+               
+           }
+           int num= subjectDao.insertUser_subject(user_subject);
+           if(num<0){
+               throw new Exception("User_subject insert failed");
+             
+           }
+            
+        }
+        System.out.println("startTime:"+startTime+" "+ "endTime:"+endTime);
+        
+        paperMix.setTotalScore(totalScore);//总分已经变成用户的分数了
+        User_paper user_paper=this.countPaper(paperMix, uid);
+        user_paper.setStartTime(Timestamp.valueOf(startTime));
+        user_paper.setEndTime(Timestamp.valueOf(endTime));
+        int num= paperDao.insertUser_paper(user_paper);
+        if(num<0){
+            throw new Exception("user_paper insert failed");
+         
+        }
+        return true;
+    }
+
+    @Override
+    public PaperMix getPaperWithUsers(int pid, String uid, List<String> uids) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public User_paper getUserPaper(int pid, String uid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public User_paper countPaper(PaperMix paperMix, String uid) {
+        // TODO Auto-generated method stub
+        //计算这个
+        User_paper user_paper=new User_paper();
+        user_paper.setPid(paperMix.getPid());
+        user_paper.setUid(uid);
+        return user_paper;
+    }
+
+    @Override
+    public List<Paper> getQueryPapers(PaperQueryState paperQueryState, User user) {
+        // TODO Auto-generated method stub
+        List<Paper> papers=new ArrayList<>();
+        Map<String, Object> sMap=new HashMap<String, Object>();
+        if(StringUtil.isBlank(paperQueryState.title) == false){
+            sMap.put("title",paperQueryState.title );
+            
+        }
+        if(user.getPosition() == ConstantUtil.STUDENT){
+            
+            sMap.put("studentId", user.getPosition());
+            
+        }
+        Paper[] papers2= paperDao.getQueryPapersWithParms(sMap);
+        for(Paper paper:papers2){
+            papers.add(paper);
+        } 
+        return papers;
     }
 
 }

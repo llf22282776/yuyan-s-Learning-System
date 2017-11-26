@@ -1,11 +1,14 @@
 package com.learning.service.imp;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Delete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,16 @@ import com.learning.dao.ElementDao;
 import com.learning.dao.SubjectDao;
 import com.learning.pojo.ChooseElement;
 import com.learning.pojo.LineElement;
+import com.learning.pojo.PaperMix;
 import com.learning.pojo.Subject;
 import com.learning.pojo.SubjectFromJs;
+import com.learning.pojo.SubjectMix;
+import com.learning.pojo.UserPaper;
+import com.learning.pojo.UserSubject;
+import com.learning.pojo.User_paper;
+import com.learning.pojo.User_subject;
+import com.learning.pojo.User_subject_choose;
+import com.learning.pojo.User_subject_line;
 import com.learning.service.SubjectService;
 import com.learning.util.ConstantUtil;
 @Service
@@ -43,12 +54,16 @@ public class SubjectServiceImp implements SubjectService{
         try {
             for(int i=0;i<lineTypeSubject.getAudioFiles().size();i++){
                 MultipartFile picFile=lineTypeSubject.getPicFiles().elementAt(i);
+                System.out.println("pic——Type "+picFile.getContentType());
+                System.out.println("pic——Name "+picFile.getOriginalFilename());
+        
                 MultipartFile audioFile=lineTypeSubject.getAudioFiles().elementAt(i);
                 String picFname=UUID.randomUUID().toString();
                 String audioFname=UUID.randomUUID().toString();
                 String picfilePath = realPath+ConstantUtil.UPLOAD+ConstantUtil.IMG_PATH+picFname;
                 String audiofilePath = realPath+ConstantUtil.UPLOAD+ConstantUtil.AUDIO_PATH+audioFname;
-                
+                System.out.println("audioFile——Type "+audioFile.getContentType());
+                System.out.println("audioFile——Name "+audioFile.getOriginalFilename());
                 
                 
                 System.out.println("pic's file:"+picfilePath+picFile.getOriginalFilename());
@@ -56,9 +71,9 @@ public class SubjectServiceImp implements SubjectService{
                 //保存到本地
              
                 picFile.transferTo(new File(picfilePath));
-                audioFile.transferTo(new File(audiofilePath));
+                audioFile.transferTo(new File(audiofilePath+ConstantUtil.WEBM_POSTFIX));
                 lineTypeSubject.getPicUrl().add(picFname);//前缀是一样的
-                lineTypeSubject.getVideoUrl().add(audioFname);
+                lineTypeSubject.getVideoUrl().add(audioFname+ConstantUtil.WEBM_POSTFIX);
             }
         } catch (Exception e1) {
            LOGGER.error(e1.getMessage());
@@ -104,7 +119,8 @@ public class SubjectServiceImp implements SubjectService{
         if(type == ConstantUtil.SUBJECT_LINE){
             //生成随机的顺序
             
-            Object[] randomNums=ConstantUtil.randomSeq(0, 3);//[0,3]
+            int[] randomNums=ConstantUtil.randomSeq(0, 3);//[0,3]
+            System.out.println("randomNums.length:"+randomNums.length);
             for(int i=0;i<subjectFromJs.getAudioFiles().size();i++){
                 LineElement line = new LineElement();
                 line.setPic(subjectFromJs.getPicUrl().elementAt(i));
@@ -114,7 +130,7 @@ public class SubjectServiceImp implements SubjectService{
                 elementDao.insertIntoLine(line);
                 int lid=line.getLid();
                 //插入关联表
-                elementDao.insertIntoS_Line(sid, lid,(int)randomNums[i]);
+                elementDao.insertIntoS_Line(sid, lid,randomNums[i]);
                 
             }
         }else if(type == ConstantUtil.SUBJECT_CHOOSE){
@@ -149,5 +165,157 @@ public class SubjectServiceImp implements SubjectService{
         int num=subjectDao.insertS_P(sid, pid);
         return num>0?true:false;
     }
+
+    @Override
+    public boolean saveOneSubject(SubjectMix subject) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean saveLineSubject(SubjectMix subject) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean saveChooseSubject(SubjectMix subject) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public List<User_subject_line> countLineSubjet(SubjectMix subject, String uid,int pid) {
+        // TODO Auto-generated method stub
+        //生成 user_subject_line的列表
+        List<User_subject_line> lines=new ArrayList<User_subject_line>();
+        for(int i=0;i<subject.getEid().size();i++){
+            int thisLid=subject.getEid().get(i);
+            int otherLid = subject.getEid().get(subject.getSeq().get(i));
+            User_subject_line user_subject_line=new User_subject_line();
+            
+            user_subject_line.setLid(thisLid);
+            user_subject_line.setLotherId(otherLid);
+            user_subject_line.setSid(subject.getSid());
+            user_subject_line.setPid(pid);
+            user_subject_line.setUid(uid);
+            lines.add(user_subject_line);
+            
+            
+        }
+        
+        return lines;
+    }
+
+  
+
+    
+
+    @Override
+    public UserSubject getUserSubject_Line(int pid, String uid, int sid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public UserSubject getUserSubject_Choose(int pid, String uid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public UserSubject getUserSubject(int pid, String uid, int sid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<UserSubject> getSubjects(int pid, String uid, int sid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public User_subject countSubject(SubjectMix subjectMix, String uid,int pid) {
+        // TODO Auto-generated method stub
+        //计算需要的东西，
+        User_subject user_subject=new User_subject();
+        user_subject.setPid(pid);
+        user_subject.setScore(0);
+        user_subject.setTotalSecond(ConstantUtil.getTimeBetween(subjectMix.getStartTime(), subjectMix.getEndTime()));
+        user_subject.setUid(uid);
+        user_subject.setSid(subjectMix.getSid());
+        boolean isWrong= false;
+        if(subjectMix.getType() == ConstantUtil.SUBJECT_LINE){
+            //算连线题的分
+            for(int i=0;i<subjectMix.getSeq().size();i++){
+                if(subjectMix.getSeq().get(i) == i){
+                    //相符了有分,累加分数
+                    user_subject.setScore(user_subject.getScore()+subjectMix.getScores().get(i));
+                    
+                }else {
+                    
+                    isWrong=true;
+                }
+                
+            }            
+            user_subject.setWrong(isWrong);
+        }else if(subjectMix.getType() == ConstantUtil.SUBJECT_CHOOSE){
+            if(subjectMix.getChoosenIndex() == subjectMix.getAnswerIndex()){
+                user_subject.setScore(user_subject.getScore()+2);//选择题就两分
+                
+            }else{
+                isWrong = true;
+            }
+            
+            user_subject.setWrong(isWrong);
+        }
+        return user_subject;
+    }
+
+    @Override
+    public List<User_subject_choose> countChooseSubjet(SubjectMix subject,
+            String uid,int pid) {
+        List<User_subject_choose> list=new ArrayList<User_subject_choose>();
+     
+        int chooseId=subject.getChoosenIndex();
+        User_subject_choose user_subject_choose=new User_subject_choose();
+        user_subject_choose.setSid(subject.getSid());
+        user_subject_choose.setChooseId(chooseId);//这个id只是一个Index,
+        user_subject_choose.setPid(pid);
+        user_subject_choose.setUid(uid); 
+        list.add(user_subject_choose);
+        return list;
+    }
+
+    @Override
+    @Transactional(propagation=Propagation.REQUIRED,rollbackFor=Exception.class,timeout=1,isolation=Isolation.DEFAULT) 
+    public void insertUser_subject_lines(
+            List<User_subject_line> list) {
+        // TODO Auto-generated method stub
+        //现在需要调dao层写入
+        for(int i=0;i<list.size();i++){
+            subjectDao.insertUser_subject_line(list.get(i));
+            
+        }
+        
+        
+        
+    }
+
+    @Override
+    @Transactional(propagation=Propagation.REQUIRED,rollbackFor=Exception.class,timeout=1,isolation=Isolation.DEFAULT) 
+    public void insertUser_subject_chooses(
+            List<User_subject_choose> list) {
+        // TODO Auto-generated method stub
+        for(int i=0;i<list.size();i++){
+            subjectDao.insertUser_subject_choose(list.get(i));
+            
+        }
+    }
+
+    
+
+   
 
 }

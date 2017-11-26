@@ -35,9 +35,15 @@ public class SubjectMix implements Serializable{
     private List<Integer> seq =new ArrayList<>();//如果是选择题，只有一个值，eid的索引,如果是连线题，单词匹配的eid列表顺序，本来是 0 1 2 3，
     @JSONField(name="textList")
     private List<String>  seqStrings=new ArrayList<>();//如果是填空题，eid顺次的空
-    @JSONField(name="inedxList")
-    private List<Integer> indexSeq=new ArrayList<>();
+    @JSONField(name="indexList")
+    private List<Integer> indexList=new ArrayList<>();
     
+    public List<Integer> getIndexList() {
+        return indexList;
+    }
+    public void setIndexList(List<Integer> indexList) {
+        this.indexList = indexList;
+    }
     public String getTitle() {
         return title;
     }
@@ -131,12 +137,7 @@ public class SubjectMix implements Serializable{
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-    public List<Integer> getIndexSeq() {
-        return indexSeq;
-    }
-    public void setIndexSeq(List<Integer> indexSeq) {
-        this.indexSeq = indexSeq;
-    }
+    
   
     public int getChoosenIndex() {
         return choosenIndex;

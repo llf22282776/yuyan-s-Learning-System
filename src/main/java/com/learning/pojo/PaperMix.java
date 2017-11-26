@@ -39,7 +39,7 @@ public class PaperMix implements Serializable{
         this.totalScore = totalScore;
     }
 
-    public List<SubjectMix> getSubjects() {
+    public  List<SubjectMix> getSubjects() {
         return subjects;
     }
 

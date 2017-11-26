@@ -13,6 +13,8 @@
 <script src="${pageContext.request.contextPath}/js/flat-ui.js"></script>
 <script src="${pageContext.request.contextPath}/js/BootstrapMenu.min.js"></script>
 <script
+	src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.js"></script>
+<script
 	src="${pageContext.request.contextPath}/js/bootstrap-treeview.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/assets/js/application.js"></script>
@@ -24,8 +26,10 @@
 <link href="${pageContext.request.contextPath}/css/flat-ui.css"
 	rel="stylesheet" />
 <link
-	href="${pageContext.request.contextPath}/css/bootstrap-treeview.min.css"
+	href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.css"
 	rel="stylesheet" />
+<script
+	src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.js"></script>
 <link href="${pageContext.request.contextPath}/css/font-awesome.css"
 	rel="stylesheet" />
 <link
@@ -37,12 +41,18 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
+<link href="${pageContext.request.contextPath}/css/queryCommon.css"
+	rel="stylesheet" />
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
 <script src="${pageContext.request.contextPath}/js/audioPlugs.js"></script>
 <script
 	src="${pageContext.request.contextPath}/js/menclickAndsubject.js"></script>
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/img/icons/svg/student.ico" />
+<script>
+	BasePath="${pageContext.request.contextPath}";
+
+	</script>
 </head>
 <body>
 	<div class="rootContainer">
@@ -295,7 +305,9 @@
 				</div>
 			</div>
 			<div id="queryContentDiv" style="display: none"
-				class="jumbotron contentDiv queryDiv"></div>
+				class="jumbotron contentDiv queryDiv">
+				<%@include file="./common/queryCommon.jsp"%>
+			</div>
 			<div id="addContentDiv" style="display: none"
 				class="jumbotron contentDiv addDiv">
 				<div class="container jumbotron addContent">
@@ -372,8 +384,8 @@
 						</label>
 					</div>
 					<div class=" groupRow row">
-						<a title="提交" id="addUserButton" class="subIconLink" >
-							<span class="fui-check-circle iconSubject"></span>
+						<a title="提交" id="addUserButton" class="subIconLink"> <span
+							class="fui-check-circle iconSubject"></span>
 						</a>
 
 					</div>
@@ -505,7 +517,7 @@
 		});
 		//题目框输入事件
 		$(".paperTitleInput").keypress(function(evt) {
-			
+
 		});
 		$("#subjectHelpButton").click(function() {
 			//
@@ -558,238 +570,244 @@
 		$("#addUserButton").click(function() {
 			sumitPeople($(this));
 		});
-		
+
 	});
 
-	
-	function sumitPeople(){
-		if(completeCheck() == false){
-			
-			swal("错误","请填写完全","warning");
-			return ;
+	function sumitPeople() {
+		if (completeCheck() == false) {
+
+			swal("错误", "请填写完全", "warning");
+			return;
 		}
-		
-		
-		
+
 		swal({
-			  title: '提示',
-			  text: "确定现在要添加吗",
-			  type: 'warning',
-			  showCancelButton: true,
-			  confirmButtonText: '是的',
-			  cancelButtonText: '我再想想吧',
-			}).then(function () {
-				
-				$.ajax({
-					url: "${pageContext.request.contextPath}/insertUser" ,  
-			        type: 'POST',  
-			        dataType:"JSON",
-			        contentType:"application/json",
-			        async: true,  
-			        data: JSON.stringify(combineToUserJson()),
-					success:function(data){
-						if(data.result == true || data.result == "true"){
-							swal("","添加成功","success");
-							clearAddArea();
-						}else {
-							
-							swal("错误","添加失败","error");
-						}
-							
-						
-					},
-					error:function(){
-						
-						swal("错误","网络错误,添加失败","error");
+			title : '提示',
+			text : "确定现在要添加吗",
+			type : 'warning',
+			showCancelButton : true,
+			confirmButtonText : '是的',
+			cancelButtonText : '我再想想吧',
+		}).then(function() {
+
+			$.ajax({
+				url : "${pageContext.request.contextPath}/insertUser",
+				type : 'POST',
+				dataType : "JSON",
+				contentType : "application/json",
+				async : true,
+				data : JSON.stringify(combineToUserJson()),
+				success : function(data) {
+					if (data.result == true || data.result == "true") {
+						swal("", "添加成功", "success");
+						clearAddArea();
+					} else {
+
+						swal("错误", "添加失败", "error");
 					}
-					
-					
-				})
-				
-			},function(){
-				
-				
-				
-				
+
+				},
+				error : function() {
+
+					swal("错误", "网络错误,添加失败", "error");
+				}
+
 			})
-		
+
+		}, function() {
+
+		})
+
 	}
-	
-	function upLoadPaper(thisEle){
+
+	function upLoadPaper(thisEle) {
 		//先判断下是否合法
-		if(checkPaperMsgCompleted()==-1){
+		if (checkPaperMsgCompleted() == -1) {
 			//没有题目
-			swal("干吗","你看看有题吗？","question");
-			
-			
-		}else 
-			
-			if(checkPaperMsgCompleted() == 0){
+			swal("干吗", "你看看有题吗？", "question");
+
+		} else
+
+		if (checkPaperMsgCompleted() == 0) {
 			//没有标题
-			swal("","试卷标题呢","question");
-		}else {
-			
+			swal("", "试卷标题呢", "question");
+		} else {
+
 			//1.给试卷打上时间,把标题放入数据结构里面
-			paper.date=new Date().Format("yyyy-MM-dd hh:mm:ss");//时间
-			paper.title=$(".paperTitleInput").val();
-			var errorHappened=false;
+			paper.date = new Date().Format("yyyy-MM-dd hh:mm:ss");//时间
+			paper.title = $(".paperTitleInput").val();
+			var errorHappened = false;
 			//4.点击上传，询问是否确定上传
 			swal({
-				  title: '提示',
-				  text: "确定现在要发布这个试卷吗",
-				  type: 'warning',
-				  showCancelButton: true,
-				  confirmButtonText: '是的',
-				  cancelButtonText: '我再想想吧',
-				}).then(function () {
-					
-					 //先上传源信息
-					  $(".paperSubmitTextDiv").text("正在传输试卷源信息...");
-						$.ajax({
-								url: "${pageContext.request.contextPath}/paperUpload" ,  
-						        type: 'POST',  
-						        dataType:"JSON",
-						        contentType:"application/json",
-						        async: false,  
-						        data: JSON.stringify(getPaperMsg()),  
-								success:function(data){
-									 //上传成功了就成功了
-									 if(data.result =="true" || data.result ==true){
-										 //取pid
-										 paper.pid=data.des;
-										 
-										 return;
-									 }
-									 swal({
-										 title:"错误",
-										 text:"试卷上传失败因为"+data.des,
-										 type:"error"
-									 });
-									 errorHappened=true;
-								},
-								error:function(e){
-									 swal({
-										 title:"错误",
-										 text:"试卷上传失败，网络错误",
-										 type:"error"
-										 
-									 });
-									 errorHappened=true;
-									
+				title : '提示',
+				text : "确定现在要发布这个试卷吗",
+				type : 'warning',
+				showCancelButton : true,
+				confirmButtonText : '是的',
+				cancelButtonText : '我再想想吧',
+			})
+					.then(
+							function() {
+
+								//先上传源信息
+								$(".paperSubmitTextDiv").text("正在传输试卷源信息...");
+								if (paper.pid == -1) {
+									$
+											.ajax({
+												url : "${pageContext.request.contextPath}/paperUpload",
+												type : 'POST',
+												dataType : "JSON",
+												contentType : "application/json",
+												async : false,
+												data : JSON
+														.stringify(getPaperMsg()),
+												success : function(data) {
+													//上传成功了就成功了
+													if (data.result == "true"
+															|| data.result == true) {
+														//取pid
+														paper.pid = data.des;
+
+														return;
+													}
+													swal({
+														title : "错误",
+														text : "试卷上传失败因为"
+																+ data.des,
+														type : "error"
+													});
+													errorHappened = true;
+												},
+												error : function(e) {
+													swal({
+														title : "错误",
+														text : "试卷上传失败，网络错误",
+														type : "error"
+
+													});
+													errorHappened = true;
+
+												}
+
+											})
+
 								}
-								
-							})
-						if(errorHappened)return;	
-					//这里就开始显示一个带有进度条的，不可点击外侧关闭的进度框
-					 swal({
-						 title: '',
-						 showCloseButton: false,
-						 showCancelButton: false,
-						 showConfirmButton:false,
-						 allowOutsideClick:false,
-						 allowEscapeKey:false,
-						 allowEnterKey:false,
-						 html:"<div><div class='row pbl paperSubmitTextDiv'></div>"+
-						 "<div  class='row pbl sliperDiv'></div></div>",
-						 onOpen:function(){
-							 //打开后要做的事情		
-							 //1.读取lastIndex
-							 //设置一个滑动条，总码数/初始位置
-							   var errorHappened=false;
-							  $(".sliperDiv").slider({
-									    min: 1,
-									    max: paper.subjects.length,
-									    value: 1,
-									    orientation: "horizontal",
-									    range: "min",
-									    slide: function( event, ui ) {
-									   		  return false;
-									       
-									    }
-									}).addSliderSegments($(".sliperDiv").slider("option").max);
-							 //3 for 循环，index小于lastIndex的时候，从lastIndex开始,每完成一个进度条前进，文字改变
-							 for(var i=0;i<paper.subjects.length;i++){
-								 //设置文本
-								 $(".paperSubmitTextDiv").text("正在传输第 "+(i+1)+" 道题");
-								 //设置滑动条
-								 $(".sliperDiv").slider("value",(i+1));
-								 
-								
-								 if(i<lastIndex)continue;//仅仅只是
-								 //不然就要上传
-								 //构建一个formdata的对象
-								 var dataForm=createSubjectFormdata(i);
-								 $.ajax({
-									 url: paper.subjects[i].sid==undefined||paper.subjects[i].sid==null?"${pageContext.request.contextPath}/subjectUpload":"${pageContext.request.contextPath}/subjectUploadAlreadyExist" ,  
-							         type: 'POST',  
-							         data: dataForm,  
-							         dataType:"JSON",
-							         async: false,  
-							         cache: false,  
-							         contentType: false,  
-							         processData: false,  
-									 success:function(data){
-										 //上传成功了就成功了
-										 if(data.result =="true" || data.result ==true)return ;
-										 //失败了结束
-										 swal("错误","第"+i+"道题因为"+data.des+"上传失败，再次点击上传即可从断电处继续","error");
-									            	
-									      //重新记一下
-									     lastIndex=i;
-									     errorHappened=true;
-									            	
-									             
-									 },
-									 error: function (returndata) {  
-										 swal("错误","第"+i+"道题上传失败，再次点击上传即可从断电处继续","error")
-											//重新记一下
-						            		lastIndex=i;
-						            		//
-						            		errorHappened=true;
-									            
-							          }
-								 });
-								 
-								 if(errorHappened)break;
-							 }
-							 
-							 
-							 //没完成一次循环，设置文本和进度条的位置
-							 //5 全部完成，重置lastIndex,显示上传成功，关闭对话框
-							//情况paper区域
-							if(errorHappened)return;
-							cleanPaper();
-							swal("","发布试卷成功!","success");
-							 
-							 
-							 
-							 
-						 }
-						 
-						 
-						 
-						 
-					 });
-					 
-					 
-					 
-				}, function (dismiss) {
-					
-				});
-			
-			
-			
-			
+								if (errorHappened)
+									return;
+								//这里就开始显示一个带有进度条的，不可点击外侧关闭的进度框
+								swal({
+									title : '',
+									showCloseButton : false,
+									showCancelButton : false,
+									showConfirmButton : false,
+									allowOutsideClick : false,
+									allowEscapeKey : false,
+									allowEnterKey : false,
+									html : "<div><div class='row pbl paperSubmitTextDiv'></div>"
+											+ "<div  class='row pbl sliperDiv'></div></div>",
+									onOpen : function() {
+										//打开后要做的事情		
+										//1.读取lastIndex
+										//设置一个滑动条，总码数/初始位置
+										var errorHappened = false;
+										$(".sliperDiv").slider({
+											min : 1,
+											max : paper.subjects.length,
+											value : 1,
+											orientation : "horizontal",
+											range : "min",
+											slide : function(event, ui) {
+												return false;
+
+											}
+										}).addSliderSegments(
+												$(".sliperDiv")
+														.slider("option").max);
+										//3 for 循环，index小于lastIndex的时候，从lastIndex开始,每完成一个进度条前进，文字改变
+										for (var i = 0; i < paper.subjects.length; i++) {
+											//设置文本
+											$(".paperSubmitTextDiv").text(
+													"正在传输第 " + (i + 1) + " 道题");
+											//设置滑动条
+											$(".sliperDiv").slider("value",
+													(i + 1));
+
+											if (i < lastIndex)
+												continue;//仅仅只是
+											//不然就要上传
+											//构建一个formdata的对象
+											var dataForm = createSubjectFormdata(i);
+											$
+													.ajax({
+														url : paper.subjects[i].sid == undefined
+																|| paper.subjects[i].sid == null ? "${pageContext.request.contextPath}/subjectUpload"
+																: "${pageContext.request.contextPath}/subjectUploadAlreadyExist",
+														type : 'POST',
+														data : dataForm,
+														dataType : "JSON",
+														async : false,
+														cache : false,
+														contentType : false,
+														processData : false,
+														success : function(data) {
+															//上传成功了就成功了
+															if (data.result == "true"
+																	|| data.result == true)
+																return;
+															//失败了结束
+															swal(
+																	"错误",
+																	"第"
+																			+ i
+																			+ "道题因为"
+																			+ data.des
+																			+ "上传失败，再次点击上传即可从断电处继续",
+																	"error");
+
+															//重新记一下
+															lastIndex = i;
+															errorHappened = true;
+
+														},
+														error : function(
+																returndata) {
+															swal(
+																	"错误",
+																	"第"
+																			+ i
+																			+ "道题上传失败，再次点击上传即可从断电处继续",
+																	"error")
+															//重新记一下
+															lastIndex = i;
+															//
+															errorHappened = true;
+
+														}
+													});
+
+											if (errorHappened)
+												break;
+										}
+
+										//没完成一次循环，设置文本和进度条的位置
+										//5 全部完成，重置lastIndex,显示上传成功，关闭对话框
+										//情况paper区域
+										if (errorHappened)
+											return;
+										cleanPaper();
+										swal("", "发布试卷成功!", "success");
+
+									}
+
+								});
+
+							}, function(dismiss) {
+
+							});
+
 		}
-		
-		
-		
-		
-		
-		
-		
+
 	}
-	function cleanSubjectArea(){
+	function cleanSubjectArea() {
 		//清理全部题型的div的残留，确保数据依然保存着
 		/*1.选择题清空
 		  1.completed false
@@ -797,9 +815,10 @@
 		  3.音频删除
 		  4.填空框清空
 		  
-		*/
-		$(".getter").attr("completed",false);
-		$(".linePic").cropper("replace","${pageContext.request.contextPath}/img/temp.png");
+		 */
+		$(".getter").attr("completed", false);
+		$(".linePic").cropper("replace",
+				"${pageContext.request.contextPath}/img/temp.png");
 		$(".audioRow").empty();
 		$(".wordInput").val("");
 		$(".scoreInput").val("");
@@ -807,23 +826,23 @@
 			选择题区域清空
 		
 		
-		*/
+		 */
 		$(".chooseInput").val("");
-		$(".chooseInput").attr("completed",false);
+		$(".chooseInput").attr("completed", false);
 		$("#subjectName").val("");
-		
+
 		//数据结构清
-		
-		  nowSubject = {
-				type : -1,
-				title : "",
-				totalScore:0,
-				elements : [],
-				index:0
-			};
+
+		nowSubject = {
+			type : -1,
+			title : "",
+			totalScore : 0,
+			elements : [],
+			index : 0
+		};
 	}
 </script>
-
+<script src="${pageContext.request.contextPath}/js/queryCommon.js"></script>
 
 
 </html>

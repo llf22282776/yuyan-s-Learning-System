@@ -69,7 +69,7 @@
 					<div class="navigatorItem col-md-6 row">
 
 						<div class="nButtonDiv col-md-3">
-							<a id="" class="subIconLink" href="#"><img
+							<a id="" class="subIconLink" href="${pageContext.request.contextPath}/getQueryListPage"><img
 								src="${pageContext.request.contextPath}/img/icons/svg/video.svg" /></a>
 						</div>
 						<div class="coverDiv col-md-3">历史试卷</div>
