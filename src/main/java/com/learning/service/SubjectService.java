@@ -8,9 +8,12 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.learning.pojo.PaperMetaData;
 import com.learning.pojo.PaperMix;
 import com.learning.pojo.SubjectFromJs;
 import com.learning.pojo.SubjectMix;
+import com.learning.pojo.User;
+import com.learning.pojo.UserMix;
 import com.learning.pojo.UserPaper;
 import com.learning.pojo.UserSubject;
 import com.learning.pojo.User_paper;
@@ -80,5 +83,18 @@ public interface SubjectService {
      * 
      * */
     public List<UserSubject> getSubjects(int pid,String uid,int sid); 
+    
+    /**
+     * 获取一个用户的userMix
+     * 
+     * */
+    public UserMix getUserMixByUid(String uid);
+    
+    /**
+     * 根据 up 获得 us
+     * @throws Exception 
+     * 
+     * */
+    public List<UserMix> getUserMixByUp(User user,User_paper[] upList,PaperMetaData p) throws Exception;
     
 } 

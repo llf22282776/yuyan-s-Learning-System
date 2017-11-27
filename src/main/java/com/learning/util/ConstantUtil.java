@@ -28,7 +28,7 @@ public class ConstantUtil {
     public static final String IMG_PATH="img/";
     public static final String AUDIO_PATH="audio/";
     public static final String WEBM_POSTFIX=".webm";
-    public static final String TIME_STR = "%dd %dhr %dmin %dsec";
+    public static final String TIME_STR = "%天 %d小时 %d分 ";
     public static String formatTime(long ms) {
 
         int ss = 1000;
@@ -41,7 +41,7 @@ public class ConstantUtil {
         long minute = (ms - day * dd - hour * hh) / mi;
         long second = (ms - day * dd - hour * hh - minute * mi) / ss;
         String timeString = new String(ConstantUtil.TIME_STR);
-        return String.format(timeString, day, hour, minute, second);
+        return String.format(timeString, day, hour, minute);
     }
     public static long getTimeBetween(String startTime,String endTime) {
         Timestamp st1=Timestamp.valueOf(startTime);
@@ -49,6 +49,12 @@ public class ConstantUtil {
         
       
         return Math.abs(st1.getTime() - st2.getTime());
+    }
+    public static long getTimeBetween(Timestamp startTime,Timestamp endTime) {
+     
+        
+      
+        return Math.abs(startTime.getTime() - endTime.getTime());
     }
     public static int[] randomSeq(int start,int end){
         //生成一个0-end的随机序列

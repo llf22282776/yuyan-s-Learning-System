@@ -32,7 +32,7 @@
 #queryDatePicker{
 	color: #1bc5a3;
 	font-size: 40px;
-	line-height: 1;
+	line-height: 1.2;
 
 }
 #queryDatePicker:hover,#queryDatePicker:focus{
@@ -43,13 +43,13 @@
 #querySubmitButton{
 	color: #3498db;
 	font-size: 40px;
-	line-height: 1;
+	line-height: 1.2;
 }
 
 #querySubmitButton:hover,#querySubmitButton:focus {
 	color: #52b6f9;
 }
-.queryHeaderRow>.row>.col-md-1:first-child{
+.queryHeaderRow>.row>.col-md-1{
 	text-align: right;
 
 

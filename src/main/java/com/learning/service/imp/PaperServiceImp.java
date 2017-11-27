@@ -22,6 +22,7 @@ import com.learning.dao.SubjectDao;
 import com.learning.pojo.ChooseElement;
 import com.learning.pojo.LineElement;
 import com.learning.pojo.Paper;
+import com.learning.pojo.PaperMetaData;
 import com.learning.pojo.PaperMix;
 import com.learning.pojo.PaperMsg;
 import com.learning.pojo.PaperQueryState;
@@ -288,6 +289,32 @@ public class PaperServiceImp implements PaperService {
             papers.add(paper);
         } 
         return papers;
+    }
+
+    @Override
+    public PaperMix getUserDonePaper(int pid,User user) {
+        PaperMix paperMix=new PaperMix();
+       try {
+           // TODO Auto-generated method stub
+           //1.获取基本的信息
+       
+           Paper paper=paperDao.getSpecPaper(pid);
+           paperMix.setPaperDataIn(paper);
+           //2.获取这个卷子的所有u p 
+           User_paper[] upPapers= paperDao.getUser_papersByPid(pid);
+           paperMix.getPaperMetaData().insertPapers(upPapers);
+           //3.获取所有的user相关
+           paperMix.setUsers(subjetServiceImp.getUserMixByUp(user,upPapers,paperMix.getPaperMetaData()));
+           paperMix.setResult(true);
+           return paperMix;
+    } catch (Exception e) {
+        LOGGER.error(e.getMessage());
+        e.printStackTrace();
+        paperMix.setResult(false);
+        return paperMix;
+        // TODO: handle exception
+    }
+        
     }
 
 }

@@ -1,0 +1,98 @@
+@CHARSET "UTF-8";
+
+.subjectTotalView {
+	position: fixed;
+	width: 14%;
+	right: 10px;
+	border-radius: 5px;
+	text-align: center;
+	background-color: #eee;
+	padding-top: 10px;
+}
+
+.subjectUserView {
+	position: fixed;
+	width: 12%;
+	border-radius: 5px;
+	left: 3%;
+}
+
+.subjectUserView>.headerRow {
+	text-align: center;
+}
+
+.paperTotalDiv {
+	margin-left: 10%;
+	height: 230px;
+}
+
+.paperUserTotalView {
+	float: left;
+	margin-left: 3%;
+	width: 750px;
+	background-color: #fefefe;
+	margin-top: 28px;
+	border-radius: 25px;
+}
+
+.paperUserTotalView>.area>.row {
+margin-top: 10px;
+font-size: 24px;
+margin-bottom: 10px;
+}
+
+.paperUserTotalView>.area {
+	float: left;
+	width: 230px;
+}
+
+div.rankArea>.headerRow>span {
+	color: #3498db;
+	font-size: 24px;
+}
+
+div.rankArea {
+	text-align: center;
+}
+
+div.rankArea>.headerRow {
+	text-align: center;
+}
+
+div.area .row>.col-sm-4 {
+	text-align: right;
+}
+
+.paperTotalView {
+	float: left;
+padding-left: 2%;
+width: 425px;
+background-color: #fefefe;
+margin-top: 28px;
+border-radius: 25px;
+margin-left: 2%;
+}
+
+.paperCharts {
+	width: 180px;
+	height: 150px;
+	margin-left: 10px;
+}
+
+.row .textArea {
+	display: inline;
+	padding-left: 5px;
+	padding-right: 5px;
+	color: cornflowerblue;
+}
+
+div.nameArea .textArea {
+	padding-left: 5px;
+	padding-right: 5px;
+	color: #e74c3c;
+	display: inline;
+}
+
+.paperTotalView>.scoreRow>.chartsCol {
+	float: left;
+}

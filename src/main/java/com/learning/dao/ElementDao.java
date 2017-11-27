@@ -2,8 +2,11 @@ package com.learning.dao;
 
 
 import com.learning.pojo.ChooseElement;
+import com.learning.pojo.ElementMix;
 import com.learning.pojo.LineElement;
 import com.learning.pojo.Subject_line;
+import com.learning.pojo.User_subject_choose;
+import com.learning.pojo.User_subject_line;
 
 public interface ElementDao {
     public int insertIntoLine(LineElement lineEle);
@@ -16,6 +19,9 @@ public interface ElementDao {
     public ChooseElement[] getChoosesBySid(int sid);
     public int getRightChoosenIndex(int sid);//获取正确的选择题选项
     
-    
+    public User_subject_line[] getUser_Paer_Subjet_lines(String uid,int pid,int sid);
+    public User_subject_choose[] getUser_Paer_Subjet_chooses(String uid,int pid,int sid);
+    public ElementMix[] getLineElementMixs(String uid,int pid,int sid);
+    public ElementMix[] getChooseElementMixs(String uid,int pid,int sid);
     
 }

@@ -13,4 +13,6 @@ public interface UserDao {
     public int insertUser(String uid,String password,int position,String uname);
     
     
+    //4,获取一个user）
+    public User getUserByUid(String uid);
 }

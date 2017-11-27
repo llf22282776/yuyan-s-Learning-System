@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.learning.util.ConstantUtil;
 
 public class SubjectMix implements Serializable{
     /**
@@ -14,14 +15,17 @@ public class SubjectMix implements Serializable{
     private String title;
     private int sid;
     private int type;//题目类型
-    private int totalScore;
+    private int totalScore;//查询阶段有用
+    private int score;//查询阶段有用
     private String startTime ="";
-    private String endTime="" ;
+    private String endTime="" ;//这两个字段在查询阶段是没有用的
+    private String totalSecond;//这个字段是有效的
     private List<String> audios=new ArrayList<>();
     private List<String> pics=new ArrayList<>();
     private List<String> words=new ArrayList<>();
     private List<String> texts=new ArrayList<>();//填空题和选择题都是这个
-   
+    private int scoreRank; //排名
+    private int timeRank; //排名
     private int answerIndex;
     
     @JSONField(name = "choosenIndex")
@@ -144,5 +148,76 @@ public class SubjectMix implements Serializable{
     }
     public void setChoosenIndex(int choosenIndex) {
         this.choosenIndex = choosenIndex;
+    }
+    public String getTotalSecond() {
+        return totalSecond;
+    }
+    public void setTotalSecond(String totalSecond) {
+        this.totalSecond = totalSecond;
+    }
+    public void setSubjectMixByU_sAndEle(User_subject user_subject,int type,User_subject_choose[] user_subject_chooses,User_subject_line[] user_subject_lines){
+        if(type == ConstantUtil.SUBJECT_CHOOSE){
+            this.setSubjectMixByU_sAndEle_Choose(user_subject, type, user_subject_chooses);
+            
+        }else if(type == ConstantUtil.SUBJECT_LINE){
+            
+            this.setSubjectMixByU_sAndEle_Line(user_subject, type, user_subject_lines);
+        }
+        
+    }
+    public void setSubjectMixByU_sAndEle_Line(User_subject user_subject,int type,User_subject_line[] user_subject_lines){
+        
+        
+    }
+     public void setSubjectMixByU_sAndEle_Choose(User_subject user_subject,int type,User_subject_choose[] user_subject_chooses){
+     
+     
+ }
+     public void setElementsByType(ElementMix[] elementMixs,int type){
+        
+         if(type == ConstantUtil.SUBJECT_LINE){
+             //连线题的相关，那就设置
+             List<Integer> selectSwapList=new ArrayList<>();
+             for(ElementMix elementMix:elementMixs){
+                 selectSwapList.add(elementMix.getLotherId());
+             }
+            for(ElementMix elementMix:elementMixs){
+                audios.add(elementMix.getVideo());
+                pics.add(elementMix.getPic());
+                scores.add(elementMix.getScore());
+                indexList.add(elementMix.getIndex());
+                seq.add(selectSwapList.indexOf(elementMix.getLotherId()));
+                eid.add(elementMix.getLid());
+            }
+
+         }else if(type == ConstantUtil .SUBJECT_CHOOSE){
+             for(ElementMix elementMix:elementMixs){
+                 choosenIndex=elementMix.getChooseId();
+                 answerIndex=elementMix.getAnswerId();
+                 texts.add(elementMix.getText());
+                 eid.add(elementMix.getCid());
+             }
+             
+         }
+         
+         
+     }
+    public int getScore() {
+        return score;
+    }
+    public void setScore(int score) {
+        this.score = score;
+    }
+    public int getScoreRank() {
+        return scoreRank;
+    }
+    public void setScoreRank(int scoreRank) {
+        this.scoreRank = scoreRank;
+    }
+    public int getTimeRank() {
+        return timeRank;
+    }
+    public void setTimeRank(int timeRank) {
+        this.timeRank = timeRank;
     }
 }

@@ -395,13 +395,33 @@ public class MainController {
             RequestMethod.GET })
 
     public String checkPaperDetail(HttpServletRequest req, HttpServletResponse res) {
-     
-        if(StringUtil.isBlank(req.getParameter("pid") )){
+        
+        if(StringUtil.isBlank(req.getParameter("pid") )  ){
+            
             return "redirect:/main";
         
         
         }
-        return "redirect:/getStudentNodoingPaperPage";
+       try {
+           setUsername(req);
+           int pid = Integer.parseInt(req.getParameter("pid"));
+           PaperMix paperMix = paperServiceImp.getUserDonePaper(pid,(User)req.getSession().getAttribute("user"));
+           req.setAttribute("paper", paperMix);
+           req.setAttribute("user", (User)req.getSession().getAttribute("user"));
+           req.setAttribute("paperJson", JSONObject.toJSONString(paperMix));
+           return "paper/checkDetailPage";
+    } catch (Exception e) {
+        // TODO: handle exception
+        PaperMix paperMix=new PaperMix();
+        paperMix.setResult(false);
+        e.printStackTrace();
+        LOGGER.error(e.getMessage());
+        req.setAttribute("paper", paperMix);
+        req.setAttribute("user", (User)req.getSession().getAttribute("user"));
+        req.setAttribute("paperJson", JSONObject.toJSONString(paperMix));
+        return "paper/checkDetailPage";
+     }
+       
 
     }
     /**

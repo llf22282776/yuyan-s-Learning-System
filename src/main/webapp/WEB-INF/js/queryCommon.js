@@ -9,8 +9,22 @@ var queryState={
 		
 		
 		
-}
+};
+(function($){
+	$.fn.datetimepicker.dates['zh-CN'] = {
+			days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+			daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+			daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+			months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+			monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+			today: "今天",
+			suffix: [],
+			meridiem: ["上午", "下午"]
+	};
+}(jQuery));
+
 //添加事件了
+
 $("#querySubmitButton").click(function(){
     submitClick($(this));
 
@@ -24,7 +38,8 @@ $("#queryDatePicker").click(function(){
 })
 $('#queryDatePicker').datetimepicker({
 	format:'yyyy-mm-dd',
-	minView:3
+	minView:3,
+	language:'zh-CN'
 });
 
 $("#queryInput").change(function(){
@@ -128,7 +143,13 @@ function queryPaperCardClick(thisEle){
         confirmButtonText : '是的',
         cancelButtonText : '取消',
     }).then(function(){
-        location.href=BasePath+"/checkPaperDetail?"+"pid="+thisEle.find(".paperPidDiv").text();
+       // location.href=BasePath+"/checkPaperDetail?"+"pid="+thisEle.find(".paperPidDiv").text();
+    	$('.tempA').remove();
+    	var url=BasePath+"/checkPaperDetail?"+"pid="+thisEle.find(".paperPidDiv").text();
+		var tempA=$("<a style='display:none' class='tempA' target='_blank' href='"+url+"' >asd<a/>");
+		$('body').append(tempA);
+		$('.tempA')[0].click();
+		$('.tempA').remove();
     },function(value){
 
     });

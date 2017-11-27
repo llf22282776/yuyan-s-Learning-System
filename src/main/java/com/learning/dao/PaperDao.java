@@ -24,5 +24,7 @@ public interface PaperDao {
     //
     public Paper[] getQueryPapersWithParms(Map<String, Object> map);
     
+    //获取多条up
+    public User_paper[] getUser_papersByPid(int pid);
     
 }

@@ -39,8 +39,11 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/checkDetail.css"
+	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
 <script src="${pageContext.request.contextPath}/js/commonPaper.js"></script>
+
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/img/icons/svg/student.ico" />
 </head>
@@ -49,15 +52,13 @@
 		<%@include file="../common/header.jsp"%>
 		<div class="">
 			
-			<div style="display: block" class="jumbotron contentDiv  waitingDiv">
-				<!-- 这里显示请稍后，正在拉取试卷 -->
-				<div class="waitTextDiv">
-					<span class="icon-spinner icon-spin"></span>请稍后，正在拉取试卷...
-				</div>
+			<div style="display: block" class="jumbotron contentDiv ">
+				<%@include file="../common/checkDetailPaperDiv.jsp"%>
 			</div>
 			<div style="display: none" class="jumbotron contentDiv subjectDiv">
 
 			</div>
+			<%@include file="../common/checkDetailSubjectDiv.jsp"%>
 
 		</div>
 
@@ -108,52 +109,34 @@
 	<video class='subjectAudioView'></video>
 </body>
 <script>
+	var testPaper = {
+	isStarted : false,//判断是否开始
+	paper : {},//试卷保存在这个对象里面
+	startTime : "",//答卷开始时间
+	endTime : "",//答卷结束时间
+	subjectsLength : 0, //试卷总长度
+	nowSubjectIndex : 0,//现在是第几题
+	paperType : 0,//-1 答题形式 0查看形式  （答完题后可以查看）
+	nowUserIndex:0,//从o开始
+
+	};
 	$(document)
 			.ready(
 					function() {
-						//拉取题目
-						$
-								.ajax({
-									url : "${pageContext.request.contextPath}/getTestPaper",
-									type : 'POST',
-									dataType : "json",
-									async : false,//同步的方法  
-									success : function(data) {
-										if (data.result == true
-												|| data.result == "true") {
-											//开始初始化试卷
-											//1.去掉等待面板
-											$(".contentDiv").css("display",
-													"none");
-											$(".subjectDiv").css("display",
-													"block");
-											initPaper(".subjectDiv", -1, data);
+						$('.userSelecter').change(function(){
+							selectChangeEvent($(this));
 
-										} else {
-											//返回到首页
-											swal("错误", "拉取试卷失败，请联系管理员或重新选择试卷",
-													"error")
-													.then(
-															function() {
-																//回到上一个列表页面
-																location.href = "${pageContext.request.contextPath}/getStudentNodoingPaperPage";
 
-															});
+						});
+						//组织题目
+						if(testPaper.paper.result == false || testPaper.paper.result == "false"){
+							swal("","拉取试卷失败，请联系管理员","error").then(function(){
+							location.href = '${pageContext.request.contextPath}/main';
+							var localpaper=JSON.parse('${paperJson}');
+						})}else {
+							initPaper(".subjectDiv",0,localpaper);
 
-										}
-
-									},
-									error : function() {
-
-										swal("错误", "网络错误,拉取试卷失败", "error")
-												.then(
-														function() {
-															location.href = "${pageContext.request.contextPath}/getStudentNodoingPaperPage";
-
-														});
-									}
-
-								});
+						}
 
 					});
 
@@ -162,16 +145,151 @@
 		endTime : "",
 
 	};
-	var testPaper = {
-		isStarted : false,//判断是否开始
-		paper : {},//试卷保存在这个对象里面
-		startTime : "",//答卷开始时间
-		endTime : "",//答卷结束时间
-		subjectsLength : 0, //试卷总长度
-		nowSubjectIndex : 0,//现在是第几题
-		paperType : -1,//-1 答题形式 0查看形式  （答完题后可以查看）
 
-	};
+	function selectChangeEvent(thisEle){
+			//下拉框切换事件
+			//切换用户
+			 switchUser(parseInt(thisEle.attr("index")));
+
+
+	}
+	function switchUser(index){
+			//切换用户，
+			testPaper.nowUserIndex=index;
+			//更改testPaper.subjects,nowsubjectInde nowUserIndex
+			testPaper.paper.subjects=testPaper.paper.users[testPaper.nowUserIndex].subjects;
+			//更改试卷头信息
+			changePaperDataDiv();
+			testPaper.paper.nowSubjectIndex-=1;//减小
+			//切换到下一个题(表面上依然是这一题)
+			switchSubjectToNext();
+
+
+	}
+
+	function changePaperDataDiv(){
+		//更改用户数据，切换数据的时候被调用
+		//清空paperTotalDate
+		cleanPaperDataDiv();
+		//重新渲染数据,各种div
+		paintPaperDataDiv();
+		//重新绘制表格,各种
+		paintPaperViewCharts();
+	}
+	function cleanPaperDataDiv(){
+		//更改用户数据，切换数据的时候被调用
+		//姓名不用变化，
+		//分数和时间清空//排行榜清空
+		$('.paperUserTotalView').find('.textArea').empty();
+		//表格什么的重新加载一下就行，不用清空
+
+	}
+	function paintPaperDataDiv(){
+		//绘制试卷面板数据
+
+			var userMix=testPaper.paper.users[testPaper.nowUserIndex];
+		//分数
+		$('.paperUserTotalView').find(".nameArea").find('.scoreRow').find('.textArea').text(userMix.totalScore);
+		//时间
+		$('.paperUserTotalView').find(".nameArea").find('.timeRow').find('.textArea').text(userMix.totalSecond);
+		//排行
+		$('.paperUserTotalView').find(".rankArea").find('.scoreRow').find('.textArea').text(userMix.scoreRank);
+		//时间
+		$('.paperUserTotalView').find(".rankArea").find('.timeRow').find('.textArea').text(userMix.timeRank);
+
+	}
+	function paintSubjectDataDiv(){
+		//绘制题目面板数据
+		//清空数据div
+		var subjectMix=testPaper.paper.subjects[testPaper.nowSubjectIndex];
+		//分数
+		$('.subjectUserView').find(".nameArea").find('.scoreRow').find('.textArea').text(subjectMix.score);
+		//时间
+		$('.subjectUserView').find(".nameArea").find('.timeRow').find('.textArea').text(subjectMix.totalSecond);
+	}
+	function changeSubjectDiv(){
+		//switchSubject的时候触发,在修改完index之后，就是clean之后
+		//重新绘制面板
+		cleanSubjectDataDiv();
+		paintSubjectDataDiv();
+		//重新绘制表格
+		paintSubjectCharts();
+	}
+	function cleanSubjectDataDiv(){
+		$('.subjectUserView').find('.textArea').empty();
+
+	}
+	function initCharts(){
+		//初始化各种表
+		/*skillRaderCharts
+		paperScoreCharts
+		paperTimeCharts
+		subjectScoreCharts
+		subjetTimeCharts*/
+			skillChart=echarts.init(($('#skillRaderCharts'))[0]);
+			paperScoreChart=echarts.init(($('#paperScoreCharts'))[0]);
+			paperTimeChart=echarts.init(($('#paperTimeCharts'))[0]);
+			subjectScoreChart=echarts.init(($('#subjectScoreCharts'))[0]);
+			subjetTimeChart=echarts.init(($('#subjetTimeCharts'))[0]);
+	}
+	function paintPaperViewCharts(){
+		//能力表，两个时间表,pie，一个skill表
+	var opt=creatOptionByType('skill');
+	skillChart.setOptions(opt,{
+			notMerge:true,
+	});
+	opt=creatOptionByType('paperScore');
+	paperScoreChart.setOptions(opt,{
+		notMerge:true,
+	});
+	opt=creatOptionByType('paperTime');
+	paperTimeChart.setOptions(opt,{
+		notMerge:true,
+	});
+
+	}
+
+	function creatOptionByType(type ){
+		var opt={
+				title:{
+				text:''
+			},
+				legend:{
+				data:['']
+			},
+
+		}
+		if(type == 'skill'){
+			return opt;
+		}else if(type == 'paperScore'){
+			return opt;
+		}else if(type == 'paperTime'){
+			return opt;
+
+		}
+
+	}
+	function paintSubjectCharts(){
+		//画那两个pie
+
+	}
+	function preSubjectClickEvent(){
+		//切换
+		//第一题没饭应
+		if(testPaper.nowUserIndex <=0)return ;
+		else testPaper.nowUserIndex-=2;//减小两个，因为switch的时候会增加
+		//要让下一题的按钮依然有效
+		var buttonEle = $(testPaper.className).find(".subjectRooter").find(
+		"#papertestSubmitButton");
+		buttonEle.click(function() {
+				nextButtonClick($(this));
+
+		});
+
+		//调用switch就行
+		switchSubjectToNext();
+
+	}
 	function initPaper(className, type, paper) {
 		//创建全局变量(如果没有的话)
 		testPaper = {
@@ -182,7 +300,8 @@
 			subjectsLength : paper.length, //试卷总长度
 			nowSubjectIndex : -1,//现在是第几题
 			paperType : type,//-1 答题形式 0查看形式  （答完题后可以查看）
-			className : className
+			className : className,
+			nowUserIndex:0,//从o开始
 		};
 		subjectStamp = {
 			startTime : "",
@@ -198,6 +317,8 @@
 		chooseSubjectEle = $('<div class="chooseSubjectContent"><c:forEach begin="0" end="3" varStatus="status"><div class="row"><div class="form-group subjectChooseGroup"><label class="radio radio-inline col-sm-1" for="paperChooseInputRadio${status.index+1}"> <input name="chooseRadio" type="radio" data-toggle="radio" value="" id="paperChooseInputRadio${status.index+1}" class="paperChooseRadio" index="${status.index}" required /> </label> <div class="col-sm-8"> <h4></h4> </div> </div> </div> </c:forEach></div>');
 		//创建一下
 		createElement(className);
+		//初始化表
+		initCharts();
 		//切换到第一题
 		switchSubjectToNext();
 	}
@@ -205,9 +326,10 @@
 	function createElement(className) {
 		//清空这个类下的内容，然后创建
 		$(className).empty();
-		var contentEle = $('<div class="row subjectHeader"><div class="col-xs-1"></div><div class="col-xs-10"></div></div><div class="row subjectContent"></div><div class="row subjectRooter"><div class="scoreDiv"></div><div class="row stepState" id="stepState"></div><div class="row nextButtonDiv"><a id="papertestSubmitButton" class=""><span class="iconSubject fui-arrow-right"aria-hidden="true"></span> </a></div></div>');
+		var contentEle = $('<div class="row subjectHeader"><div class="col-xs-1"></div><div class="col-xs-10"></div></div><div class="row subjectContent"></div><div class="row subjectRooter"><div class="scoreDiv"></div><div class="row stepState" id="stepState"></div><div class="row nextButtonDiv"><div class="col-md-6"><a id="preSubjectButton" class=""><span class="iconSubject fui-arrow-left"aria-hidden="true"></span></a></div><div class="col-md-6"><a id="papertestSubmitButton" class=""><span class="iconSubject fui-arrow-right"aria-hidden="true"></span> </a></div></div></div>');
 
 		$(className).append(contentEle);//添加进来
+		//给按钮添加事件
 	}
 	function switchSubjectToNext() {
 		//切换subject到下一题，第一次的时候，下一题是0编号
@@ -217,8 +339,10 @@
 			//做完了，
 			//1.保存这道题的做题结果，开始/结束时间 时间，
 			saveSubject();
-			//2.清除答题区域
+			//2.清除答题区域,index增加
 			cleanSubjectArea();
+			//3.修改数据面板
+			changeSubjectDiv();
 			//3.绘制答题区域
 			paintSubject();
 			//4.更改进度条
@@ -495,20 +619,25 @@
 	}
 	function drawlines(thisEle, list) {
 		//清空，遍历List划线
-		var cavnsEle = thisEle.closest(".lineSubjectContent").find(
+		var cavnsEle = thisEle.find(
 				"#linePainter");
 		cavnsEle.clearCanvas();
 		for ( var i in list) {
 			var lineEle = list[i];
 
-			cavnsEle.drawLine({
-				strokeStyle : '#000',
-				strokeWidth : 10,
-				x1 : 110 * (lineEle.start + 1),
-				y1 : 0,
-				x2 : 110 * (lineEle.index + 1),
-				y2 : 220,
-			});
+				console.log("i:" + i + " " + (110 + 210 * (lineEle.start)) / 3
+				+ " " + (110 + 210 * (lineEle.index)) / 3);
+				var disTance = (110 + 210 * (lineEle.index)) / 3
+					- (110 + 210 * (lineEle.start)) / 3;
+				cavnsEle.drawLine({
+					strokeStyle : '#000',
+					strokeWidth : 1,
+					x1 : (110 + 210 * (lineEle.start)) / 3,
+					y1 : 0,
+					x2 : (110 + 210 * (lineEle.index)) / 3 + disTance / 3,
+					y2 : 220,
+
+				});
 		}
 
 	}
@@ -547,6 +676,10 @@
 		canvasEle.find(".wordSubjectDiv").unbind('click');
 		canvasEle.find(".picSubjectDiv").unbind('click');
 		//4.划线
+		drawlines(canvasEle,combineLines(testPaper.subjects[testPaper.nowSubjectIndex]));
+	}
+	function combineLines(subject){
+		//组件lines,start,end
 
 	}
 	function paintChoose(radiosEle, paperType, subject) {
@@ -723,6 +856,13 @@
 		//改变button的请求指向和
 		var buttonEle = $(testPaper.className).find(".subjectRooter").find(
 				"#papertestSubmitButton");
+		var buttonEle1 = $(testPaper.className).find(".subjectRooter").find(
+				"#preSubjectButton");
+		buttonEle1.unbind('click');
+		buttonEle1.click(function(){
+				preSubjectClickEvent();
+
+		});
 		var spanEle = $(testPaper.className).find(".subjectRooter").find(
 				"#papertestSubmitButton").find("span");
 		buttonEle.unbind('click');

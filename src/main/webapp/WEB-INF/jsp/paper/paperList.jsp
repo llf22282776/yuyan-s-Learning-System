@@ -126,11 +126,13 @@
 						success:function(data){
 							if(data.result == true || data.result == "true"){
 								//现在让location.href=那个特定的request
-								location.href="${pageContext.request.contextPath}/paperTestPage"
+								//location.href="${pageContext.request.contextPath}/paperTestPage"
 								
-								
-								
-								
+								$('.tempA').remove();
+								var tempA=$("<a style='display:none' class='tempA' target='_blank' href='${pageContext.request.contextPath}/paperTestPage' >asd<a/>");
+								$('body').append(tempA);
+								$('.tempA')[0].click();
+								$('.tempA').remove();
 							}else {
 								
 								swal("错误","该试卷可能已完成，无法作答，请刷新网页或联系管理员","error");

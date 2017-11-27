@@ -13,8 +13,9 @@ public class PaperMix implements Serializable{
     private int pid;
     private String title;
     private int totalScore;
+    private PaperMetaData paperMetaData=new PaperMetaData();
     private List<SubjectMix> subjects=new ArrayList<SubjectMix>();
-    
+    private List<UserMix> users=new ArrayList<>();
     public boolean isResult() {
         return result;
     }
@@ -58,6 +59,27 @@ public class PaperMix implements Serializable{
     public void setPid(int pid) {
         this.pid = pid;
     }
-    
+
+    public List<UserMix> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserMix> users) {
+        this.users = users;
+    }
+    public void setPaperDataIn(Paper paper){
+        this.pid=paper.getPid();
+        this.title=paper.getPname();
+        this.totalScore=paper.getTotalScore();
+       
+    }
+
+    public PaperMetaData getPaperMetaData() {
+        return paperMetaData;
+    }
+
+    public void setPaperMetaData(PaperMetaData paperMetaData) {
+        this.paperMetaData = paperMetaData;
+    }
     
 }

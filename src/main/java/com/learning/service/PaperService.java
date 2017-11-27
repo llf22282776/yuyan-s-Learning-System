@@ -83,7 +83,11 @@ public interface PaperService {
      * */
      public List<Paper> getQueryPapers(PaperQueryState paperQueryState,User user);
     
-    
-    
+    /**
+     * 
+     * 获得一个查询用的paperMix
+     * 
+     * */
+    public PaperMix getUserDonePaper(int pid,User user);
     
 }

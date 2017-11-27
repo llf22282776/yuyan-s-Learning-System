@@ -243,8 +243,8 @@
 			if (subjectType == 0) {
 				//连线题
 				var isComplete = true;
-				for (var i = 0; i < subjectStamp.length; i++) {
-					if (subjectStamp.allSelect[i] == false) {
+				for (var i = 0; i < subjectStamp.wordSelectList.length; i++) {
+					if (subjectStamp.wordSelectList[i] == false) {
 						isComplete = false;
 						break;
 					}
