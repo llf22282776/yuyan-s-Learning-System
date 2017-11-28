@@ -78,7 +78,7 @@
 		
 		<if test="title != null and date != null">AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%')) AND ABS(TO_DAYS( #{date} ) - TO_DAYS(p.pdate))  &lt;=2 </if>
 		<if test="studentId != null "> AND up.uid = #{studentId}</if>
-		
+		order by p.pdate desc;
 		
 		;
 
