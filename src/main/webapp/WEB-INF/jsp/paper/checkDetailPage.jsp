@@ -496,10 +496,10 @@
 	function preSubjectClickEvent() {
 		//切换
 		//第一题没饭应
-		if (testPaper.nowUserIndex <= 0)
+		if (testPaper.nowSubjectIndex <= 0)
 			return;
 		else
-			testPaper.nowUserIndex -= 2;//减小两个，因为switch的时候会增加
+			testPaper.nowSubjectIndex -= 2;//减小两个，因为switch的时候会增加
 		//要让下一题的按钮依然有效
 		var buttonEle = $(testPaper.className).find(".subjectRooter").find(
 				"#papertestSubmitButton");
@@ -582,7 +582,7 @@
 
 	function checkSubjectComplete() {
 		//检查是否完成
-		if (testPaper.type == 0 || testPaper.nowSubjectIndex == -1) {
+		if (testPaper.paperType == 0 || testPaper.nowSubjectIndex == -1) {
 			//查询模式或者刚开始不用检查
 			return true;//不用检查
 

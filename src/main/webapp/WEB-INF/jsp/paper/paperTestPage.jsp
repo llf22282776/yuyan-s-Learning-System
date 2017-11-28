@@ -24,7 +24,6 @@
 <link href="${pageContext.request.contextPath}/css/flat-ui.css"
 	rel="stylesheet" />
 
-	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/font-awesome.css"
 	rel="stylesheet" />
 <link
