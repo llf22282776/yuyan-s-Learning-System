@@ -969,7 +969,7 @@
 		//1.设置所有为false
 		radiosEle.find(".paperChooseRadio").prop("checked", false);
 		radiosEle.find(".paperChooseRadio").removeAttr("disabled");
-		radiosEle.find(".paperChooseRadio").closest(".row").find("h4").css(
+		radiosEle.find(".paperChooseRadio").closest(".row").find("strong").css(
 				"color", "inherit");
 		//2.设置文本
 
@@ -990,13 +990,13 @@
 		//1.设置所有为false
 		radiosEle.find(".paperChooseRadio").prop("checked", false);
 		radiosEle.find(".paperChooseRadio").removeAttr("disabled");
-		radiosEle.find(".paperChooseRadio").closest(".row").find("h4").css(
+		radiosEle.find(".paperChooseRadio").closest(".row").find("strong").css(
 				"color", "inherit");
 
 		//2.设置文本
 
 		radiosEle.find(".paperChooseRadio").each(function(index, ele) {
-			ele = $(ele);
+			ele = $(ele).closest(".row");
 			ele.find("strong").text(subject.texts[index]);
 
 		});
@@ -1013,7 +1013,7 @@
 			//
 			radiosEle.find(
 					".paperChooseRadio[index='" + subject.answerIndex + "']")
-					.closest(".row").find("h4").css("color", "#2ecc71");
+					.closest(".row").find("strong").css("color", "#2ecc71");
 			//设置用户选的那个为选中，颜色
 			radiosEle.find(
 					".paperChooseRadio[index='" + subject.choosenIndex + "']")
@@ -1022,8 +1022,8 @@
 					".paperChooseRadio[index='" + subject.choosenIndex + "']")
 					.prop("checked", true);
 			radiosEle.find(
-					".paperChooseRadio[index='" + subject.answerIndex + "']")
-					.closest(".row").find("h4").css("color", "#e74c3c");
+					".paperChooseRadio[index='" + subject.choosenIndex + "']")
+					.closest(".row").find("strong").css("color", "#e74c3c");
 		} else {
 			//文本颜色为绿色
 			radiosEle.find(
@@ -1034,7 +1034,7 @@
 					.prop("checked", true);
 			radiosEle.find(
 					".paperChooseRadio[index='" + subject.answerIndex + "']")
-					.closest(".row").find("h4").css("color", "#e74c3c");
+					.closest(".row").find("strong").css("color", "#e74c3c");
 
 		}
 		//所有都不可选取
