@@ -22,6 +22,8 @@ public class PaperMetaData implements Serializable{
     private List<Integer> scores=new ArrayList<Integer>();
     private List<Long> times=new ArrayList<>();
     private List<SubjectMetaData> subjectMetaDatas=new ArrayList<>();
+    private Long maxTime=(long) 0;
+    private int maxScore=0;
     
     
     public List<Integer> getScores() {
@@ -49,14 +51,20 @@ public class PaperMetaData implements Serializable{
         //吧up里面的东西填进来,保证是顺序的
         for(User_paper user_paper :user_papers){
             this.scores.add(user_paper.getTotalScore());
-            this.times.add(ConstantUtil.getTimeBetween(user_paper.getStartTime(), user_paper.getEndTime()));
+            if(user_paper.getTotalScore()>maxScore)maxScore=user_paper.getTotalScore();
+            Long a=ConstantUtil.getTimeBetween(user_paper.getStartTime(), user_paper.getEndTime());
+            this.times.add(a);
+            if(a>maxTime)maxTime=a;     
         }
     }
     public void insertPapers(User_paper[] user_papers){
         //吧up里面的东西填进来,保证是顺序的
         for(User_paper user_paper :user_papers){
             this.scores.add(user_paper.getTotalScore());
-            this.times.add(ConstantUtil.getTimeBetween(user_paper.getStartTime(), user_paper.getEndTime()));
+            if(user_paper.getTotalScore()>maxScore)maxScore=user_paper.getTotalScore();
+            Long a=ConstantUtil.getTimeBetween(user_paper.getStartTime(), user_paper.getEndTime());
+            this.times.add(a);
+            if(a>maxTime)maxTime=a;
         }
     }
     /**
@@ -98,5 +106,17 @@ public class PaperMetaData implements Serializable{
     }
     public void setSubjectMetaDatas(List<SubjectMetaData> subjectMetaDatas) {
         this.subjectMetaDatas = subjectMetaDatas;
+    }
+    public Long getMaxTime() {
+        return maxTime;
+    }
+    public void setMaxTime(Long maxTime) {
+        this.maxTime = maxTime;
+    }
+    public int getMaxScore() {
+        return maxScore;
+    }
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
     }
 }

@@ -28,7 +28,7 @@ public class ConstantUtil {
     public static final String IMG_PATH="img/";
     public static final String AUDIO_PATH="audio/";
     public static final String WEBM_POSTFIX=".webm";
-    public static final String TIME_STR = "%天 %d小时 %d分 ";
+    public static final String TIME_STR = "%d分 %d秒";
     public static String formatTime(long ms) {
 
         int ss = 1000;
@@ -36,12 +36,12 @@ public class ConstantUtil {
         int hh = mi * 60;
         int dd = hh * 24;
 
-        long day = ms / dd;
-        long hour = (ms - day * dd) / hh;
+        long day = 0;
+        long hour = 0;
         long minute = (ms - day * dd - hour * hh) / mi;
         long second = (ms - day * dd - hour * hh - minute * mi) / ss;
         String timeString = new String(ConstantUtil.TIME_STR);
-        return String.format(timeString, day, hour, minute);
+        return String.format(timeString,minute,second);
     }
     public static long getTimeBetween(String startTime,String endTime) {
         Timestamp st1=Timestamp.valueOf(startTime);

@@ -71,6 +71,12 @@ function submitClick(thisEle){
         	swal("","网络错误，无法获得列表","error");
         	
         	
+        },
+        beforeSend:function(){
+            $("#queryContainer").find(".paperListDivContent").empty();
+            $("#queryContainer").find(".paperListDivContent").append('<span class="icon-spinner icon-spin" style="font-size: 30px;margin-left: 50%"></span>');
+
+
         }
 
 

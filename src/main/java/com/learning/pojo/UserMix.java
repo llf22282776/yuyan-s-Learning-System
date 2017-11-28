@@ -14,6 +14,7 @@ public class UserMix implements Serializable{
     private int scoreRank; //排名
     private int timeRank; //排名
     private String totalSecond ;//总时间
+    private Long totalSecond_num ;//总时间
     private String endTime ;//结束时间
     private String uid;
     private int totalScore;//用户这张卷子的得分
@@ -69,5 +70,11 @@ public class UserMix implements Serializable{
     }
     public void setTotalScore(int totalScore) {
         this.totalScore = totalScore;
+    }
+    public Long getTotalSecond_num() {
+        return totalSecond_num;
+    }
+    public void setTotalSecond_num(Long totalSecond_num) {
+        this.totalSecond_num = totalSecond_num;
     }
 }

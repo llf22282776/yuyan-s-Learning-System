@@ -15,6 +15,23 @@ public class SubjectMetaData implements Serializable{
     private static final long serialVersionUID = 1L;
     private List<Long> times =new ArrayList<Long>();
     private List<Integer> scores =new ArrayList<Integer>();
+    public Long getMaxTime() {
+        return maxTime;
+    }
+    public void setMaxTime(Long maxTime) {
+        this.maxTime = maxTime;
+    }
+    public int getMaxScore() {
+        return maxScore;
+    }
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
+    }
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+    private Long maxTime=(long)0;
+    private int maxScore=0;
     public List<Long> getTimes() {
         return times;
     }
@@ -30,7 +47,9 @@ public class SubjectMetaData implements Serializable{
     public void countAllTimes(User_subject[] user_subjects){
         for(User_subject user_subject:user_subjects){
             this.scores.add(user_subject.getScore());
+            if(maxScore<user_subject.getScore())maxScore=user_subject.getScore();
             this.times.add(user_subject.getTotalSecond());
+            if(maxTime<user_subject.getTotalSecond())maxTime=user_subject.getTotalSecond();
             
         }
     }

@@ -18,8 +18,9 @@ public class SubjectMix implements Serializable{
     private int totalScore;//查询阶段有用
     private int score;//查询阶段有用
     private String startTime ="";
-    private String endTime="" ;//这两个字段在查询阶段是没有用的
+    private String endTime="";//这两个字段在查询阶段是没有用的
     private String totalSecond;//这个字段是有效的
+    private Long  totalSecond_num;
     private List<String> audios=new ArrayList<>();
     private List<String> pics=new ArrayList<>();
     private List<String> words=new ArrayList<>();
@@ -179,15 +180,16 @@ public class SubjectMix implements Serializable{
              //连线题的相关，那就设置
              List<Integer> selectSwapList=new ArrayList<>();
              for(ElementMix elementMix:elementMixs){
-                 selectSwapList.add(elementMix.getLotherId());
+                 selectSwapList.add(elementMix.getLid());
              }
             for(ElementMix elementMix:elementMixs){
-                audios.add(elementMix.getVideo());
-                pics.add(elementMix.getPic());
+                audios.add(ConstantUtil.UPLOAD_WEB+ConstantUtil.AUDIO_PATH+elementMix.getVideo());
+                pics.add(ConstantUtil.UPLOAD_WEB+ConstantUtil.IMG_PATH+elementMix.getPic());
                 scores.add(elementMix.getScore());
                 indexList.add(elementMix.getIndex());
                 seq.add(selectSwapList.indexOf(elementMix.getLotherId()));
                 eid.add(elementMix.getLid());
+                words.add(elementMix.getWord());
             }
 
          }else if(type == ConstantUtil .SUBJECT_CHOOSE){
@@ -219,5 +221,11 @@ public class SubjectMix implements Serializable{
     }
     public void setTimeRank(int timeRank) {
         this.timeRank = timeRank;
+    }
+    public Long getTotalSecond_num() {
+        return totalSecond_num;
+    }
+    public void setTotalSecond_num(Long totalSecond_num) {
+        this.totalSecond_num = totalSecond_num;
     }
 }

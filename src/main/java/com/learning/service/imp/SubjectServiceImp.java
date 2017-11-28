@@ -383,7 +383,8 @@ public class SubjectServiceImp implements SubjectService {
                             subjectMix.getType());
 
                 }
-                
+                subjectMix.setTotalSecond_num(Long.parseLong(subjectMix.getTotalSecond()));
+                subjectMix.setTotalSecond(ConstantUtil.formatTime(Long.parseLong(subjectMix.getTotalSecond())));
                 
                 subjectMixs.add(subjectMix);
             }
@@ -393,6 +394,9 @@ public class SubjectServiceImp implements SubjectService {
             userMix.setTotalSecond(ConstantUtil.formatTime(ConstantUtil
                     .getTimeBetween(user_paper.getStartTime(),
                             user_paper.getEndTime())));
+            userMix.setTotalSecond_num(ConstantUtil
+                    .getTimeBetween(user_paper.getStartTime(),
+                            user_paper.getEndTime()));
             userMix.setScoreRank(p.getScoreRank(user_paper.getTotalScore()));
             userMix.setTimeRank(p.getTimeRank(ConstantUtil.getTimeBetween(
                     user_paper.getStartTime(), user_paper.getEndTime())));

@@ -8,6 +8,7 @@
 	text-align: center;
 	background-color: #eee;
 	padding-top: 10px;
+	bottom: 10px;
 }
 
 .subjectUserView {
@@ -15,6 +16,7 @@
 	width: 12%;
 	border-radius: 5px;
 	left: 3%;
+	bottom: 10px;
 }
 
 .subjectUserView>.headerRow {

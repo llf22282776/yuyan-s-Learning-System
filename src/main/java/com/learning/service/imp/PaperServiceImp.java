@@ -279,6 +279,10 @@ public class PaperServiceImp implements PaperService {
             sMap.put("title",paperQueryState.title );
             
         }
+        if(StringUtil.isBlank(paperQueryState.date) == false){
+            sMap.put("date",paperQueryState.date );
+            
+        }
         if(user.getPosition() == ConstantUtil.STUDENT){
             
             sMap.put("studentId", user.getPosition());

@@ -39,7 +39,7 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/css/checkDetail.css"
+<link href="${pageContext.request.contextPath}/css/checkDetail.css"
 	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
 <script src="${pageContext.request.contextPath}/js/commonPaper.js"></script>
@@ -51,7 +51,7 @@
 	<div class="rootContainer">
 		<%@include file="../common/header.jsp"%>
 		<div class="">
-			
+
 			<div style="display: block" class="jumbotron contentDiv ">
 				<%@include file="../common/checkDetailPaperDiv.jsp"%>
 			</div>
@@ -110,31 +110,36 @@
 </body>
 <script>
 	var testPaper = {
-	isStarted : false,//判断是否开始
-	paper : {},//试卷保存在这个对象里面
-	startTime : "",//答卷开始时间
-	endTime : "",//答卷结束时间
-	subjectsLength : 0, //试卷总长度
-	nowSubjectIndex : 0,//现在是第几题
-	paperType : 0,//-1 答题形式 0查看形式  （答完题后可以查看）
-	nowUserIndex:0,//从o开始
+		isStarted : false,//判断是否开始
+		paper :  JSON
+	.parse('${paperJson}'),//试卷保存在这个对象里面
+		startTime : "",//答卷开始时间
+		endTime : "",//答卷结束时间
+		subjectsLength : 0, //试卷总长度
+		nowSubjectIndex : 0,//现在是第几题
+		paperType : 0,//-1 答题形式 0查看形式  （答完题后可以查看）
+		nowUserIndex : 0,//从o开始
 
 	};
 	$(document)
 			.ready(
 					function() {
-						$('.userSelecter').change(function(){
+						$('.userSelecter').change(function() {
 							selectChangeEvent($(this));
-
 
 						});
 						//组织题目
-						if(testPaper.paper.result == false || testPaper.paper.result == "false"){
-							swal("","拉取试卷失败，请联系管理员","error").then(function(){
-							location.href = '${pageContext.request.contextPath}/main';
-							var localpaper=JSON.parse('${paperJson}');
-						})}else {
-							initPaper(".subjectDiv",0,localpaper);
+						if (testPaper.paper.result == false
+								|| testPaper.paper.result == "false") {
+							swal("", "拉取试卷失败，请联系管理员", "error")
+									.then(
+											function() {
+												location.href = '${pageContext.request.contextPath}/main';
+
+											})
+						} else {
+
+							initPaper(".subjectDiv", 0, testPaper.paper);
 
 						}
 
@@ -146,28 +151,29 @@
 
 	};
 
-	function selectChangeEvent(thisEle){
-			//下拉框切换事件
-			//切换用户
-			 switchUser(parseInt(thisEle.attr("index")));
-
-
-	}
-	function switchUser(index){
-			//切换用户，
-			testPaper.nowUserIndex=index;
-			//更改testPaper.subjects,nowsubjectInde nowUserIndex
-			testPaper.paper.subjects=testPaper.paper.users[testPaper.nowUserIndex].subjects;
-			//更改试卷头信息
-			changePaperDataDiv();
-			testPaper.paper.nowSubjectIndex-=1;//减小
-			//切换到下一个题(表面上依然是这一题)
-			switchSubjectToNext();
-
+	function selectChangeEvent(thisEle) {
+		//下拉框切换事件
+		//切换用户
+		switchUser(parseInt(thisEle.attr("index")));
 
 	}
+	function switchUser(index) {
+		//切换用户，
+		testPaper.nowUserIndex = index;
+		//更改testPaper.subjects,nowsubjectInde nowUserIndex
+		testPaper.paper.subjects = testPaper.paper.users[testPaper.nowUserIndex].subjects;
+		//更改试卷头信息
+		changePaperDataDiv();
+		if (testPaper.paper.nowSubjectIndex > -1)
+			testPaper.paper.nowSubjectIndex -= 1;//减小
+		else
+			testPaper.paper.nowSubjectIndex = -1;//小于等于-1就别动了
+		//切换到下一个题(表面上依然是这一题)
+		switchSubjectToNext();
 
-	function changePaperDataDiv(){
+	}
+
+	function changePaperDataDiv() {
 		//更改用户数据，切换数据的时候被调用
 		//清空paperTotalDate
 		cleanPaperDataDiv();
@@ -176,7 +182,7 @@
 		//重新绘制表格,各种
 		paintPaperViewCharts();
 	}
-	function cleanPaperDataDiv(){
+	function cleanPaperDataDiv() {
 		//更改用户数据，切换数据的时候被调用
 		//姓名不用变化，
 		//分数和时间清空//排行榜清空
@@ -184,30 +190,39 @@
 		//表格什么的重新加载一下就行，不用清空
 
 	}
-	function paintPaperDataDiv(){
+	function paintPaperDataDiv() {
 		//绘制试卷面板数据
 
-			var userMix=testPaper.paper.users[testPaper.nowUserIndex];
+		var userMix = testPaper.paper.users[testPaper.nowUserIndex];
 		//分数
-		$('.paperUserTotalView').find(".nameArea").find('.scoreRow').find('.textArea').text(userMix.totalScore);
+		$('.paperUserTotalView').find(".nameArea").find('.scoreRow').find(
+				'.textArea').text(userMix.totalScore);
 		//时间
-		$('.paperUserTotalView').find(".nameArea").find('.timeRow').find('.textArea').text(userMix.totalSecond);
+		$('.paperUserTotalView').find(".nameArea").find('.timeRow').find(
+				'.col-sm-8').text(userMix.totalSecond);
 		//排行
-		$('.paperUserTotalView').find(".rankArea").find('.scoreRow').find('.textArea').text(userMix.scoreRank);
+		$('.paperUserTotalView').find(".rankArea").find('.scoreRow').find(
+				'.textArea').text(userMix.scoreRank);
 		//时间
-		$('.paperUserTotalView').find(".rankArea").find('.timeRow').find('.textArea').text(userMix.timeRank);
+		$('.paperUserTotalView').find(".rankArea").find('.timeRow').find(
+				'.textArea').text(userMix.timeRank);
 
 	}
-	function paintSubjectDataDiv(){
+	function paintSubjectDataDiv() {
 		//绘制题目面板数据
 		//清空数据div
-		var subjectMix=testPaper.paper.subjects[testPaper.nowSubjectIndex];
+		var subjectMix = testPaper.paper.subjects[testPaper.nowSubjectIndex];
 		//分数
-		$('.subjectUserView').find(".nameArea").find('.scoreRow').find('.textArea').text(subjectMix.score);
+	$('.subjectUserView').find('.headerRow').find(
+	'.textArea').text(testPaper.nowSubjectIndex);
+
+		$('.subjectUserView').find('.scoreRow').find(
+				'.textArea').text(subjectMix.score);
 		//时间
-		$('.subjectUserView').find(".nameArea").find('.timeRow').find('.textArea').text(subjectMix.totalSecond);
+		$('.subjectUserView').find('.timeRow').find(
+				'.timeText').text(subjectMix.totalSecond);
 	}
-	function changeSubjectDiv(){
+	function changeSubjectDiv() {
 		//switchSubject的时候触发,在修改完index之后，就是clean之后
 		//重新绘制面板
 		cleanSubjectDataDiv();
@@ -215,74 +230,281 @@
 		//重新绘制表格
 		paintSubjectCharts();
 	}
-	function cleanSubjectDataDiv(){
+	function cleanSubjectDataDiv() {
 		$('.subjectUserView').find('.textArea').empty();
 
 	}
-	function initCharts(){
+	function initCharts() {
 		//初始化各种表
 		/*skillRaderCharts
 		paperScoreCharts
 		paperTimeCharts
 		subjectScoreCharts
 		subjetTimeCharts*/
-			skillChart=echarts.init(($('#skillRaderCharts'))[0]);
-			paperScoreChart=echarts.init(($('#paperScoreCharts'))[0]);
-			paperTimeChart=echarts.init(($('#paperTimeCharts'))[0]);
-			subjectScoreChart=echarts.init(($('#subjectScoreCharts'))[0]);
-			subjetTimeChart=echarts.init(($('#subjetTimeCharts'))[0]);
+		skillChart = echarts.init(($('#skillRaderCharts'))[0]);
+		paperScoreChart = echarts.init(($('#paperScoreCharts'))[0]);
+		paperTimeChart = echarts.init(($('#paperTimeCharts'))[0]);
+		subjectScoreChart = echarts.init(($('#subjectScoreCharts'))[0]);
+		subjectTimeChart = echarts.init(($('#subjetTimeCharts'))[0]);
 	}
-	function paintPaperViewCharts(){
+	function paintPaperViewCharts() {
 		//能力表，两个时间表,pie，一个skill表
-	var opt=creatOptionByType('skill');
-	skillChart.setOptions(opt,{
-			notMerge:true,
-	});
-	opt=creatOptionByType('paperScore');
-	paperScoreChart.setOptions(opt,{
-		notMerge:true,
-	});
-	opt=creatOptionByType('paperTime');
-	paperTimeChart.setOptions(opt,{
-		notMerge:true,
-	});
+		var opt = creatOptionByType('skill');
+		<%--skillChart.setOption(opt, {--%>
+			<%--notMerge : true,--%>
+		<%--});--%>
+		opt = creatOptionByType('paperScore');
+		paperScoreChart.setOption(opt, {
+			notMerge : true,
+		});
+		<%--opt = creatOptionByType('paperTime');--%>
+		<%--paperTimeChart.setOption(opt, {--%>
+			<%--notMerge : true,--%>
+		<%--});--%>
 
 	}
 
-	function creatOptionByType(type ){
-		var opt={
-				title:{
-				text:''
+	function creatOptionByType(type) {
+		var opt = {
+			title : {
+				text : ''
 			},
-				legend:{
-				data:['']
+			legend : {
+				data : [ '' ]
 			},
 
 		}
-		if(type == 'skill'){
+		if (type == 'skill') {
+			paperChartIndex=0;
+			opt = {
+				title : {
+					text : '学生能力'
+				},
+				legend : {
+					data : [ '']
+				//用户的姓名
+				},
+				radar : [ {
+					indicator : [ {
+						text : '时间',
+						max : testPaper.paper.paperMetaData.maxTime,
+
+					},//最大的时间应该是
+					{
+						text : '分数',
+						max : testPaper.paper.paperMetaData.maxScore,
+
+					},
+
+					],
+					center : [ '75%', '50%' ],
+					radius : 120
+				} ],
+				series : [ {
+					name : '',
+					type : 'radar',
+					data : [ {
+						value : [
+								testPaper.paper.users[testPaper.nowUserIndex].totalSecond_num,
+								testPaper.paper.users[testPaper.nowUserIndex].totalScore ],//这个人的情况时间和分数
+						value_string : [
+								testPaper.paper.users[testPaper.nowUserIndex].totalSecond,
+								testPaper.paper.users[testPaper.nowUserIndex].totalScore
+										+ "分" ],//显示用的字符串
+						label : {
+							normal : {
+								show : true,
+								formatter : function(params) {
+
+										return params.value;
+									}
+							    }
+							}
+					} ]
+				} ]
+			}
+
 			return opt;
-		}else if(type == 'paperScore'){
+		} else if (type == 'paperScore') {
+			//饼图需要技巧，设置分数百分比
+			var scoresDist = getRangeScoreOrTimes(testPaper.paper.paperMetaData.scores);
+			var scoresText = [];
+			var dataList = [];
+			for ( var i in scoresDist) {
+				scoresText.push(i + "分");
+				var dataEle = {
+					value : scoresDist[i].nums,
+					name : i + "分",
+				}
+				dataList.push(dataEle);//把它的数量也取出来
+			}
+			opt = {
+				title : {
+					text : '分数分布'
+				},
+				legend : {
+					orient : 'vertical',
+					x : 'left',
+					data : scoresText,
+					show:false
+				//三个分数段的图例
+
+				},
+
+				series : [ {
+					name : '访问来源',
+					type : 'pie',
+
+					radius : [ '50%', '70%' ],
+					avoidLabelOverlap : false,
+					label : {
+						normal : {
+							show : false,
+							position : 'center'
+						},
+						emphasis : {
+							show : true,
+							textStyle : {
+								fontSize : '20',
+								fontWeight : 'bold'
+							}
+						}
+					},
+					labelLine : {
+						normal : {
+							show : false,
+
+						}
+					},
+					data : dataList,
+				} ]
+			}
+
 			return opt;
-		}else if(type == 'paperTime'){
+		} else if (type == 'paperTime') {
+			return opt;
+
+		} else if (type == 'subjectScore') {
+			var scoresDist = getRangeScoreOrTimes(testPaper.paper.paperMetaData.subjectMetaDatas[testPaper.nowSubjectIndex].scores);
+			var scoresText = [];
+			var dataList = [];
+		for ( var i in scoresDist) {
+			scoresText.push(i + "分");
+			var dataEle = {
+			value : scoresDist[i].nums,
+			name : i + "分",
+			}
+			dataList.push(dataEle);//把它的数量也取出来
+		}
+			opt = {
+				title : {
+					text : '分数分布'
+				},
+				legend : {
+					orient : 'vertical',
+					x : 'left',
+					data : scoresText,
+					show:false
+				//三个分数段的图例
+
+				},
+
+				series : [ {
+					name : '访问来源',
+					type : 'pie',
+
+					radius : [ '50%', '70%' ],
+					avoidLabelOverlap : false,
+					label : {
+						normal : {
+							show : false,
+							position : 'center'
+						},
+						emphasis : {
+							show : true,
+							textStyle : {
+								fontSize : '20',
+								fontWeight : 'bold'
+							}
+						}
+					},
+					labelLine : {
+						normal : {
+							show : false,
+
+						}
+					},
+					data : dataList,
+				} ]
+			}
+
+			return opt;
+		} else if (type == 'subjectTime') {
+
 			return opt;
 
 		}
 
 	}
-	function paintSubjectCharts(){
+	function toFormatTime(ms){
+		var  ss = 1000;
+		var mi = ss * 60;
+		var hh = mi * 60;
+		var dd = hh * 24;
+
+		var day = ms / dd;
+		var hour = (ms - day * dd) / hh;
+		var minute = (ms - day * dd - hour * hh) / mi;
+		var second = (ms - day * dd - hour * hh - minute * mi) / ss;
+		var str="";
+		if(day>0)str+=day+"天";
+		if(hour>0)str+=hour+"小时";
+		if(minute>0)str+=minute+"分";
+		if(second>0)str+=second+"秒";
+		return str;
+	}
+	function getRangeScoreOrTimes(scores) {
+		//获取3分数阶段,
+		var scoreDist = [];
+		for (var i = 0; i < scores.length; i++) {
+			//放进字典,字典的key是分数，value是数量
+			if (scoreDist[scores[i]] == undefined
+					|| scoreDist[scores[i]] == null) {
+				//没有这个键
+				scoreDist[scores[i]] = {
+					nums : 1,//刚刚加入进来
+				}
+
+			} else {
+				scoreDist[scores[i]].nums += 1;//增长1
+
+			}
+
+		}
+		return scoreDist;
+
+	}
+
+	function paintSubjectCharts() {
 		//画那两个pie
+		opt = creatOptionByType('subjectScore');
+		subjectScoreChart.setOption(opt, {
+			notMerge : true,
+		});
 
 	}
-	function preSubjectClickEvent(){
+	function preSubjectClickEvent() {
 		//切换
 		//第一题没饭应
-		if(testPaper.nowUserIndex <=0)return ;
-		else testPaper.nowUserIndex-=2;//减小两个，因为switch的时候会增加
+		if (testPaper.nowUserIndex <= 0)
+			return;
+		else
+			testPaper.nowUserIndex -= 2;//减小两个，因为switch的时候会增加
 		//要让下一题的按钮依然有效
 		var buttonEle = $(testPaper.className).find(".subjectRooter").find(
-		"#papertestSubmitButton");
+				"#papertestSubmitButton");
 		buttonEle.click(function() {
-				nextButtonClick($(this));
+			nextButtonClick($(this));
 
 		});
 
@@ -301,7 +523,7 @@
 			nowSubjectIndex : -1,//现在是第几题
 			paperType : type,//-1 答题形式 0查看形式  （答完题后可以查看）
 			className : className,
-			nowUserIndex:0,//从o开始
+			nowUserIndex : 0,//从o开始
 		};
 		subjectStamp = {
 			startTime : "",
@@ -317,10 +539,12 @@
 		chooseSubjectEle = $('<div class="chooseSubjectContent"><c:forEach begin="0" end="3" varStatus="status"><div class="row"><div class="form-group subjectChooseGroup"><label class="radio radio-inline col-sm-1" for="paperChooseInputRadio${status.index+1}"> <input name="chooseRadio" type="radio" data-toggle="radio" value="" id="paperChooseInputRadio${status.index+1}" class="paperChooseRadio" index="${status.index}" required /> </label> <div class="col-sm-8"> <h4></h4> </div> </div> </div> </c:forEach></div>');
 		//创建一下
 		createElement(className);
+			$(className).css("display","block");
 		//初始化表
 		initCharts();
-		//切换到第一题
-		switchSubjectToNext();
+		//切换到第一个用户
+		switchUser(testPaper.nowUserIndex);
+
 	}
 
 	function createElement(className) {
@@ -414,6 +638,7 @@
 		//$(className).find(".subjectContent").empty();
 		//更改题目编号为下一个
 		testPaper.nowSubjectIndex += 1;
+		//设置
 
 		//更新最初的题目状态量
 		subjectStamp = {
@@ -617,18 +842,22 @@
 		}
 
 	}
-	function drawlines(thisEle, list) {
+	function drawlines(thisEle, list, subject) {
 		//清空，遍历List划线
-		var cavnsEle = thisEle.find(
-				"#linePainter");
+		var cavnsEle = thisEle.find("#linePainter");
 		cavnsEle.clearCanvas();
 		for ( var i in list) {
 			var lineEle = list[i];
+			var line_right = {
+				start : i,
+				end : i,
+				index : subject.indexList[i],//正确选择的顺序
 
-				console.log("i:" + i + " " + (110 + 210 * (lineEle.start)) / 3
-				+ " " + (110 + 210 * (lineEle.index)) / 3);
+			};
+			if (lineEle.end == line_right.end) {//用户选择一致
+				//画一条黑线
 				var disTance = (110 + 210 * (lineEle.index)) / 3
-					- (110 + 210 * (lineEle.start)) / 3;
+						- (110 + 210 * (lineEle.start)) / 3;
 				cavnsEle.drawLine({
 					strokeStyle : '#000',
 					strokeWidth : 1,
@@ -638,6 +867,34 @@
 					y2 : 220,
 
 				});
+			} else {
+				//不一致，画两条线，一绿一红
+				//画一条灰色是用户选的 红色 错的
+				var disTance = (110 + 210 * (lineEle.index)) / 3
+						- (110 + 210 * (lineEle.start)) / 3;
+				cavnsEle.drawLine({
+					strokeStyle : '#e74c3c',
+					strokeWidth : 1,
+					x1 : (110 + 210 * (lineEle.start)) / 3,
+					y1 : 0,
+					x2 : (110 + 210 * (lineEle.index)) / 3 + disTance / 3,
+					y2 : 220,
+
+				});
+				disTance = (110 + 210 * (line_right.index)) / 3
+						- (110 + 210 * (line_right.start)) / 3;
+				cavnsEle.drawLine({
+					strokeStyle : '#2ecc71',
+					strokeWidth : 1,
+					x1 : (110 + 210 * (line_right.start)) / 3,
+					y1 : 0,
+					x2 : (110 + 210 * (line_right.index)) / 3 + disTance / 3,//正确的线
+					y2 : 220,
+
+				});
+
+			}
+
 		}
 
 	}
@@ -660,15 +917,15 @@
 		//绘制文字
 		canvasEle.find(".wordSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
-			ele.text(subject.words[i]);
-			ele.attr("pairNum", i);
+			ele.text(subject.words[index]);
+			ele.attr("pairNum",index);
 			ele.attr("pairTo", -1);
 		});
 		//2 绘制图片
 		canvasEle.find(".picSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
-			ele.attr("src", subject.pics[subject.indexList.indexOf(i)]);//顺序为0的编号是多少
-			ele.attr("pairNum", subject.indexList[i]);
+			ele.attr("src", subject.pics[subject.indexList.indexOf(index)]);//顺序为0的编号是多少
+			ele.attr("pairNum", subject.indexList[index]);
 			ele.attr("pairFrom", -1);
 		});
 
@@ -676,11 +933,21 @@
 		canvasEle.find(".wordSubjectDiv").unbind('click');
 		canvasEle.find(".picSubjectDiv").unbind('click');
 		//4.划线
-		drawlines(canvasEle,combineLines(testPaper.subjects[testPaper.nowSubjectIndex]));
+		drawlines(canvasEle, combineLines(subject), subject);
 	}
-	function combineLines(subject){
+	function combineLines(subject) {
 		//组件lines,start,end
-
+		var lines_user = [];
+		for (var i = 0; i < subject.indexList.length; i++) {
+			//遍历
+			var line = {
+				start : i,
+				end : subject.selectList[i],//选的
+				index : subject.indexList.indexOf(subject.selectList[i]), //选的这个编号的顺序是几
+			};
+			lines_user.push(line);
+		}
+		return lines_user;
 	}
 	function paintChoose(radiosEle, paperType, subject) {
 		//在这个元素里面绘制选择题，添加radio啥的
@@ -774,7 +1041,7 @@
 		radiosEle.find(".paperChooseRadio").attr("disabled", true);
 		//3.去掉所有的nowChoosen 类,name设置一致
 		radiosEle.find(".paperChooseRadio").removeClass("nowChoosen");
-		//去掉所有事件
+		//去掉所有事件,不再添加
 		radiosEle.find(".paperChooseRadio").unbind("click");
 
 	}
@@ -859,8 +1126,8 @@
 		var buttonEle1 = $(testPaper.className).find(".subjectRooter").find(
 				"#preSubjectButton");
 		buttonEle1.unbind('click');
-		buttonEle1.click(function(){
-				preSubjectClickEvent();
+		buttonEle1.click(function() {
+			preSubjectClickEvent();
 
 		});
 		var spanEle = $(testPaper.className).find(".subjectRooter").find(
@@ -940,59 +1207,71 @@
 				showCancelButton : true,
 				confirmButtonText : '是的',
 				cancelButtonText : '取消',
-			}).then(function() {
-                swal({
-                        title: '',
-                        showCloseButton: false,
-                        showCancelButton: false,
-                        showConfirmButton:false,
-                        allowOutsideClick:false,
-                        allowEscapeKey:false,
-                        allowEnterKey:false,
-                        text:"请稍后，正在交卷中..."
-                });
-				$.ajax({
-					url : "${pageContext.request.contextPath}/submitPaper",
-					type : 'POST',
-					dataType : "JSON",
-					contentType : "application/json",
-					async : false,
-					data : JSON.stringify(testPaper.paper),
-					success : function(data) {
-
-						if (data.result == true || data.result == "true") {
-
-                            swal({
-                                        title : '',
-                                        text : "交卷成功,现在查看答题结果吗",
-                                        type : "success",
-                                        showCancelButton : true,
-                                        confirmButtonText : '是的',
-                                        cancelButtonText : '不了',
-                           }).then(function(){
-
-                                         location.href='${pageContext.request.contextPath}/checkPaperDetail?'+'pid='+testPaper.pid;
-        
-
-                                },function(){
-                                        location.href='${pageContext.request.contextPath}/getStudentNodoingPaperPage'
-                                });
-						} else {
-
-							swal("错误", "添加失败，请稍后再试", "error");
-						}
-
-					},
-					error : function() {
-
-						swal("错误", "网络错误,提交失败，请误", "error");
-					}
-
-				})
-
-			}, function() {
-
 			})
+					.then(
+							function() {
+								swal({
+									title : '',
+									showCloseButton : false,
+									showCancelButton : false,
+									showConfirmButton : false,
+									allowOutsideClick : false,
+									allowEscapeKey : false,
+									allowEnterKey : false,
+									text : "请稍后，正在交卷中..."
+								});
+								$
+										.ajax({
+											url : "${pageContext.request.contextPath}/submitPaper",
+											type : 'POST',
+											dataType : "JSON",
+											contentType : "application/json",
+											async : false,
+											data : JSON
+													.stringify(testPaper.paper),
+											success : function(data) {
+
+												if (data.result == true
+														|| data.result == "true") {
+
+													swal(
+															{
+																title : '',
+																text : "交卷成功,现在查看答题结果吗",
+																type : "success",
+																showCancelButton : true,
+																confirmButtonText : '是的',
+																cancelButtonText : '不了',
+															})
+															.then(
+																	function() {
+
+																		location.href = '${pageContext.request.contextPath}/checkPaperDetail?'
+																				+ 'pid='
+																				+ testPaper.pid;
+
+																	},
+																	function() {
+																		location.href = '${pageContext.request.contextPath}/getStudentNodoingPaperPage'
+																	});
+												} else {
+
+													swal("错误", "添加失败，请稍后再试",
+															"error");
+												}
+
+											},
+											error : function() {
+
+												swal("错误", "网络错误,提交失败，请误",
+														"error");
+											}
+
+										})
+
+							}, function() {
+
+							})
 
 		}
 

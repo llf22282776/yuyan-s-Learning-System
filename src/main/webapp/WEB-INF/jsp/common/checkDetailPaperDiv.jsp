@@ -18,7 +18,20 @@
 									<select
 										class="userSelecter form-control select select-primary select-block mbl">
 										<c:forEach var="usr" items="${paper.getUsers()}" varStatus="status">
-											 <option value="${status.index}">${usr.getUname()}</option>
+											<c:choose>
+												<c:when test="${status.index == 0}">
+													<option value="${status.index}" selected='selected'>${usr.getUname()}</option>
+
+												</c:when>
+												<c:otherwise>
+
+
+													<option value="${status.index}">${usr.getUname()}</option>
+												</c:otherwise>
+
+											</c:choose>
+
+
 										</c:forEach>
 									</select>
 								</c:otherwise>
@@ -67,7 +80,7 @@
 	</div>
 
 	<div class="paperTotalView">
-		<div class="row headerRow">总览</div>
+		<div class="row headerRow"></div>
 		<div class="row scoreRow">
 			<div id="paperScoreCharts" class="paperCharts chartsCol"></div>
 			<div id="paperTimeCharts" class="paperCharts chartsCol"></div>
