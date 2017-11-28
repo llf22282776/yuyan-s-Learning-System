@@ -20,7 +20,7 @@
 		SELECT P.* FROM
 		paper p
 		WHERE p.pid not in (select up.pid from user u,user_paper up
-		WHERE u.uid = up.uid and u.uid =#{0} ) order by p.pid;
+		WHERE u.uid = up.uid and u.uid =#{0} ) order by p.pid desc;
 	</select>
 
 	<select id="getPapersNumUserNotDoItYet" resultType="java.lang.Integer">
@@ -78,7 +78,7 @@
 		
 		<if test="title != null and date != null">AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%')) AND ABS(TO_DAYS( #{date} ) - TO_DAYS(p.pdate))  &lt;=2 </if>
 		<if test="studentId != null "> AND up.uid = #{studentId}</if>
-		order by p.pdate desc;
+		order by p.pid desc;
 		
 		;
 
