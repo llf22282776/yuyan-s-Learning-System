@@ -273,7 +273,7 @@ public class SubjectServiceImp implements SubjectService {
                     user_subject.setScore(user_subject.getScore()
                             + subjectMix.getScores().get(i));
 
-                } else {
+                } else { 
 
                     isWrong = true;
                 }

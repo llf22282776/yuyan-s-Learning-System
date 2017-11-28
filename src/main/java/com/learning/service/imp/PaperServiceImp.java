@@ -156,6 +156,7 @@ public class PaperServiceImp implements PaperService {
                     subjectMix.getAudios().add(ConstantUtil.UPLOAD_WEB+ConstantUtil.AUDIO_PATH+l.getVideo());
                     subjectMix.getPics().add(ConstantUtil.UPLOAD_WEB+ConstantUtil.IMG_PATH+l.getPic());
                     subjectMix.getEid().add(l.getLid());
+                    subjectMix.getScores().add(l.getScore());
                     
                 }
                 for(Subject_line sub_line:sub_lines){
