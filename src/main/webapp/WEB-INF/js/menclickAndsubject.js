@@ -488,7 +488,7 @@ function radioChooseClick(thisEle){
 
 		//nowAddRadio放在这个属性上
 		$(".positionRadio").removeClass("nowAddRadio");
-		thisEle.removeClass("nowAddRadio");
+		thisEle.addClass("nowAddRadio");
 
 	}
 	//-----------------

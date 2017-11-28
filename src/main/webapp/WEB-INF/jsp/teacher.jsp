@@ -436,6 +436,8 @@
 
 	$(document).ready(function() {
 		//刚刚加载进来
+		//设置
+	$(".addRadio").prop("checked",false);
 		//设置提示
 		$('[data-toggle=tooltip]').tooltip();
 		//添加点击事件
