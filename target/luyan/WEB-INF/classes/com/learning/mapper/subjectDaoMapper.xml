@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.dao.SubjectDao">
+	<insert id="insertSubject" parameterType="com.learning.pojo.Subject"
+		useGeneratedKeys="true" keyProperty="sid">
+		INSERT INTO Subject (
+		stitle,
+		stype,
+		totalScore
+		) VALUES(
+		#{stitle},
+		#{stype},
+		#{totalScore}
+		);
+
+	</insert>
+		<insert id="insertS_P"> 
+		INSERT INTO paper_subject (
+			pid,
+			sid
+
+		) VALUES(
+			#{1},
+			#{0}
+		);
+
+	</insert>
+	
+	<select id="getSubjectsByPid" resultType="com.learning.pojo.Subject">
+		SELECT s.* FROM subject s ,paper_subject ps WHERE ps.pid = #{0} and ps.sid = s.sid order by s.sid;
+	
+	</select>
+	
+</mapper>
+	
+	

@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.dao.SubjectDao">
+
+	<resultMap id="subjectMixMap" type="com.learning.pojo.SubjectMix">
+		<id column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="stitle" property="title" jdbcType="VARCHAR" />
+		<result column="stype" property="type" jdbcType="INTEGER" />
+		<result column="totalSecond" property="totalSecond" jdbcType="BIGINT" />
+		<result column="totalScore" property="totalScore" jdbcType="INTEGER" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+	
+	</resultMap>
 	<insert id="insertSubject" parameterType="com.learning.pojo.Subject"
 		useGeneratedKeys="true" keyProperty="sid">
 		INSERT INTO Subject (
@@ -15,23 +25,125 @@
 		);
 
 	</insert>
-		<insert id="insertS_P"> 
+	<insert id="insertS_P">
 		INSERT INTO paper_subject (
-			pid,
-			sid
+		pid,
+		sid
 
 		) VALUES(
-			#{1},
-			#{0}
+		#{1},
+		#{0}
 		);
 
 	</insert>
-	
+
 	<select id="getSubjectsByPid" resultType="com.learning.pojo.Subject">
-		SELECT s.* FROM subject s ,paper_subject ps WHERE ps.pid = #{0} and ps.sid = s.sid order by s.sid;
+		SELECT s.* FROM subject
+		s ,paper_subject ps WHERE ps.pid = #{0} and ps.sid = s.sid order by
+		s.sid;
+
+	</select>
+
+	<insert id="insertUser_subject" parameterType="com.learning.pojo.User_subject">
+		INSERT INTO
+		user_paper_subject (
+
+		uid,
+		pid,
+		sid,
+		score,
+		isWrong,
+		totalSecond
+
+		) VALUES(
+		#{uid},
+		#{pid},
+		#{sid},
+		#{score},
+		#{isWrong},
+		#{totalSecond}
+
+		)
+
+	</insert>
+
+	<insert id="insertUser_subject_line" parameterType="com.learning.pojo.User_subject_line">
+		INSERT INTO user_paper_subject_line (
+
+		uid,
+		pid,
+		sid,
+		lid,
+		lotherId
+
+		) VALUES(
+		#{uid},
+		#{pid},
+		#{sid},
+		#{lid},
+		#{lotherId}
+
+		)
+
+	</insert>
+
+
+	<insert id="insertUser_subject_choose" parameterType="com.learning.pojo.User_subject_choose">
+		INSERT INTO
+		user_paper_subject_choose (
+		uid,
+		pid,
+		sid,
+		chooseId
+
+		) VALUES(
+		#{uid},
+		#{pid},
+		#{sid},
+		#{chooseId}
+
+		)
+
+	</insert>
+	<select id="getUser_subjects" resultType="com.learning.pojo.User_subject">
+		SELECT * FROM user_paper_subject WHERE uid = #{0} and pid = #{1} order by sid;
 	
 	</select>
+
+	<select id="getUser_subject_choose" resultType="com.learning.pojo.User_subject_choose">
+		SELECT * FROM user_paper_subject_choose WHERE uid = #{0} and pid = #{1} and sid=#{2} order by cid;
 	
+	</select>
+	<select id="getUser_subject_line" resultType="com.learning.pojo.User_subject_line">
+		SELECT * FROM user_paper_subject_line WHERE uid = #{0} and pid = #{1} and sid=#{2} order by lid;
+	
+	</select>
+	<select id="getSubject" resultMap="subjectMixMap">
+		SELECT 
+		s.sid sid, 
+		s.stitle title,
+		s.stype type,
+		s.totalScore totalScore,
+		us.score score,
+		us.totalSecond totalSecond
+		
+		
+		
+		FROM subject s,user_paper_subject us WHERE 
+		s.sid = us .sid AND 
+		us.uid = #{0} AND
+		us.pid = #{1} AND
+		us.sid = #{2}
+		;
+	
+	</select>
+	<select id="getUser_subjectsBysid_pid" resultType="com.learning.pojo.User_subject">
+		SELECT * FROM user_paper_subject WHERE sid = #{0} and pid = #{1} order by score ;
+		
+		
+	
+	</select>
+
 </mapper>
 	
 	

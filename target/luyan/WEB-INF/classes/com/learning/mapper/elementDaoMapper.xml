@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.dao.ElementDao">
+	<insert id="insertIntoLine" parameterType="com.learning.pojo.LineElement"
+		useGeneratedKeys="true" keyProperty="lid">
+		INSERT INTO line (
+		pic,
+		video,
+		word,
+		score
+
+		) VALUES(
+		#{pic},
+		#{video},
+		#{word},
+		#{score}
+		);
+
+	</insert>
+	<insert id="insertIntoS_Line">
+		INSERT INTO subject_line (
+		sid,
+		lid,
+		index_
+		) VALUES(
+		#{0},
+		#{1},
+		#{2}
+		);
+
+	</insert>
+	<insert id="insertIntoChoose" parameterType="com.learning.pojo.ChooseElement"
+		useGeneratedKeys="true" keyProperty="cid">
+		INSERT INTO choose (
+		text
+		) VALUES(
+		#{text}
+		);
+
+	</insert>
+	<insert id="insertIntoS_choose">
+		INSERT INTO subject_choose(
+		sid,
+		cid,
+		answerId
+		) VALUES(
+		#{0},
+		#{1},
+		#{2}
+		);
+
+	</insert>
+
+	<select id="getLinesBySid" resultType="com.learning.pojo.LineElement">
+		SELECT l.* FROM line l
+		,subject_line sl WHERE sl.sid = #{0} AND sl.lid = l.lid order by l.lid;
+	</select>
+	<select id="getChoosesBySid" resultType="com.learning.pojo.ChooseElement">
+		SELECT c.* FROM choose c ,subject_choose sc WHERE sc.sid = #{0} AND sc.cid =
+		c.cid order by c.cid;
+	</select>
+	<select id="getRightChoosenIndex" resultType="int">
+		SELECT answerId FROM subject_choose sc where sc.sid = #{0} limit 1;
+	
+	</select>
+	
+	<select id="getLinesSeq" resultType="com.learning.pojo.Subject_line">
+		SELECT * FROM subject_line sl where sl.sid = #{0} order by sl.lid;
+	</select>
+</mapper>

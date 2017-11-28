@@ -30,17 +30,67 @@
 		u,user_paper up WHERE u.uid = up.uid and u.uid =#{0} ) ;
 	</select>
 
-	<select id="testPaperDone" resultType="java.lang.Integer"> 
-		SELECT count(1) FROM 
+	<select id="testPaperDone" resultType="java.lang.Integer">
+		SELECT count(1) FROM
 		user_paper up
-		WHERE up.pid = #{1} AND up.uid LIKE CONCAT('',#{0}) ; 
+		WHERE up.pid = #{1} AND up.uid LIKE CONCAT('',#{0}) ;
 	</select>
-     <select id="getSpecPaper" resultType="com.learning.pojo.Paper"> 
-		SELECT * FROM 
+	<select id="getSpecPaper" resultType="com.learning.pojo.Paper">
+		SELECT * FROM
 		paper p
-		WHERE p.pid = #{0}  ; 
+		WHERE
+		p.pid = #{0} ;
 	</select>
+	<insert id="insertUser_paper" parameterType="com.learning.pojo.User_paper">
+		INSERT INTO
+		user_paper (
 
+		uid,
+		pid,
+		totalScore,
+		startTime,
+		endTime
+
+		)VALUES(
+		#{uid},
+		#{pid},
+		#{totalScore},
+		#{startTime},
+		#{endTime}
+		);
+	</insert>
+	<select id="getUser_papers" resultType="com.learning.pojo.User_paper">
+		SELECT * FROM user_paper
+		WHERE pid = #{0} and uid = #{1};
+
+	</select>
+	<select id="getQueryPapersWithParms" resultType="com.learning.pojo.Paper">
+
+
+
+		SELECT p.* FROM paper p,user_paper up WHERE 
+		
+		p.pid = up.pid 
+		<if test="title == null and date == null"> AND ABS(TO_DAYS( NOW( ) ) - TO_DAYS(p.pdate) ) &lt;=2 </if>
+		<if test="title != null and date == null"> AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%'))</if>
+		
+		<if test="title == null and date != null"> AND ABS(TO_DAYS( #{date} ) - TO_DAYS(p.pdate))  &lt;=2 </if>
+		
+		<if test="title != null and date != null">AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%')) AND ABS(TO_DAYS( #{date} ) - TO_DAYS(p.pdate))  &lt;=2 </if>
+		<if test="studentId != null "> AND up.uid = #{studentId}</if>
+		
+		
+		;
+
+
+
+
+
+	</select>
+	<select id="getUser_papersByPid" resultType="com.learning.pojo.User_paper">
+		SELECT * FROM user_paper
+		WHERE pid = #{0} order by totalScore ;
+	</select>
 
 </mapper>
 	

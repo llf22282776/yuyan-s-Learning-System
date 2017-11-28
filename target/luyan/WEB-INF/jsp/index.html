@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/jquery.js"></script><!-- jQuery is required -->
+    <link rel="stylesheet" href="../css/cropper.css">
+    <script src="../js/cropper.js"></script>
+</head>
+<body>
+<img class="cropper" src="../img/favicon.ico" style="width: 400px;height: 400px"/>
+</body>
+<script>
+
+    $(".cropper").cropper({
+        aspectRatio: 16/9,
+        modal: false,
+        preview: ".extra-preview",
+        done: function(data) {
+            console.log(data);
+        }
+    });
+
+</script>
+</html>

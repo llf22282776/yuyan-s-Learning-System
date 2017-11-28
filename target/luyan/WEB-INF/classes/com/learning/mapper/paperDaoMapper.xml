@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learning.dao.PaperDao">
+	<insert id="insertPaper" parameterType="com.learning.pojo.Paper"
+		useGeneratedKeys="true" keyProperty="pid">
+		INSERT INTO paper (
+		pname,
+		pdate,
+		totalScore
+
+		) VALUES(
+		#{pname},
+		#{pdate},
+		#{totalScore}
+		);
+
+	</insert>
+	<select id="getPapersUserNotDoItYet" resultType="com.learning.pojo.Paper">
+		SELECT P.* FROM
+		paper p
+		WHERE p.pid not in (select up.pid from user u,user_paper up
+		WHERE u.uid = up.uid and u.uid =#{0} ) order by p.pid;
+	</select>
+
+	<select id="getPapersNumUserNotDoItYet" resultType="java.lang.Integer">
+		SELECT
+		count(1) FROM paper p
+		WHERE p.pid not in (select up.pid from user
+		u,user_paper up WHERE u.uid = up.uid and u.uid =#{0} ) ;
+	</select>
+
+	<select id="testPaperDone" resultType="java.lang.Integer"> 
+		SELECT count(1) FROM 
+		user_paper up
+		WHERE up.pid = #{1} AND up.uid LIKE CONCAT('',#{0}) ; 
+	</select>
+     <select id="getSpecPaper" resultType="com.learning.pojo.Paper"> 
+		SELECT * FROM 
+		paper p
+		WHERE p.pid = #{0}  ; 
+	</select>
+
+
+</mapper>
+	
+	
