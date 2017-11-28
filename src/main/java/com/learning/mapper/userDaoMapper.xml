@@ -29,6 +29,12 @@
 		);
   
 	</insert>
+<select id="getUserByUid" resultType="com.learning.pojo.User">
+		SELECT * FROM user
+		WHERE
+		uid LIKE CONCAT(#{0},'')
+	</select>
+
 
 
 

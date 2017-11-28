@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.learning.dao.ElementDao">
+
+	<resultMap id="elementMixMap" type="com.learning.pojo.ElementMix">
+		<id column="lid" property="lid" jdbcType="INTEGER" />
+		<result column="pic" property="pic" jdbcType="VARCHAR" />
+		<result column="video" property="video" jdbcType="INTEGER" />
+		<result column="word" property="word" jdbcType="BIGINT" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+		<result column="text" property="text" jdbcType="INTEGER" />
+		<result column="chooseId" property="chooseId" jdbcType="INTEGER" />
+		<result column="lotherId" property="lotherId" jdbcType="INTEGER" />
+		<result column="index_" property="index" jdbcType="INTEGER" />
+		<result column="answerId" property="answerId" jdbcType="INTEGER" />
+		
+	</resultMap>
 	<insert id="insertIntoLine" parameterType="com.learning.pojo.LineElement"
 		useGeneratedKeys="true" keyProperty="lid">
 		INSERT INTO line (
@@ -22,11 +36,11 @@
 		INSERT INTO subject_line (
 		sid,
 		lid,
-		index
+		index_
 		) VALUES(
 		#{0},
 		#{1},
-		#{3}
+		#{2}
 		);
 
 	</insert>
@@ -54,18 +68,62 @@
 
 	<select id="getLinesBySid" resultType="com.learning.pojo.LineElement">
 		SELECT l.* FROM line l
-		,subject_line sl WHERE sl.sid = #{0} AND sl.lid = l.lid order by l.lid;
+		,subject_line sl WHERE sl.sid = #{0} AND sl.lid = l.lid order by
+		l.lid;
 	</select>
 	<select id="getChoosesBySid" resultType="com.learning.pojo.ChooseElement">
-		SELECT c.* FROM choose c ,subject_choose sc WHERE sc.sid = #{0} AND sc.cid =
-		c.cid order by c.cid;
+		SELECT c.* FROM choose c
+		,subject_choose sc WHERE sc.sid = #{0} AND sc.cid =
+		c.cid order by
+		c.cid;
 	</select>
 	<select id="getRightChoosenIndex" resultType="int">
-		SELECT answerId FROM subject_choose sc where sc.sid = #{0} limit 1;
-	
+		SELECT answerId
+		FROM subject_choose sc where sc.sid = #{0} limit 1;
+
 	</select>
-	
+
 	<select id="getLinesSeq" resultType="com.learning.pojo.Subject_line">
-		SELECT * FROM subject_line sl where sl.sid = #{0} order by sl.lid;
+		SELECT * FROM subject_line
+		sl where sl.sid = #{0} order by sl.lid;
 	</select>
+	<select id="getLineElementMixs" resultMap="elementMixMap">
+
+		SELECT
+			l.lid lid,
+			l.pic pic,
+			l.video video,
+			l.word word,
+			l.score score,
+			ul.lotherId,
+            sl.index_ index_
+		FROM user_paper_subject_line ul,line l ,subject_line sl WHERE
+			ul.lid = l.lid AND 
+            sl.sid = ul.sid AND 
+            sl.lid = l.lid AND
+			ul.uid =#{0} AND
+			ul.pid = #{1} AND
+			ul.sid = #{2} order by  l.lid;
+		
+	</select>
+		<select id="getChooseElementMixs" resultMap="elementMixMap">
+
+		SELECT
+
+			c.cid cid,
+			c.text text,
+			c.chooseId chooseId,
+			c.answerId answerId
+		FROM user_paper_subject_choose uc,choose c,subject_choose sc WHERE
+			uc.cid = c.cid AND 
+			sc.sid = uc.sid AND 
+			sc.cid = c.cid AND
+			uc.uid =#{0} AND
+			uc.pid = #{1}AND
+			uc.sid = #{2} order by c.cid
+		
+	</select>
+
+
+
 </mapper>
