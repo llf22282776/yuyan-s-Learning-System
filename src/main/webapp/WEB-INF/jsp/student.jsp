@@ -8,7 +8,6 @@
 <title>学生界面</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
-<script src="${pageContext.request.contextPath}/js/echarts.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/sweetalert2.js"></script>
 <script src="${pageContext.request.contextPath}/js/flat-ui.js"></script>
 <script src="${pageContext.request.contextPath}/js/BootstrapMenu.min.js"></script>
@@ -23,17 +22,13 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/flat-ui.css"
 	rel="stylesheet" />
-<link
-	href="${pageContext.request.contextPath}/css/bootstrap-treeview.min.css"
-	rel="stylesheet" />
+
 <link href="${pageContext.request.contextPath}/css/font-awesome.css"
 	rel="stylesheet" />
 <link
 	href="${pageContext.request.contextPath}/css/font-awesome.min1.css"
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/student.css"
-	rel="stylesheet" />
-<link href="${pageContext.request.contextPath}/css/verticalMenu.css"
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">

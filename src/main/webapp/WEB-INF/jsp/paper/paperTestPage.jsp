@@ -10,12 +10,10 @@
 <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script src="${pageContext.request.contextPath}/js/jcanvas.js"></script>
 
-<script src="${pageContext.request.contextPath}/js/echarts.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/sweetalert2.js"></script>
 <script src="${pageContext.request.contextPath}/js/flat-ui.js"></script>
 <script src="${pageContext.request.contextPath}/js/BootstrapMenu.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/js/bootstrap-treeview.min.js"></script>
+
 <script
 	src="${pageContext.request.contextPath}/assets/js/application.js"></script>
 <link
@@ -25,8 +23,7 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/flat-ui.css"
 	rel="stylesheet" />
-<link
-	href="${pageContext.request.contextPath}/css/bootstrap-treeview.min.css"
+
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/font-awesome.css"
 	rel="stylesheet" />
@@ -35,8 +32,7 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/paper.css"
 	rel="stylesheet" />
-<link href="${pageContext.request.contextPath}/css/verticalMenu.css"
-	rel="stylesheet" />
+
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
