@@ -351,6 +351,7 @@
 		//3 设置图片为原始的
 		canvasEle.find(".picSubjectDiv").attr("src",
 				"");
+
 	}
 	function drawThePicsAndWords(canvasEle, subject) {
 		//假设传入的是连线题的顶级元素
@@ -367,8 +368,8 @@
 		//2 绘制图片
 		canvasEle.find(".picSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
-			ele.attr("src", subject.pics[subject.indexList.indexOf(index)]);//顺序为0的编号是多少
-			ele.attr("pairNum", subject.indexList.indexOf(index));
+			ele.attr("src", subject.pics[subject.indexList[index]]);//顺序为0的编号是多少
+			ele.attr("pairNum", subject.indexList[index]);
 			ele.attr("pairFrom", -1);
 		});
 
@@ -451,14 +452,14 @@
 		var line = {
 			start : start,
 			end : end,
-			index : subject.indexList.indexOf(end),
+			index : subject.indexList[end],
 			type : 0,
 		};
 		subjectStamp.lines[start + ""] = line;
 		line = {
 			start : start,
 			end : end,
-			index : subject.indexList.indexOf(end),
+			index : subject.indexList[end],
 			type : 1,
 		};
 		subjectStamp.lines_r[end + ""] = line;
@@ -532,7 +533,7 @@
 		//2 绘制图片
 		canvasEle.find(".picSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
-			ele.attr("src", subject.pics[subject.indexList.indexOf(i)]);//顺序为0的编号是多少
+			ele.attr("src", subject.pics[subject.indexList[i]]);//顺序为0的编号是多少
 			ele.attr("pairNum", subject.indexList[i]);
 			ele.attr("pairFrom", -1);
 		});
@@ -886,7 +887,7 @@
 
 					sourcEle.prop("type", "video/webm");
 					sourcEle.prop("src", '${pageContext.request.contextPath}/'
-							+ subject.audios[subject.indexList.indexOf(index)]);
+							+ subject.audios[subject.indexList[index]]);
 					ele.attr("index", subject.indexList[index]);//设置src
 					ele.append(sourcEle);
 				});

@@ -723,7 +723,7 @@
 		//2 绘制图片
 		canvasEle.find(".picSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
-			ele.attr("src", subject.pics[subject.indexList.indexOf(index)]);//顺序为0的编号是多少
+			ele.attr("src", subject.pics[subject.indexList[index]]);//顺序为0的编号是多少
 			ele.attr("pairNum", subject.indexList[index]);
 			ele.attr("pairFrom", -1);
 		});
@@ -807,14 +807,14 @@
 		var line = {
 			start : start,
 			end : end,
-			index : subject.indexList.indexOf(end),
+			index : subject.indexList[end],
 			type : 0,
 		};
 		subjectStamp.lines[start + ""] = line;
 		line = {
 			start : start,
 			end : end,
-			index : subject.indexList.indexOf(end),
+			index : subject.indexList[end],
 			type : 1,
 		};
 		subjectStamp.lines_r[end + ""] = line;
@@ -925,7 +925,7 @@
 		//2 绘制图片
 		canvasEle.find(".picSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
-			ele.attr("src", subject.pics[subject.indexList.indexOf(index)]);//顺序为0的编号是多少
+			ele.attr("src", subject.pics[subject.indexList[index]]);//顺序为0的编号是多少
 			ele.attr("pairNum", subject.indexList[index]);
 			ele.attr("pairFrom", -1);
 		});
@@ -944,7 +944,7 @@
 			var line = {
 				start : i,
 				end : subject.selectList[i],//选的
-				index : subject.indexList.indexOf(subject.selectList[i]), //选的这个编号的顺序是几
+				index : subject.indexList[subject.selectList[i]], //选的这个编号的顺序是几
 			};
 			lines_user.push(line);
 		}
