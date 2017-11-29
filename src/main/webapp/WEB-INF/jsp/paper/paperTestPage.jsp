@@ -855,13 +855,22 @@
 		//在网页中创建audio
 		if ($(".subjectAudioView").length <= 0) {
 			//创建
-			var audioText = "<video class='subjectAudioView' ></video>";//不可见的video标签
-			for (var i = 0; i < 4; i++) {
-				var audioEle = $(audioText);
-				$('body').append(audioEle);//放到body上,点击图片的时候，trggier它的play事件就行
-				audioEle.attr("controls", "");
-				audioEle.css("display", "block");
-			}
+	var audioText = "<video class='subjectAudioView' ></video>";//不可见的video标签
+	for (var i = 0; i < 4; i++) {
+	var audioEle = $(audioText);
+	$('body').append(audioEle);//放到body上,点击图片的时候，trggier它的play事件就行
+	audioEle.attr("controls", "");
+	audioEle.css("display", "block");
+	}
+		}else {
+	$(".subjectAudioView").remove();
+	var audioText = "<video class='subjectAudioView' ></video>";//不可见的video标签
+	for (var i = 0; i < 4; i++) {
+	var audioEle = $(audioText);
+	$('body').append(audioEle);//放到body上,点击图片的时候，trggier它的play事件就行
+	audioEle.attr("controls", "");
+	audioEle.css("display", "block");
+	}
 		}
 		setAudioSrc(subject);
 
