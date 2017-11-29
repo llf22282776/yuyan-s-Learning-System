@@ -59,9 +59,15 @@ public class ConstantUtil {
     public static int[] randomSeq(int start,int end){
         //生成一个0-end的随机序列
         Random random=new Random(System.currentTimeMillis());
-    
+        List<Integer> list1=new ArrayList<>();
+     
+        
+        
+        
+        
+        
         List<int[]> seq= new ArrayList<int[]>();
-         int[] a1={0,1,2,3};
+        int[] a1={0,1,2,3};
         int[] a2={1,0,2,3};
         int[] a3={3,0,1,2};
         int[] a4={0,3,2,1};

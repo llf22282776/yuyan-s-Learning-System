@@ -237,10 +237,11 @@ public class PaperServiceImp implements PaperService {
         }
         System.out.println("startTime:"+startTime+" "+ "endTime:"+endTime);
         
-        paperMix.setTotalScore(totalScore);//总分已经变成用户的分数了
+    
         User_paper user_paper=this.countPaper(paperMix, uid);
         user_paper.setStartTime(Timestamp.valueOf(startTime));
         user_paper.setEndTime(Timestamp.valueOf(endTime));
+        user_paper.setTotalScore(totalScore);//总分已经变成用户的分数了
         int num= paperDao.insertUser_paper(user_paper);
         if(num<0){
             throw new Exception("user_paper insert failed");
@@ -276,6 +277,7 @@ public class PaperServiceImp implements PaperService {
         // TODO Auto-generated method stub
         List<Paper> papers=new ArrayList<>();
         Map<String, Object> sMap=new HashMap<String, Object>();
+        sMap.put("uid",user.getUid() );
         if(StringUtil.isBlank(paperQueryState.title) == false){
             sMap.put("title",paperQueryState.title );
             
@@ -286,7 +288,11 @@ public class PaperServiceImp implements PaperService {
         }
         if(user.getPosition() == ConstantUtil.STUDENT){
             
-            sMap.put("studentId", user.getPosition());
+            sMap.put("studentId", user.getUid());
+            
+        }else {
+            
+            sMap.put("teacherId", user.getUid());
             
         }
         Paper[] papers2= paperDao.getQueryPapersWithParms(sMap);

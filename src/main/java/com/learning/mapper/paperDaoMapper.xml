@@ -67,28 +67,49 @@
 	<select id="getQueryPapersWithParms" resultType="com.learning.pojo.Paper">
 
 
-
-		SELECT p.* FROM paper p,user_paper up WHERE 
-		
-		p.pid = up.pid 
-		<if test="title == null and date == null"> AND ABS(TO_DAYS( NOW( ) ) - TO_DAYS(p.pdate) ) &lt;=2 </if>
+		<choose>
+			<when test="teacherId != null">
+				SELECT
+					p.pid pid,
+					MAX(p.pname) pname,
+					MAX(p.pdate) pdate,
+					MAX(p.totalScore) totalScore,
+					'最高'+MAX(up.totalScore) score,
+					COUNT(up.uid)+'人' userName
+					FROM paper p,user_paper up ,user u WHERE
+					p.pid = up.pid AND
+					up.uid = u.uid
+			</when>
+			<otherwise>
+				SELECT
+					p.pid pid,
+					p.pname pname,
+					p.pdate pdate,
+					p.totalScore totalScore,
+					up.totalScore score,
+					u.uname userName
+					FROM paper p,user_paper up ,user u WHERE
+					p.pid = up.pid AND
+					up.uid = u.uid
+			</otherwise>
+		</choose>
+		<if test="title == null and date == null"> AND ABS(TO_DAYS( NOW( ) ) - TO_DAYS(up.endTime) ) &lt;=2
+		</if>
 		<if test="title != null and date == null"> AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%'))</if>
-		
-		<if test="title == null and date != null"> AND ABS(TO_DAYS( #{date} ) - TO_DAYS(p.pdate))  &lt;=2 </if>
-		
-		<if test="title != null and date != null">AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%')) AND ABS(TO_DAYS( #{date} ) - TO_DAYS(p.pdate))  &lt;=2 </if>
+
+		<if test="title == null and date != null"> AND ABS(TO_DAYS( #{date} ) - TO_DAYS(up.endTime)) &lt;=2
+		</if>
+
+		<if test="title != null and date != null">AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%')) AND
+			ABS(TO_DAYS( #{date} ) - TO_DAYS(up.endTime)) &lt;=2 </if>
 		<if test="studentId != null "> AND up.uid = #{studentId}</if>
+		<if test="teacherId != null ">group by p.pid</if>
 		order by p.pid desc;
 		
-		;
-
-
-
-
-
 	</select>
 	<select id="getUser_papersByPid" resultType="com.learning.pojo.User_paper">
-		SELECT * FROM user_paper
+		SELECT * FROM
+		user_paper
 		WHERE pid = #{0} order by totalScore ;
 	</select>
 

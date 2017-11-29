@@ -349,7 +349,7 @@ public class SubjectServiceImp implements SubjectService {
             // 只可能有一个卷子
             String uid = user_paper.getUid();
             if(ConstantUtil.STUDENT == user.getPosition()){
-                if(uid.equals(uid) ==false )continue;//避免学生也能获取其他人的
+                if(uid.equals(user.getUid()) ==false )continue;//避免学生也能获取其他人的
                 
             }
             int pid = user_paper.getPid();
@@ -359,10 +359,11 @@ public class SubjectServiceImp implements SubjectService {
 
             User_subject[] user_subjects = subjectDao
                     .getUser_subjects(uid, pid);
-
+            int totalScore=0;
             for (User_subject user_subject : user_subjects) {
                 // sid 也都只出现一次
                 int sid = user_subject.getSid();
+                
                 SubjectMetaData subjectMetaData = new SubjectMetaData();
                 if (subjectMetaDataFinish == false) {
                     // 只用做一次就行了
@@ -374,6 +375,7 @@ public class SubjectServiceImp implements SubjectService {
                 }
                 SubjectMix subjectMix = subjectDao.getSubject(uid, pid, sid);// 特定用户在这个卷子上的答题情况
                 // 剩下的用户选的和题本身答案在下面
+                totalScore+=subjectMix.getScore();
                 if (subjectMix.getType() == ConstantUtil.SUBJECT_LINE) {
                     setSubjectMixByU_sAndEle(subjectMix, user_subject,
                             subjectMix.getType());
@@ -403,6 +405,7 @@ public class SubjectServiceImp implements SubjectService {
             userMix.setUid(uid);
             User user2 = userDao.getUserByUid(uid);
             userMix.setUname(user2.getUname());
+            userMix.setTotalScore(totalScore);
 
             userMixs.add(userMix);
 

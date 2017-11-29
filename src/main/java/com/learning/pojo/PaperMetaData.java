@@ -65,6 +65,7 @@ public class PaperMetaData implements Serializable{
             Long a=ConstantUtil.getTimeBetween(user_paper.getStartTime(), user_paper.getEndTime());
             this.times.add(a);
             if(a>maxTime)maxTime=a;
+            
         }
     }
     /**
@@ -75,10 +76,10 @@ public class PaperMetaData implements Serializable{
      * */
     public int getScoreRank(int score){
         int rank=0;
-        for(int i=0;i<this.scores.size();i++ ){
+        for(int i=this.scores.size()-1,k=0;i>=0;i-- ,k++){
             
             if(this.scores.get(i) == score){
-                rank=i+1;
+                rank=k+1;
                 break;
             }
         }
@@ -92,10 +93,10 @@ public class PaperMetaData implements Serializable{
      * */
     public int getTimeRank(long l){
         int rank=0;
-        for(int i=0;i<this.times.size();i++ ){
+        for(int i=this.scores.size()-1,k=0;i>=0;i-- ,k++){
             
             if(this.times.get(i) == l){
-                rank=i+1;
+                rank=k+1;
                 break;
             }
         }

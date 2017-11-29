@@ -13,6 +13,8 @@ public class Paper implements Serializable {
     private Timestamp pdate;
     private int totalScore;
     private int pid;
+    private String userName;
+    private int score;
     public String getPname() {
         return pname;
     }
@@ -43,6 +45,22 @@ public class Paper implements Serializable {
 
     public void setPid(int pid) {
         this.pid = pid;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
 }

@@ -75,10 +75,24 @@
 	padding-top: 20px;
 	color: salmon;
 }
-.paperCard >.col-md-10 {
+.paperCard >.col-md-7 {
 	
 	text-align: left;
 	padding-left: 50px;
+}
+.paperCard  .paperUserName {
+	
+	overflow: hidden;
+font-size: 30px;
+text-align: left;
+color: #ccc;
+line-height: 3;
+}
+.paperCard  .paperScore {
+	
+	
+	text-align: left;
+	color: #ff7565;
 }
 
 .paperTitle{

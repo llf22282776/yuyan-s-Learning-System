@@ -825,7 +825,7 @@
                                         cancelButtonText : '不了',
                            }).then(function(){
 
-                                         location.href='${pageContext.request.contextPath}/checkPaperDetail?'+'pid='+testPaper.pid;
+                                         location.href='${pageContext.request.contextPath}/checkPaperDetail?'+'pid='+testPaper.paper.pid;
 
 
                                 },function(){
