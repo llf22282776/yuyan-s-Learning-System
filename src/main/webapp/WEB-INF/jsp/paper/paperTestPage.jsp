@@ -860,7 +860,7 @@
 	var audioEle = $(audioText);
 	$('body').append(audioEle);//放到body上,点击图片的时候，trggier它的play事件就行
 	audioEle.attr("controls", "");
-	audioEle.css("display", "block");
+	audioEle.css("display", "none");
 	}
 		}else {
 	$(".subjectAudioView").remove();
@@ -869,7 +869,7 @@
 	var audioEle = $(audioText);
 	$('body').append(audioEle);//放到body上,点击图片的时候，trggier它的play事件就行
 	audioEle.attr("controls", "");
-	audioEle.css("display", "block");
+	audioEle.css("display", "none");
 	}
 		}
 		setAudioSrc(subject);
