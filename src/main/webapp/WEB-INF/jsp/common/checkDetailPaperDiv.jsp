@@ -15,8 +15,7 @@
 								</c:when>
 								<c:otherwise>
 									<!-- 老师 -->
-									<select
-										class="userSelecter form-control select select-primary select-block mbl">
+									<select data-toggle="select" class="form-control userSelecter select select-default select-sm mrs">
 										<c:forEach var="usr" items="${paper.getUsers()}" varStatus="status">
 											<c:choose>
 												<c:when test="${status.index == 0}">

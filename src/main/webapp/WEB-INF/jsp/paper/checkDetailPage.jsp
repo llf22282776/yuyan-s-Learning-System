@@ -108,6 +108,7 @@
 	<video class='subjectAudioView'></video>
 	<video class='subjectAudioView'></video>
 </body>
+ <script src="${pageContext.request.contextPath}/assets/js/application.js"></script>
 <script>
 	var testPaper = {
 		isStarted : false,//判断是否开始
@@ -124,8 +125,8 @@
 	$(document)
 			.ready(
 					function() {
-						$('.userSelecter').change(function() {
-							selectChangeEvent($(this));
+						$('.userSelecter').change(function(e) {
+							selectChangeEvent($(this),e);
 
 						});
 						//组织题目
@@ -151,10 +152,10 @@
 
 	};
 
-	function selectChangeEvent(thisEle) {
+	function selectChangeEvent(thisEle,e) {
 		//下拉框切换事件
 		//切换用户
-		switchUser(parseInt(thisEle.attr("index")));
+		switchUser(parseInt(e.val));
 
 	}
 	function switchUser(index) {
@@ -164,10 +165,10 @@
 		testPaper.paper.subjects = testPaper.paper.users[testPaper.nowUserIndex].subjects;
 		//更改试卷头信息
 		changePaperDataDiv();
-		if (testPaper.paper.nowSubjectIndex > -1)
-			testPaper.paper.nowSubjectIndex -= 1;//减小
+		if (testPaper.nowSubjectIndex > -1)
+			testPaper.nowSubjectIndex -= 1;//减小
 		else
-			testPaper.paper.nowSubjectIndex = -1;//小于等于-1就别动了
+			testPaper.nowSubjectIndex = -1;//小于等于-1就别动了
 		//切换到下一个题(表面上依然是这一题)
 		switchSubjectToNext();
 
@@ -214,7 +215,7 @@
 		var subjectMix = testPaper.paper.subjects[testPaper.nowSubjectIndex];
 		//分数
 	$('.subjectUserView').find('.headerRow').find(
-	'.textArea').text(testPaper.nowSubjectIndex);
+	'.textArea').text(testPaper.nowSubjectIndex+1);
 
 		$('.subjectUserView').find('.scoreRow').find(
 				'.textArea').text(subjectMix.score);
