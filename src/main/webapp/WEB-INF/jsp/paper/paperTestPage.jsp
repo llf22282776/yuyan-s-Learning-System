@@ -89,7 +89,7 @@
 				<c:forEach begin="0" end="3" varStatus="status">
 					<!-- 这里是特殊的文字 -->
 					<img class="picSubjectDiv"
-						src="${pageContext.request.contextPath}/img/temp.png" alt="" />
+						src="${pageContext.request.contextPath}/img/temp.png" alt="请稍后。。。" />
 				</c:forEach>
 
 			</div>
@@ -350,7 +350,7 @@
 		canvasEle.find("#linePainter").clearCanvas();
 		//3 设置图片为原始的
 		canvasEle.find(".picSubjectDiv").attr("src",
-				"${pageContext.request.contextPath}/img/temp.png")
+				"");
 	}
 	function drawThePicsAndWords(canvasEle, subject) {
 		//假设传入的是连线题的顶级元素
@@ -368,7 +368,7 @@
 		canvasEle.find(".picSubjectDiv").each(function(index, ele) {
 			var ele = $(ele);
 			ele.attr("src", subject.pics[subject.indexList.indexOf(index)]);//顺序为0的编号是多少
-			ele.attr("pairNum", subject.indexList[index]);
+			ele.attr("pairNum", subject.indexList.indexOf(index));
 			ele.attr("pairFrom", -1);
 		});
 
