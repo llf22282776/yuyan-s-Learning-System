@@ -877,7 +877,7 @@
 
 					sourcEle.prop("type", "video/webm");
 					sourcEle.prop("src", '${pageContext.request.contextPath}/'
-							+ subject.audios[subject.indexList.indexOf(i)]);
+							+ subject.audios[subject.indexList.indexOf(index)]);
 					ele.attr("index", subject.indexList[index]);//设置src
 					ele.append(sourcEle);
 				});
