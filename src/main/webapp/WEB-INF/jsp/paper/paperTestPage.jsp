@@ -874,11 +874,12 @@
 					var ele = $(ele);
 					ele.empty();
 					var sourcEle = $("<source />");
-					ele.append(sourcEle);
+
 					sourcEle.prop("type", "video/webm");
 					sourcEle.prop("src", '${pageContext.request.contextPath}/'
 							+ subject.audios[subject.indexList[index]]);
 					ele.attr("index", subject.indexList[index]);//设置src
+					ele.append(sourcEle);
 				});
 
 	}
