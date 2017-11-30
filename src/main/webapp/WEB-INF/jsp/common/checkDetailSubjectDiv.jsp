@@ -14,7 +14,7 @@
 </div>
 <div class="subjectTotalView jumbotron  ">
 
-		<div class="row headerRow">总览</div>
+		<div class="row headerRow"></div>
 		<div class="row scoreRow">
 			<div id="subjectScoreCharts" class="paperCharts"></div>
 		
