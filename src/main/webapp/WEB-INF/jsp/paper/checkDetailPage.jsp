@@ -807,14 +807,14 @@
 		var line = {
 			start : start,
 			end : end,
-			index : subject.indexList[end],
+			index : subject.indexList.indexOf(end),
 			type : 0,
 		};
 		subjectStamp.lines[start + ""] = line;
 		line = {
 			start : start,
 			end : end,
-			index : subject.indexList[end],
+			index : subject.indexList.indexOf(end),
 			type : 1,
 		};
 		subjectStamp.lines_r[end + ""] = line;
@@ -852,7 +852,7 @@
 			var line_right = {
 				start : i,
 				end : i,
-				index : subject.indexList[i],//正确选择的顺序
+				index : subject.indexList.indexOf(i),//正确选择的顺序
 
 			};
 			if (lineEle.end == line_right.end) {//用户选择一致
