@@ -452,14 +452,14 @@
 		var line = {
 			start : start,
 			end : end,
-			index : subject.indexList[end],
+			index : subject.indexList.indexOf(end),
 			type : 0,
 		};
 		subjectStamp.lines[start + ""] = line;
 		line = {
 			start : start,
 			end : end,
-			index : subject.indexList[end],
+			index :  subject.indexList.indexOf(end),
 			type : 1,
 		};
 		subjectStamp.lines_r[end + ""] = line;
