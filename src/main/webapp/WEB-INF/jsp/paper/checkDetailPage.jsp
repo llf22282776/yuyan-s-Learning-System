@@ -944,7 +944,7 @@
 			var line = {
 				start : i,
 				end : subject.selectList[i],//选的
-				index : subject.indexList[subject.selectList[i]], //选的这个编号的顺序是几
+				index : subject.indexList.indexOf(subject.selectList[i]), //选的这个编号的顺序是几
 			};
 			lines_user.push(line);
 		}
