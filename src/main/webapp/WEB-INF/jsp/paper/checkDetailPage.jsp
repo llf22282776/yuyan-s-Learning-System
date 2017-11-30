@@ -847,7 +847,7 @@
 		//清空，遍历List划线
 		var cavnsEle = thisEle.find("#linePainter");
 		cavnsEle.clearCanvas();
-		for ( var i in list) {
+		for ( var i=0;i<list.length; i++) {
 			var lineEle = list[i];
 			var line_right = {
 				start : i,
