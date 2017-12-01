@@ -205,7 +205,7 @@
 				'.textArea').text(userMix.totalScore);
 		//时间
 		$('.paperUserTotalView').find(".nameArea").find('.timeRow').find(
-				'.col-sm-8').text(userMix.totalSecond);
+				'.col-xs-8').text(userMix.totalSecond);
 		//排行
 		$('.paperUserTotalView').find(".rankArea").find('.scoreRow').find(
 				'.textArea').text(userMix.scoreRank);
