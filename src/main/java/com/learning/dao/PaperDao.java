@@ -27,4 +27,14 @@ public interface PaperDao {
     //获取多条up
     public User_paper[] getUser_papersByPid(int pid);
     
+    /**
+     * 获得学生没有做过的卷子列表
+     * */
+    public Paper[] getPapersNoStudentDone();
+    
+    /**
+     * 删除一个学生没有做过的卷子
+     * 
+     * */
+    public int deleteOnePaperStudentNotDone(int pid);
 }

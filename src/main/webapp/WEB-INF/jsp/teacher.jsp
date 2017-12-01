@@ -30,6 +30,8 @@
 	rel="stylesheet" />
 <script
 	src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.js"></script>
+	<script
+	src="${pageContext.request.contextPath}/js/deletePaper.js"></script>
 <link href="${pageContext.request.contextPath}/css/font-awesome.css"
 	rel="stylesheet" />
 <link
@@ -50,9 +52,8 @@
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/img/icons/svg/student.ico" />
 <script>
-	BasePath="${pageContext.request.contextPath}";
-
-	</script>
+	BasePath = "${pageContext.request.contextPath}";
+</script>
 </head>
 <body>
 	<div class="rootContainer">
@@ -304,9 +305,11 @@
 					</div>
 				</div>
 				
-			
-				
-				
+					<a id="dbPaperModalButton" class="subIconLink" > <span
+						class="fui-trash iconSubject cancelIcon"></span>
+					</a>
+
+
 			</div>
 			<div id="queryContentDiv" style="display: none"
 				class="jumbotron contentDiv queryDiv">
@@ -408,6 +411,28 @@
 					<h3></h3>
 				</div>
 			</div>
+
+			<div class="modal fade" id="drawBackModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<div class="modal-body dbpaperContainer" id="dbpaperContainer">
+							<div class="paperListDivContent row pbl">
+								<!--这里放置card卡片-->
+
+							</div>
+							<div class="row buttonRow ">
+								<!--这里放置card卡片-->
+									<a id="getDbButton" class="refreshButton"><span class="fa fa-refresh iconSubject"></span></a>
+							</div>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal -->
+			</div>
+
 		</div>
 	</div>
 </body>
@@ -441,7 +466,7 @@
 	$(document).ready(function() {
 		//刚刚加载进来
 		//设置
-	$(".addRadio").prop("checked",false);
+		$(".addRadio").prop("checked", false);
 		//设置提示
 		$('[data-toggle=tooltip]').tooltip();
 		//添加点击事件
@@ -576,6 +601,19 @@
 		$("#addUserButton").click(function() {
 			sumitPeople($(this));
 		});
+		//未做按钮刷新事件
+		$("#getDbButton").click(function(){
+			dbPaperRefreshButtonClick();
+			
+			
+		});
+		//模态框弹出按钮点击事件
+		$("#dbPaperModalButton").click(function(){
+			modalButtonClickEevent($(this));
+			
+			
+		});
+		
 
 	});
 

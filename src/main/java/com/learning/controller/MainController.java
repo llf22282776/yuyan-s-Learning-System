@@ -479,7 +479,63 @@ public class MainController {
 
     }
     
+    /**
+     * 此接口用于返回可以被删除的卷子列表
+     * 没有学生做
+     * 
+     * */
+    @RequestMapping(value = "/getPaperNoUserDoneList", method = { RequestMethod.POST,
+            RequestMethod.GET })
     
+    public String getPaperNoUserDoneList(HttpServletRequest req, HttpServletResponse res) {
+           try {
+
+               List<Paper> list=paperServiceImp.getPapersNoUserDoneYet();
+               req.setAttribute("paperList", list);
+                      
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+    
+        
+        return "common/cardList";
+
+    }
+    /**
+     * 此接口用于删除试卷，返回删除结果
+     * 
+     * 
+     * */
+    
+    @RequestMapping(value = "/deletePaper", method = { RequestMethod.POST,
+            RequestMethod.GET })
+    @ResponseBody
+    public JSONObject deletePaper( HttpServletRequest req, HttpServletResponse res) {
+        CommonRes commonRes = new CommonRes();
+        commonRes.setDes("");
+        try {
+            int pid = Integer.parseInt(req.getParameter("pid"));
+            int num = paperServiceImp.deleteNoUserDonePaperByPid(pid);
+            if(num<=0){
+                commonRes.setDes("删除失败，可能已经有学生作答");
+                commonRes.setSucceed(false);
+            }else {
+                commonRes.setDes("删除成功！");
+                commonRes.setSucceed(true);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            LOGGER.error(ConstantUtil.getStackMsg(e));
+            commonRes.setDes("删除操作产生异常，删除失败");
+            commonRes.setSucceed(false);
+            
+        }
+        
+        return JSONObject.parseObject(JSONObject.toJSONString(commonRes));
+
+    }
     
     /**
      * 

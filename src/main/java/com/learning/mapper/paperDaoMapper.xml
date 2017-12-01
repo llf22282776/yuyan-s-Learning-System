@@ -70,27 +70,27 @@
 		<choose>
 			<when test="teacherId != null">
 				SELECT
-					p.pid pid,
-					MAX(p.pname) pname,
-					MAX(p.pdate) pdate,
-					MAX(p.totalScore) totalScore,
-					'最高'+MAX(up.totalScore) score,
-					COUNT(up.uid)+'人' userName
-					FROM paper p,user_paper up ,user u WHERE
-					p.pid = up.pid AND
-					up.uid = u.uid
+				p.pid pid,
+				MAX(p.pname) pname,
+				MAX(p.pdate) pdate,
+				MAX(p.totalScore) totalScore,
+				'最高'+MAX(up.totalScore) score,
+				COUNT(up.uid)+'人' userName
+				FROM paper p,user_paper up ,user u WHERE
+				p.pid = up.pid AND
+				up.uid = u.uid
 			</when>
 			<otherwise>
 				SELECT
-					p.pid pid,
-					p.pname pname,
-					p.pdate pdate,
-					p.totalScore totalScore,
-					up.totalScore score,
-					u.uname userName
-					FROM paper p,user_paper up ,user u WHERE
-					p.pid = up.pid AND
-					up.uid = u.uid
+				p.pid pid,
+				p.pname pname,
+				p.pdate pdate,
+				p.totalScore totalScore,
+				up.totalScore score,
+				u.uname userName
+				FROM paper p,user_paper up ,user u WHERE
+				p.pid = up.pid AND
+				up.uid = u.uid
 			</otherwise>
 		</choose>
 		<if test="title == null and date == null"> AND ABS(TO_DAYS( NOW( ) ) - TO_DAYS(up.endTime) ) &lt;=2
@@ -105,14 +105,22 @@
 		<if test="studentId != null "> AND up.uid = #{studentId}</if>
 		<if test="teacherId != null ">group by p.pid</if>
 		order by p.pid desc;
-		
+
 	</select>
 	<select id="getUser_papersByPid" resultType="com.learning.pojo.User_paper">
 		SELECT * FROM
 		user_paper
 		WHERE pid = #{0} order by totalScore ;
 	</select>
-
+	<delete id="deleteOnePaperStudentNotDone">
+		delete FROM paper
+		WHERE pid = #{0} AND
+		pid not in (SELECT pid FROM (SELECT p.pid FROM paper p, user_paper up
+		WHERE p.pid = up.pid) result ) ;
+	</delete>
+	<select id="getPapersNoStudentDone" resultType="com.learning.pojo.Paper">
+		SELECT p.* FROM paper p WHERE p.pid not in (select pid from user_paper up);
+	</select>
 
 </mapper>
 	

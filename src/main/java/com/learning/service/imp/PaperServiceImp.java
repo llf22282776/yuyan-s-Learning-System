@@ -331,4 +331,24 @@ public class PaperServiceImp implements PaperService {
         
     }
 
+    @Override
+    public List<Paper> getPapersNoUserDoneYet() {
+        // TODO Auto-generated method stub
+        List<Paper> papers=new ArrayList<>();
+        Paper[] papers2=paperDao.getPapersNoStudentDone();
+        for(Paper p:papers2){
+            papers.add(p);
+        }
+        return papers;
+        
+        
+    }
+
+    @Override
+    public int deleteNoUserDonePaperByPid(int pid) throws Exception {
+        // TODO Auto-generated method stub
+   
+        return paperDao.deleteOnePaperStudentNotDone(pid);
+    }
+
 }

@@ -90,4 +90,18 @@ public interface PaperService {
      * */
     public PaperMix getUserDonePaper(int pid,User user);
     
+    
+    /**
+     * 
+     * 获得一个试卷列表
+     * 为没有被用户做的试卷列表
+     * */
+    public List<Paper> getPapersNoUserDoneYet();
+    
+    /**
+     * 
+     * 删除试卷，返回执行成功的数量
+     * 
+     * */
+    public int deleteNoUserDonePaperByPid(int pid)throws Exception;
 }
