@@ -43,7 +43,8 @@
 	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
 <script src="${pageContext.request.contextPath}/js/commonPaper.js"></script>
-
+<link href="${pageContext.request.contextPath}/css/common.css"
+	rel="stylesheet" />
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/img/icons/svg/student.ico" />
 </head>
@@ -54,11 +55,15 @@
 
 			<div style="display: block" class="jumbotron contentDiv ">
 				<%@include file="../common/checkDetailPaperDiv.jsp"%>
+				<%@include file="../common/checkDetailSubjectDiv.jsp"%>
 			</div>
+	
+			
+		
 			<div style="display: none" class="jumbotron contentDiv subjectDiv">
 
 			</div>
-			<%@include file="../common/checkDetailSubjectDiv.jsp"%>
+			
 
 		</div>
 
@@ -242,11 +247,10 @@
 		paperTimeCharts
 		subjectScoreCharts
 		subjetTimeCharts*/
-		skillChart = echarts.init(($('#skillRaderCharts'))[0]);
+		//skillChart = echarts.init(($('#skillRaderCharts'))[0]);
 		paperScoreChart = echarts.init(($('#paperScoreCharts'))[0]);
-		paperTimeChart = echarts.init(($('#paperTimeCharts'))[0]);
 		subjectScoreChart = echarts.init(($('#subjectScoreCharts'))[0]);
-		subjectTimeChart = echarts.init(($('#subjetTimeCharts'))[0]);
+		
 	}
 	function paintPaperViewCharts() {
 		//能力表，两个时间表,pie，一个skill表

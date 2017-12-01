@@ -31,7 +31,8 @@
 	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/paper.css"
 	rel="stylesheet" />
-
+<link href="${pageContext.request.contextPath}/css/common.css"
+	rel="stylesheet" />
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>

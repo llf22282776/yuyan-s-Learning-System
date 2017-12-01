@@ -4,8 +4,8 @@
 	background-color: #f9f9f9;
 	border-radius: 10px;
 	height: 138px;
-	padding-top: 20px;
-	font-size: 30px;
+	padding-top: 3vmin;
+	font-size: 4vmin;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	border: turquoise;
@@ -49,12 +49,12 @@
 #querySubmitButton:hover,#querySubmitButton:focus {
 	color: #52b6f9;
 }
-.queryHeaderRow>.row>.col-md-1{
+.queryHeaderRow>.row>.col-xs-1{
 	text-align: right;
 
 
 }
-.queryHeaderRow>.row>.col-md-1:last-child{
+.queryHeaderRow>.row>.col-xs-1:last-child{
 	text-align: left;
 
 
@@ -67,26 +67,26 @@
 
 	
 }
-.paperCard >.col-md-1 {
+.paperCard >.col-xs-1 {
 
-	padding-top: 20px;
+	padding-top: 2vmin;
 }
-.paperCard >.col-md-1>span.fui-calendar{
-	padding-top: 20px;
+.paperCard >.col-xs-1>span.fui-calendar{
+	padding-top: 2vmin;
 	color: salmon;
 }
-.paperCard >.col-md-7 {
+.paperCard >.col-xs-7 {
 	
 	text-align: left;
-	padding-left: 50px;
+	padding-left: 4%;
 }
 .paperCard  .paperUserName {
 	
 	overflow: hidden;
-font-size: 30px;
-text-align: left;
-color: #ccc;
-line-height: 3;
+	font-size: 4vmin;
+	text-align: left;
+	color: #ccc;
+	line-height: 3;
 }
 .paperCard  .paperScore {
 	
@@ -97,13 +97,13 @@ line-height: 3;
 
 .paperTitle{
 	
-	font-size:31px;
+	font-size:4vmin;
 
 	
 }
 .paperDate{
 	
-	font-size:16px;
+	font-size:3vmin;
 	color: #bbbbbb;
 	
 }

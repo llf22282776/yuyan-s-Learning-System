@@ -10,18 +10,18 @@
 							
 						>
 						<div class="paperCard row">
-						<div class="col-md-1 paperPidDiv">${paper.getPid()}</div>
-						<div class="col-md-1">
+						<div class="col-xs-1 paperPidDiv">${paper.getPid()}</div>
+						<div class="col-xs-1">
 							<span class="fui-calendar"></span>
 						</div>
-						<div class="col-md-7">
+						<div class="col-xs-7">
 							<div class="row paperTitle">${paper.getPname()}</div>
 							<div class="row paperDate">${paper.getPdate().toString()}</div>
 						</div>
-						<div class="col-md-2">
+						<div class="col-xs-2">
 							<div class="row paperUserName">${paper.getUserName()}</div>
 						</div>
-						<div class="col-md-1">
+						<div class="col-xs-1">
 							<div class="row paperScore">${paper.getScore()}分</div>
 						</div>
 					</div>

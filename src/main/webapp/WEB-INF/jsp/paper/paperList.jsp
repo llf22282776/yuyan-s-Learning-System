@@ -38,7 +38,8 @@
 <link href="${pageContext.request.contextPath}/css/cropper.css"
 	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/cropper.js"></script>
-
+<link href="${pageContext.request.contextPath}/css/common.css"
+	rel="stylesheet" />
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/img/icons/svg/student.ico" />
 </head>
@@ -58,11 +59,11 @@
 							
 						>
 						<div class="paperCard row">
-						<div class="col-md-1 paperPidDiv">${paper.getPid()}</div>
-						<div class="col-md-1">
+						<div class="col-xs-1 paperPidDiv">${paper.getPid()}</div>
+						<div class="col-xs-1">
 							<span class="fui-calendar"></span>
 						</div>
-						<div class="col-md-10">
+						<div class="col-xs-10">
 							<div class="row paperTitle">${paper.getPname()}</div>
 							<div class="row paperDate">${paper.getPdate().toString()}</div>
 						</div>

@@ -1,22 +1,36 @@
 @CHARSET "UTF-8";
+.subjectView{
 
-.subjectTotalView {
-	position: fixed;
-	width: 14%;
-	right: 10px;
-	border-radius: 5px;
-	text-align: center;
-	background-color: #eee;
-	padding-top: 10px;
-	bottom: 10px;
+	height: 200px;
+	margin-left: 3%;
+	width: 460px;
+	background-color: #fefefe;
+	margin-top: 28px;
+	border-radius: 25px;
+	
+	
+}
+.jumbotron.contentDiv.subjectDiv{
+	margin-left: 1vmin;
+	
+	
 }
 
-.subjectUserView {
-	position: fixed;
-	width: 12%;
-	border-radius: 5px;
-	left: 3%;
-	bottom: 10px;
+.subjectView>.area>.row {
+	margin-top: 10px;
+	font-size: 3vmin;
+	margin-bottom: 10px;
+}
+.subjectView>.area {
+	float: left;
+	width: 230px;
+}
+
+div.subjectUserView .textArea {
+	padding-left: 1%;
+	padding-right: 1%;
+	color: #e74c3c;
+	display: inline;
 }
 
 .subjectUserView>.headerRow {
@@ -24,7 +38,6 @@
 }
 
 .paperTotalDiv {
-	margin-left: 10%;
 	height: 230px;
 }
 
@@ -38,9 +51,9 @@
 }
 
 .paperUserTotalView>.area>.row {
-margin-top: 10px;
-font-size: 24px;
-margin-bottom: 10px;
+	margin-top: 10px;
+	font-size: 3vmin;
+	margin-bottom: 10px;
 }
 
 .paperUserTotalView>.area {
@@ -50,7 +63,7 @@ margin-bottom: 10px;
 
 div.rankArea>.headerRow>span {
 	color: #3498db;
-	font-size: 24px;
+	font-size: 3vmin;
 }
 
 div.rankArea {
@@ -61,18 +74,12 @@ div.rankArea>.headerRow {
 	text-align: center;
 }
 
-div.area .row>.col-sm-4 {
+div.area .row>.col-xs-4 {
 	text-align: right;
 }
 
 .paperTotalView {
-	float: left;
-padding-left: 2%;
-width: 425px;
-background-color: #fefefe;
-margin-top: 28px;
-border-radius: 25px;
-margin-left: 2%;
+
 }
 
 .paperCharts {
@@ -83,14 +90,14 @@ margin-left: 2%;
 
 .row .textArea {
 	display: inline;
-	padding-left: 5px;
-	padding-right: 5px;
+padding-left: 1%;
+padding-right: 1%;
 	color: cornflowerblue;
 }
 
 div.nameArea .textArea {
-	padding-left: 5px;
-	padding-right: 5px;
+	padding-left: 1%;
+	padding-right: 1%;
 	color: #e74c3c;
 	display: inline;
 }

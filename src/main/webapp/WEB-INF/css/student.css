@@ -38,7 +38,7 @@
 	border-radius: 10px;
 	height: 138px;
 	padding-top: 20px;
-	font-size: 30px;
+	font-size: 4vmin;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	border: turquoise;
@@ -71,32 +71,32 @@ padding-top: 40px;
 }
 .refreshButton>a:hover{
 	color: #bdc3c7;
+} 
+
+
+.paperCard >.col-xs-1 {
+ 
+	padding-top: 2vmin;
 }
-
-
-.paperCard >.col-md-1 {
-
-	padding-top: 20px;
-}
-.paperCard >.col-md-1>span.fui-calendar{
-	padding-top: 20px;
+.paperCard >.col-xs-1>span.fui-calendar{
+	padding-top: 2vmin;
 	color: salmon;
 }
-.paperCard >.col-md-10 {
+.paperCard >.col-xs-10 {
 	
 	text-align: left;
-	padding-left: 50px;
+	padding-left: 4%;
 }
 
 .paperTitle{
 	
-	font-size:31px;
+	font-size:4vmin;
 
 	
 }
 .paperDate{
 	
-	font-size:16px;
+	font-size:3vmin;
 	color: #bbbbbb;
 	
 }

@@ -1,6 +1,7 @@
 @CHARSET "UTF-8";
 .rootContainer {
     padding: 10px 10px 10px;
+
 }
 
 .contentDiv {
@@ -9,7 +10,7 @@
 }
 
 .buttomLineDiv {
-    border-bottom: #cccccc;
+    border-bottom: #ffffff;
     border-bottom-style: dashed;
 }
 

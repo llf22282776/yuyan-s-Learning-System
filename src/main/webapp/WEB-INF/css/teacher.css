@@ -19,7 +19,12 @@
 .addIcon {
 	color: #2980b9;
 }
-
+.drawBackDiv{
+	position:fixed;
+	buttom:2%;
+	left:5px;
+	width:3vmin;
+}
 .addIcon:hover,.addIcon:focus {
 	color: #3498db;
 }

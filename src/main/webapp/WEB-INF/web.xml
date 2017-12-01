@@ -65,7 +65,9 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<!-- 几个listener -->
-  
+    <listener id="RequestContextListener">
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener> 
       <listener id="Log4jConfigListener">   
  		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>  
 	</listener>   

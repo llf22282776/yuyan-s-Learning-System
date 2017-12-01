@@ -5,13 +5,13 @@
 	<div class="row queryHeaderRow">
 
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="queryDatePickerDiv col-md-1 ">
+			<div class="col-sm-3"></div>
+			<div class="queryDatePickerDiv col-sm-1 ">
 				<a id="queryDatePicker"><span id="" class="fui-calendar-solid"></span></a>
 				<input id="queryDatePickerInput" value=""
 					data-date-format="yyyy-mm-dd" />
 			</div>
-			<div class="col-md-3 queryInputDiv">
+			<div class="col-sm-3 queryInputDiv">
 				<div class="form-group has-feedback">
 					<input id="queryInput" type="text" value=""
 						placeholder="输入试卷标题，全部或部分" class="form-control queryInput" /> <span
@@ -19,7 +19,7 @@
 				</div>
 			</div>
 
-			<div class="col-md-1">
+			<div class="col-sm-1">
 				<a id="querySubmitButton"><span class="fui-search"></span></a>
 			</div>
 		</div>

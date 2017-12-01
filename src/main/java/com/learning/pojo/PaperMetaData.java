@@ -59,12 +59,25 @@ public class PaperMetaData implements Serializable{
     }
     public void insertPapers(User_paper[] user_papers){
         //吧up里面的东西填进来,保证是顺序的
+        System.out.println("user_papers.length"+user_papers.length);
         for(User_paper user_paper :user_papers){
             this.scores.add(user_paper.getTotalScore());
             if(user_paper.getTotalScore()>maxScore)maxScore=user_paper.getTotalScore();
             Long a=ConstantUtil.getTimeBetween(user_paper.getStartTime(), user_paper.getEndTime());
-            this.times.add(a);
-            if(a>maxTime)maxTime=a;
+            
+            int length=times.size();
+            if(length<=0){
+                this.times.add(a);
+            }else {
+                for(int i=0;i<length;i++){
+                    if(this.times.get(i)>=a)this.times.add(i, a);
+                    System.out.println("i:"+i);
+                }
+                
+                
+            }
+           
+            if(a<maxTime)maxTime=a;
             
         }
     }
