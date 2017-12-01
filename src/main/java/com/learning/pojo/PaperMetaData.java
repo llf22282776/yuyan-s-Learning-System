@@ -5,7 +5,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
+
 import com.learning.util.ConstantUtil;
+import com.sun.media.jfxmedia.logging.Logger;
 /**
  * 
  * 这个类是查询的时候返回给前端的
@@ -17,6 +20,7 @@ public class PaperMetaData implements Serializable{
     /**
      * 
      */
+    private static final org.slf4j.Logger LOGGER= LoggerFactory.getLogger(PaperMetaData.class);
     private static final long serialVersionUID = -134030962733497519L;
     
     private List<Integer> scores=new ArrayList<Integer>();
@@ -71,7 +75,7 @@ public class PaperMetaData implements Serializable{
             }else {
                 for(int i=0;i<length;i++){
                     if(this.times.get(i)>=a)this.times.add(i, a);
-                    System.out.println("i:"+i);
+                    
                 }
                 
                 

@@ -317,9 +317,12 @@ public class PaperServiceImp implements PaperService {
            //3.获取所有的user相关
            paperMix.setUsers(subjetServiceImp.getUserMixByUp(user,upPapers,paperMix.getPaperMetaData()));
            paperMix.setResult(true);
+        
+          
+           
            return paperMix;
     } catch (Exception e) {
-        LOGGER.error(e.getMessage());
+        LOGGER.error(ConstantUtil.getStackMsg(e));
         e.printStackTrace();
         paperMix.setResult(false);
         return paperMix;
