@@ -65,6 +65,7 @@ public class PaperMetaData implements Serializable{
         //吧up里面的东西填进来,保证是顺序的
 
         LOGGER.debug("user_papers.length"+user_papers.length);
+        
         for(User_paper user_paper :user_papers){
             this.scores.add(user_paper.getTotalScore());
             if(user_paper.getTotalScore()>maxScore)maxScore=user_paper.getTotalScore();
@@ -74,11 +75,17 @@ public class PaperMetaData implements Serializable{
             if(length<=0){
                 this.times.add(a);
             }else {
+                boolean isInsert=false;
                 for(int i=0;i<length;i++){
-                    if(this.times.get(i)>=a)this.times.add(i, a);
+                    if(this.times.get(i)>=a){
+                        isInsert=true;
+                        this.times.add(i, a);
+                        break;
+                        
+                    }
                     
                 }
-                
+                if(isInsert == false)times.add(a);//没有加就最后加上
                 
             }
            
