@@ -63,7 +63,8 @@ public class PaperMetaData implements Serializable{
     }
     public void insertPapers(User_paper[] user_papers){
         //吧up里面的东西填进来,保证是顺序的
-        System.out.println("user_papers.length"+user_papers.length);
+
+        LOGGER.debug("user_papers.length"+user_papers.length);
         for(User_paper user_paper :user_papers){
             this.scores.add(user_paper.getTotalScore());
             if(user_paper.getTotalScore()>maxScore)maxScore=user_paper.getTotalScore();
