@@ -121,6 +121,12 @@
 	<select id="getPapersNoStudentDone" resultType="com.learning.pojo.Paper">
 		SELECT p.* FROM paper p WHERE p.pid not in (select pid from user_paper up);
 	</select>
+    <select id="getUsersMsgByPid" resultType="com.learning.pojo.User">
+		SELECT u.* FROM
+		user_paper up,user u
+		WHERE up.pid = #{0} and up.uid = u.uid order by totalScore ;
+	</select>
+
 
 </mapper>
 	

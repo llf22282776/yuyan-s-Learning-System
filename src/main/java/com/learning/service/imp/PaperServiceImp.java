@@ -351,4 +351,16 @@ public class PaperServiceImp implements PaperService {
         return paperDao.deleteOnePaperStudentNotDone(pid);
     }
 
+    @Override
+    public List<User> getUserPapersWithPid(int pid) {
+        // TODO Auto-generated method stub
+        User[] upPapers= paperDao.getUsersMsgByPid(pid);
+        List<User> papers=new ArrayList<>();
+        for(User user_paper:upPapers){
+            papers.add(user_paper);
+        }
+        return papers;
+    }
+    
+    
 }

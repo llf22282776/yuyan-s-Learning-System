@@ -3,6 +3,7 @@ package com.learning.dao;
 import java.util.Map;
 
 import com.learning.pojo.Paper;
+import com.learning.pojo.User;
 import com.learning.pojo.User_paper;
 
 
@@ -37,4 +38,6 @@ public interface PaperDao {
      * 
      * */
     public int deleteOnePaperStudentNotDone(int pid);
+    
+    public User[] getUsersMsgByPid(int pid);
 }

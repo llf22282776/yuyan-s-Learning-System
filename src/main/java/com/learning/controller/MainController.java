@@ -403,7 +403,8 @@ public class MainController {
        try {
            setUsername(req);
            int pid = Integer.parseInt(req.getParameter("pid"));
-           PaperMix paperMix = paperServiceImp.getUserDonePaper(pid,(User)req.getSession().getAttribute("user"));
+        
+           req.setAttribute("users", paperServiceImp.getUserPapersWithPid(pid));
            req.setAttribute("pid", pid);
            req.setAttribute("user", (User)req.getSession().getAttribute("user"));
           

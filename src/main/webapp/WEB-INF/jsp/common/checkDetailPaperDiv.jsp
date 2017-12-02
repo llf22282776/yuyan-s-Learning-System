@@ -16,7 +16,7 @@
 								<c:otherwise>
 									<!-- 老师 -->
 									<select data-toggle="select" class="form-control userSelecter select select-default select-sm mrs">
-										<c:forEach var="usr" items="${paper.getUsers()}" varStatus="status">
+										<c:forEach var="usr" items="${users}" varStatus="status">
 											<c:choose>
 												<c:when test="${status.index == 0}">
 													<option value="${status.index}" selected='selected'>${usr.getUname()}</option>

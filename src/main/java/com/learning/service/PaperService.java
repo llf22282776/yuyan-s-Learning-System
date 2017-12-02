@@ -104,4 +104,12 @@ public interface PaperService {
      * 
      * */
     public int deleteNoUserDonePaperByPid(int pid)throws Exception;
+    
+    /**
+     * 
+     * 获取user_paper
+     * */
+    public List<User> getUserPapersWithPid(int pid);
+    
+    
 }
