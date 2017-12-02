@@ -682,6 +682,7 @@
 
 		//重新设置进度条
 		if (testPaper.paper.subjects.length <= 1) {
+			$(testPaper.className).find(".subjectRooter").find("#stepState").empty();
 			$(testPaper.className).find(".subjectRooter").find("#stepState")
 					.slider({
 						min : 1,
@@ -697,6 +698,7 @@
 							$(testPaper.className).find(".subjectRooter").find(
 									"#stepState").slider('option').max);
 		} else {
+			$(testPaper.className).find(".subjectRooter").find("#stepState").empty();
 			$(testPaper.className).find(".subjectRooter").find("#stepState")
 					.slider({
 						min : 1,
