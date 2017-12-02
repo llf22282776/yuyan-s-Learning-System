@@ -1084,7 +1084,7 @@
 					.prop("checked", true);
 			radiosEle.find(
 					".paperChooseRadio[index='" + subject.answerIndex + "']")
-					.closest(".row").find("strong").css("color", "#e74c3c");
+					.closest(".row").find("strong").css("color", "#2ecc71");
 
 		}
 		//所有都不可选取
