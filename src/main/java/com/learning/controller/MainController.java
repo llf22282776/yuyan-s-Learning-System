@@ -399,16 +399,14 @@ public class MainController {
         if(StringUtil.isBlank(req.getParameter("pid") )  ){
             
             return "redirect:/main";
-        
-        
         }
        try {
            setUsername(req);
            int pid = Integer.parseInt(req.getParameter("pid"));
            PaperMix paperMix = paperServiceImp.getUserDonePaper(pid,(User)req.getSession().getAttribute("user"));
-           req.setAttribute("paper", paperMix);
+           req.setAttribute("pid", pid);
            req.setAttribute("user", (User)req.getSession().getAttribute("user"));
-           req.setAttribute("paperJson", JSONObject.toJSONString(paperMix));
+          
            return "paper/checkDetailPage";
     } catch (Exception e) {
         // TODO: handle exception
@@ -421,9 +419,37 @@ public class MainController {
         req.setAttribute("paperJson", JSONObject.toJSONString(paperMix));
         return "paper/checkDetailPage";
      }
-       
-
     }
+    
+    /**
+     * 
+     * 此接口用于获取做过试卷的json对象
+     * 
+     * */
+    @RequestMapping(value = "/getDonePaperJson", method = { RequestMethod.POST,
+            RequestMethod.GET })
+    @ResponseBody
+    public JSONObject getDonePaperJson(HttpServletRequest req,
+            HttpServletResponse res) {
+
+        PaperMix paperMix = null;
+        try {
+            // 1.获取pid uid
+
+            int pid = Integer.parseInt(req.getParameter("pid"));
+            paperMix = paperServiceImp.getUserDonePaper(pid,(User)req.getSession().getAttribute("user"));
+        } catch (Exception e) {
+            paperMix = new PaperMix();
+            paperMix.setResult(false);
+            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+
+            // TODO: handle exception
+        }
+        return JSONObject.parseObject(JSONObject.toJSONString(paperMix));
+    }
+    
+    
     /**
      * 
      * 此接口用于提交试卷

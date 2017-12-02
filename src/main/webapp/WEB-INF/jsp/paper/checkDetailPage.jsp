@@ -116,9 +116,8 @@
  <script src="${pageContext.request.contextPath}/assets/js/application.js"></script>
 <script>
 	var testPaper = {
-		isStarted : false,//判断是否开始
-		paper :  JSON
-	.parse('${paperJson}'),//试卷保存在这个对象里面
+		isStarted : false,//判断是否开始 
+		paper : {},
 		startTime : "",//答卷开始时间
 		endTime : "",//答卷结束时间
 		subjectsLength : 0, //试卷总长度
@@ -130,24 +129,46 @@
 	$(document)
 			.ready(
 					function() {
-						$('.userSelecter').change(function(e) {
-							selectChangeEvent($(this),e);
+						
+						$.ajax({
+								url : '${pageContext.request.contextPath}/getDonePaperJson',
+								type : 'POST',
+								data:{
+									pid:${pid},
+								},
+								dataType : "JSON",
+								async : false,
+								success:function(data){
+								testPaper = {
+										isStarted : false,//判断是否开始 
+										paper : data,
+										startTime : "",//答卷开始时间
+										endTime : "",//答卷结束时间
+										subjectsLength : 0, //试卷总长度
+										nowSubjectIndex : 0,//现在是第几题
+										paperType : 0,//-1 答题形式 0查看形式  （答完题后可以查看）
+										nowUserIndex : 0,//从o开始
 
-						});
-						//组织题目
-						if (testPaper.paper.result == false
-								|| testPaper.paper.result == "false") {
-							swal("", "拉取试卷失败，请联系管理员", "error")
+									};
+								initCheck();
+								},
+								error:function(){
+									swal("", "拉取试卷失败，请联系管理员", "error")
 									.then(
 											function() {
 												location.href = '${pageContext.request.contextPath}/main';
 
 											})
-						} else {
-
-							initPaper(".subjectDiv", 0, testPaper.paper);
-
-						}
+									
+									
+								}
+							
+						})
+						
+						
+						
+						
+					
 
 					});
 
@@ -157,6 +178,30 @@
 
 	};
 
+	function initCheck(){
+		
+		$('.userSelecter').change(function(e) {
+			selectChangeEvent($(this),e);
+
+		});
+		//组织题目
+		if (testPaper.paper.result == false
+				|| testPaper.paper.result == "false") {
+			swal("", "拉取试卷失败，请联系管理员", "error")
+					.then(
+							function() {
+								location.href = '${pageContext.request.contextPath}/main';
+
+							})
+		} else {
+
+			initPaper(".subjectDiv", 0, testPaper.paper);
+
+		}
+		
+		
+	}
+	
 	function selectChangeEvent(thisEle,e) {
 		//下拉框切换事件
 		//切换用户
@@ -1091,6 +1136,7 @@
 
 		//重新设置进度条
 		if (testPaper.paper.subjects.length <= 1) {
+			$(testPaper.className).find(".subjectRooter").find("#stepState").empty();
 			$(testPaper.className).find(".subjectRooter").find("#stepState")
 					.slider({
 						min : 1,
@@ -1106,6 +1152,7 @@
 							$(testPaper.className).find(".subjectRooter").find(
 									"#stepState").slider('option').max);
 		} else {
+			$(testPaper.className).find(".subjectRooter").find("#stepState").empty();
 			$(testPaper.className).find(".subjectRooter").find("#stepState")
 					.slider({
 						min : 1,
