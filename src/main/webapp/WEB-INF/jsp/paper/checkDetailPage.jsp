@@ -600,7 +600,7 @@
 	function createElement(className) {
 		//清空这个类下的内容，然后创建
 		$(className).empty();
-		var contentEle = $('<div class="row subjectHeader"><div class="col-xs-1"></div><div class="col-xs-10"></div></div><div class="row subjectContent"></div><div class="row subjectRooter"><div class="scoreDiv"></div><div class="row stepState" id="stepState"></div><div class="row nextButtonDiv"><div class="col-md-6"><a id="preSubjectButton" class=""><span class="iconSubject fui-arrow-left"aria-hidden="true"></span></a></div><div class="col-md-6"><a id="papertestSubmitButton" class=""><span class="iconSubject fui-arrow-right"aria-hidden="true"></span> </a></div></div></div>');
+		var contentEle = $('<div class="row subjectHeader"><div class="col-xs-1"></div><div class="col-xs-10"></div></div><div class="row subjectContent"></div><div class="row subjectRooter"><div class="scoreDiv"></div><div class="row stepState" id="stepState"></div><div class="row nextButtonDiv"><div class="col-xs-6"><a id="preSubjectButton" class=""><span class="iconSubject fui-arrow-left"aria-hidden="true"></span></a></div><div class="col-xs-6"><a id="papertestSubmitButton" class=""><span class="iconSubject fui-arrow-right"aria-hidden="true"></span> </a></div></div></div>');
 
 		$(className).append(contentEle);//添加进来
 		//给按钮添加事件
