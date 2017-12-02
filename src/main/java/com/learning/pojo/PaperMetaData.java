@@ -119,10 +119,10 @@ public class PaperMetaData implements Serializable{
     public int getTimeRank(long l){
         int rank=0;
         LOGGER.debug("scores's size:"+this.scores.size()+" times's size:"+this.times.size());
-        for(int i=this.scores.size()-1,k=0;i>=0;i-- ,k++){
+        for(int i=0;i<this.times.size();i++){
             
             if(this.times.get(i) == l){
-                rank=k+1;
+                rank=i+1;
                 break;
             }
         }

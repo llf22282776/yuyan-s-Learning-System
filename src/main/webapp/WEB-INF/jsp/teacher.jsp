@@ -121,14 +121,14 @@
 					</div>
 					<div class="submitPaperButton  row pbl">
 						<!-- 有个好看的提交按钮 -->
-						<div class="col-md-4" style="text-align: center;">
+						<div class="col-xs-4" style="text-align: center;">
 							<a title="帮助" id="subjectHelpButton" class="subIconLink"
 								data-toggle="tooltip" href="#"> <span
 								class="fui-bubble iconSubject" style="color: #cccccc"></span>
 							</a>
 						</div>
-						<div class="col-md-4" style="text-align: center"></div>
-						<div class="col-md-4" style="text-align: center">
+						<div class="col-xs-4" style="text-align: center"></div>
+						<div class="col-xs-4" style="text-align: center">
 							<a title="提交" id="subjectSubmitButton" class="subIconLink"
 								data-toggle="tooltip" href="#"> <span
 								class="fui-check-circle iconSubject"></span>

@@ -327,7 +327,7 @@ function radioChooseClick(thisEle){
 		//让刚刚添加的题在面板上显示出来
 		//一个卡片的形式
 		//创建一个div
-		var subjectCard= $("<div class='row subjectCard'><div class='col-md-1 subjectCardIndex'></div><div class='col-md-1 subjectCardIcon'></div><div class='col-md-9 subjectCardTitle'></div><div class='col-md-1 subjectCardDelete'></div><div>");
+		var subjectCard= $("<div class='row subjectCard'><div class='col-xs-1 subjectCardIndex'></div><div class='col-xs-1 subjectCardIcon'></div><div class='col-xs-9 subjectCardTitle'></div><div class='col-xs-1 subjectCardDelete'></div><div>");
 		$(".overviewSubjectDiv").eq(0).append(subjectCard);
 		
 		

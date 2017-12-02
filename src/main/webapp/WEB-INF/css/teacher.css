@@ -9,11 +9,11 @@
 }
 
 .iconSubject {
-	font-size: 56px;
+	font-size: 8vmin;
 }
 
 .eleIcon {
-	font-size: 30px;
+	font-size: 4vmin;
 }
 
 .addIcon {
@@ -79,7 +79,7 @@
 }
 
 .subIconLink {
-	font-size: 56px;
+	font-size: 5vmin;
 }
 
 .buttomLineDiv {
@@ -134,8 +134,8 @@ input.fileInputNoView[type="file"] {
 	background-color: #f9f9f9;
 	border-radius: 10px;
 	height: 100px;
-	padding-top: 20px;
-	font-size: 30px;
+	padding-top: 3%;
+	font-size: 4vmin;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	text-align: center;
