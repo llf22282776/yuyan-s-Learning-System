@@ -193,61 +193,68 @@ public class PaperServiceImp implements PaperService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, timeout = 1, isolation = Isolation.DEFAULT)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class, timeout = 1, isolation = Isolation.DEFAULT)
     public boolean saveTestPaperResult(PaperMix paperMix,String uid) throws Exception {
         // TODO Auto-generated method stub
         //1.插u_p
         //2.插U-s
         //3.插u-s-l或u-s-c
-        int totalScore=0;
-        String startTime = null;
-        String endTime =null;
-        for(int i=0;i<paperMix.getSubjects().size();i++){
-            //遍历每一个题，计算分数
-            SubjectMix subjectMix=paperMix.getSubjects().get(i);
-            if(subjectMix.getType()== ConstantUtil.SUBJECT_LINE){
-                //计算然后插入表里面
-                List<User_subject_line> user_subject_lines=subjetServiceImp.countLineSubjet(subjectMix, uid,paperMix.getPid());
-                subjetServiceImp.insertUser_subject_lines(user_subject_lines);
-              
-            }else if(subjectMix.getType()== ConstantUtil.SUBJECT_CHOOSE){
-                List<User_subject_choose> user_subject_chooses= subjetServiceImp.countChooseSubjet(subjectMix, uid,paperMix.getPid());
-                subjetServiceImp.insertUser_subject_chooses(user_subject_chooses);
+       try {
+           int totalScore=0;
+           String startTime = null;
+           String endTime =null;
+           for(int i=0;i<paperMix.getSubjects().size();i++){
+               //遍历每一个题，计算分数
+               SubjectMix subjectMix=paperMix.getSubjects().get(i);
+               if(subjectMix.getType()== ConstantUtil.SUBJECT_LINE){
+                   //计算然后插入表里面
+                   List<User_subject_line> user_subject_lines=subjetServiceImp.countLineSubjet(subjectMix, uid,paperMix.getPid());
+                   subjetServiceImp.insertUser_subject_lines(user_subject_lines);
+                 
+               }else if(subjectMix.getType()== ConstantUtil.SUBJECT_CHOOSE){
+                   List<User_subject_choose> user_subject_chooses= subjetServiceImp.countChooseSubjet(subjectMix, uid,paperMix.getPid());
+                   subjetServiceImp.insertUser_subject_chooses(user_subject_chooses);
+                   
+               }
+               
+              User_subject user_subject= subjetServiceImp.countSubject(subjectMix, uid,paperMix.getPid());
+              totalScore+=user_subject.getScore();
                 
-            }
-            
-           User_subject user_subject= subjetServiceImp.countSubject(subjectMix, uid,paperMix.getPid());
-           totalScore+=user_subject.getScore();
-             
-           if(i == 0){
-               startTime = subjectMix.getStartTime();
-               
+              if(i == 0){
+                  startTime = subjectMix.getStartTime();
+                  
+                  
+              }
+              if(i == paperMix.getSubjects().size()-1){
+                  endTime = subjectMix.getEndTime();
+                  
+              }
+              int num= subjectDao.insertUser_subject(user_subject);
+              if(num<0){
+                  throw new Exception("User_subject insert failed");
+                
+              }
                
            }
-           if(i == paperMix.getSubjects().size()-1){
-               endTime = subjectMix.getEndTime();
-               
-           }
-           int num= subjectDao.insertUser_subject(user_subject);
+           System.out.println("startTime:"+startTime+" "+ "endTime:"+endTime);
+           
+       
+           User_paper user_paper=this.countPaper(paperMix, uid);
+           user_paper.setStartTime(Timestamp.valueOf(startTime));
+           user_paper.setEndTime(Timestamp.valueOf(endTime));
+           user_paper.setTotalScore(totalScore);//总分已经变成用户的分数了
+           int num= paperDao.insertUser_paper(user_paper);
            if(num<0){
-               throw new Exception("User_subject insert failed");
-             
-           }
+               throw new Exception("user_paper insert failed");
             
-        }
-        System.out.println("startTime:"+startTime+" "+ "endTime:"+endTime);
-        
-    
-        User_paper user_paper=this.countPaper(paperMix, uid);
-        user_paper.setStartTime(Timestamp.valueOf(startTime));
-        user_paper.setEndTime(Timestamp.valueOf(endTime));
-        user_paper.setTotalScore(totalScore);//总分已经变成用户的分数了
-        int num= paperDao.insertUser_paper(user_paper);
-        if(num<0){
-            throw new Exception("user_paper insert failed");
-         
-        }
-        return true;
+           }
+           return true;
+    } catch (Exception e) {
+        // TODO: handle exception
+        e.printStackTrace();
+        LOGGER.error(e.getMessage());
+        throw new RuntimeException(e.getMessage());
+    }
     }
 
     @Override

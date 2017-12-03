@@ -125,58 +125,65 @@ public class SubjectServiceImp implements SubjectService {
      * 
      * */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, timeout = 1, isolation = Isolation.DEFAULT)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class, timeout = 1, isolation = Isolation.DEFAULT)
     public boolean insertSubject(SubjectFromJs subjectFromJs, int type) {
-        // TODO Auto-generated method stub
-        // 先在subject里面插一条记录
-        Subject subject = new Subject();
-        subject.setStitle(subjectFromJs.getTitle());
-        subject.setStype(type);
-        subject.setTotalScore(subjectFromJs.getTotalScore());
-        //
-        subjectDao.insertSubject(subject);
-        int sid = subject.getSid();
-        System.out.println("sid:" + sid + " pid:" + subjectFromJs.getPid());
-        int num = subjectDao.insertS_P(sid, subjectFromJs.getPid());
-        if (num < 0)
-            return false;
-        // 判断类型
-        if (type == ConstantUtil.SUBJECT_LINE) {
-            // 生成随机的顺序
+        try {
+            // TODO Auto-generated method stub
+            // 先在subject里面插一条记录
+            Subject subject = new Subject();
+            subject.setStitle(subjectFromJs.getTitle());
+            subject.setStype(type);
+            subject.setTotalScore(subjectFromJs.getTotalScore());
+            //
+            subjectDao.insertSubject(subject);
+            int sid = subject.getSid();
+            System.out.println("sid:" + sid + " pid:" + subjectFromJs.getPid());
+            int num = subjectDao.insertS_P(sid, subjectFromJs.getPid());
+            if (num < 0)
+                return false;
+            // 判断类型
+            if (type == ConstantUtil.SUBJECT_LINE) {
+                // 生成随机的顺序
 
-            int[] randomNums = ConstantUtil.randomSeq(0, 3);// [0,3]
-            System.out.println("randomNums.length:" + randomNums.length);
-            for (int i = 0; i < subjectFromJs.getAudioFiles().size(); i++) {
-                LineElement line = new LineElement();
-                line.setPic(subjectFromJs.getPicUrl().elementAt(i));
-                line.setVideo(subjectFromJs.getVideoUrl().elementAt(i));
-                line.setScore(subjectFromJs.getScores().elementAt(i));
-                line.setWord(subjectFromJs.getWords().elementAt(i));
-                elementDao.insertIntoLine(line);
-                int lid = line.getLid();
-                // 插入关联表
-                elementDao.insertIntoS_Line(sid, lid, randomNums[i]);
+                int[] randomNums = ConstantUtil.randomSeq(0, 3);// [0,3]
+                System.out.println("randomNums.length:" + randomNums.length);
+                for (int i = 0; i < subjectFromJs.getAudioFiles().size(); i++) {
+                    LineElement line = new LineElement();
+                    line.setPic(subjectFromJs.getPicUrl().elementAt(i));
+                    line.setVideo(subjectFromJs.getVideoUrl().elementAt(i));
+                    line.setScore(subjectFromJs.getScores().elementAt(i));
+                    line.setWord(subjectFromJs.getWords().elementAt(i));
+                    elementDao.insertIntoLine(line);
+                    int lid = line.getLid();
+                    // 插入关联表
+                    elementDao.insertIntoS_Line(sid, lid, randomNums[i]);
+
+                }
+            } else if (type == ConstantUtil.SUBJECT_CHOOSE) {
+                for (int i = 0; i < subjectFromJs.getTexts().size(); i++) {
+                    ChooseElement cElement = new ChooseElement();
+                    cElement.setText(subjectFromJs.getTexts().elementAt(i));
+                    elementDao.insertIntoChoose(cElement);
+                    int cid = cElement.getCid();
+                    // 插入关联表
+                    elementDao.insertIntoS_choose(sid, cid,
+                            subjectFromJs.getRightIndex());
+
+                }
+
+            } else {
+                // 其他题型，暂时不做
+                return false;
 
             }
-        } else if (type == ConstantUtil.SUBJECT_CHOOSE) {
-            for (int i = 0; i < subjectFromJs.getTexts().size(); i++) {
-                ChooseElement cElement = new ChooseElement();
-                cElement.setText(subjectFromJs.getTexts().elementAt(i));
-                elementDao.insertIntoChoose(cElement);
-                int cid = cElement.getCid();
-                // 插入关联表
-                elementDao.insertIntoS_choose(sid, cid,
-                        subjectFromJs.getRightIndex());
-
-            }
-
-        } else {
-            // 其他题型，暂时不做
-            return false;
-
+            // 然后在s-line里面插记录
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
-        // 然后在s-line里面插记录
-        return true;
     }
 
     @Override
@@ -273,7 +280,7 @@ public class SubjectServiceImp implements SubjectService {
                     user_subject.setScore(user_subject.getScore()
                             + subjectMix.getScores().get(i));
 
-                } else { 
+                } else {
 
                     isWrong = true;
                 }
@@ -309,25 +316,42 @@ public class SubjectServiceImp implements SubjectService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, timeout = 1, isolation = Isolation.DEFAULT)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class, timeout = 1, isolation = Isolation.DEFAULT)
     public void insertUser_subject_lines(List<User_subject_line> list) {
         // TODO Auto-generated method stub
         // 现在需要调dao层写入
-        for (int i = 0; i < list.size(); i++) {
-            subjectDao.insertUser_subject_line(list.get(i));
+        try {
+            for (int i = 0; i < list.size(); i++) {
+                subjectDao.insertUser_subject_line(list.get(i));
 
-        }
+            }
+      } catch (Exception e) {
+          // TODO: handle exception
+          LOGGER.error(e.getMessage());
+          e.printStackTrace();
+          throw new RuntimeException();
+      }
 
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, timeout = 1, isolation = Isolation.DEFAULT)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class, timeout = 1, isolation = Isolation.DEFAULT)
     public void insertUser_subject_chooses(List<User_subject_choose> list) {
         // TODO Auto-generated method stub
-        for (int i = 0; i < list.size(); i++) {
-            subjectDao.insertUser_subject_choose(list.get(i));
+        try {
+            for (int i = 0; i < list.size(); i++) {
+                subjectDao.insertUser_subject_choose(list.get(i));
 
-        }
+            }
+      } catch (Exception e) {
+          // TODO: handle exception
+          LOGGER.error(e.getMessage());
+          e.printStackTrace();
+          throw new RuntimeException();
+      }
+        
+        
+      
     }
 
     @Override
@@ -342,15 +366,16 @@ public class SubjectServiceImp implements SubjectService {
         List<UserMix> userMixs = new ArrayList<>();
         List<SubjectMetaData> subjectMetaDatas = new ArrayList<>();
         // TODO Auto-generated method stub
-  
+
         boolean subjectMetaDataFinish = false;
 
         for (User_paper user_paper : upList) {
             // 只可能有一个卷子
             String uid = user_paper.getUid();
-            if(ConstantUtil.STUDENT == user.getPosition()){
-                if(uid.equals(user.getUid()) ==false )continue;//避免学生也能获取其他人的
-                
+            if (ConstantUtil.STUDENT == user.getPosition()) {
+                if (uid.equals(user.getUid()) == false)
+                    continue;// 避免学生也能获取其他人的
+
             }
             int pid = user_paper.getPid();
             UserMix userMix = new UserMix();
@@ -359,23 +384,23 @@ public class SubjectServiceImp implements SubjectService {
 
             User_subject[] user_subjects = subjectDao
                     .getUser_subjects(uid, pid);
-            int totalScore=0;
+            int totalScore = 0;
             for (User_subject user_subject : user_subjects) {
                 // sid 也都只出现一次
                 int sid = user_subject.getSid();
-                
+
                 SubjectMetaData subjectMetaData = new SubjectMetaData();
                 if (subjectMetaDataFinish == false) {
                     // 只用做一次就行了
                     User_subject[] user_subjects2 = subjectDao
-                            .getUser_subjectsBysid_pid(sid, pid);//横向，取所有的
+                            .getUser_subjectsBysid_pid(sid, pid);// 横向，取所有的
                     subjectMetaData.countAllTimes(user_subjects2);// 每个用户在这个地方的做题情况
                     subjectMetaDatas.add(subjectMetaData);// 统计一下
 
                 }
                 SubjectMix subjectMix = subjectDao.getSubject(uid, pid, sid);// 特定用户在这个卷子上的答题情况
                 // 剩下的用户选的和题本身答案在下面
-                totalScore+=subjectMix.getScore();
+                totalScore += subjectMix.getScore();
                 if (subjectMix.getType() == ConstantUtil.SUBJECT_LINE) {
                     setSubjectMixByU_sAndEle(subjectMix, user_subject,
                             subjectMix.getType());
@@ -385,20 +410,21 @@ public class SubjectServiceImp implements SubjectService {
                             subjectMix.getType());
 
                 }
-                subjectMix.setTotalSecond_num(Long.parseLong(subjectMix.getTotalSecond()));
-                subjectMix.setTotalSecond(ConstantUtil.formatTime(Long.parseLong(subjectMix.getTotalSecond())));
-                
+                subjectMix.setTotalSecond_num(Long.parseLong(subjectMix
+                        .getTotalSecond()));
+                subjectMix.setTotalSecond(ConstantUtil.formatTime(Long
+                        .parseLong(subjectMix.getTotalSecond())));
+
                 subjectMixs.add(subjectMix);
             }
-            subjectMetaDataFinish = true;//下次循环就不用做了
-            //设置userMix的各种信息
+            subjectMetaDataFinish = true;// 下次循环就不用做了
+            // 设置userMix的各种信息
             userMix.setSubjects(subjectMixs);
             userMix.setTotalSecond(ConstantUtil.formatTime(ConstantUtil
                     .getTimeBetween(user_paper.getStartTime(),
                             user_paper.getEndTime())));
-            userMix.setTotalSecond_num(ConstantUtil
-                    .getTimeBetween(user_paper.getStartTime(),
-                            user_paper.getEndTime()));
+            userMix.setTotalSecond_num(ConstantUtil.getTimeBetween(
+                    user_paper.getStartTime(), user_paper.getEndTime()));
             userMix.setScoreRank(p.getScoreRank(user_paper.getTotalScore()));
             userMix.setTimeRank(p.getTimeRank(ConstantUtil.getTimeBetween(
                     user_paper.getStartTime(), user_paper.getEndTime())));
