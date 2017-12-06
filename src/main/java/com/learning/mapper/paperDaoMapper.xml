@@ -93,8 +93,7 @@
 				up.uid = u.uid
 			</otherwise>
 		</choose>
-		<if test="title == null and date == null"> AND ABS(TO_DAYS( NOW( ) ) - TO_DAYS(up.endTime) ) &lt;=2
-		</if>
+		
 		<if test="title != null and date == null"> AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%'))</if>
 
 		<if test="title == null and date != null"> AND ABS(TO_DAYS( #{date} ) - TO_DAYS(up.endTime)) &lt;=2

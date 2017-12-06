@@ -135,6 +135,9 @@
 							</a>
 						</div>
 					</div>
+				<a id="dbPaperModalButton" class="subIconLink" > <span
+				class="fui-trash iconSubject cancelIcon"></span>
+				</a>
 				</div>
 				<div style="display: none" class="container sDiv subjectContentDiv">
 					<div class="subjectHeaderDiv row pbl">
@@ -305,9 +308,7 @@
 					</div>
 				</div>
 				
-					<a id="dbPaperModalButton" class="subIconLink" > <span
-						class="fui-trash iconSubject cancelIcon"></span>
-					</a>
+
 
 
 			</div>
