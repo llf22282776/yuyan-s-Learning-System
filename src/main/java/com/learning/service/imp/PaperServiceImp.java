@@ -280,7 +280,7 @@ public class PaperServiceImp implements PaperService {
     }
 
     @Override
-    public List<Paper> getQueryPapers(PaperQueryState paperQueryState, User user) {
+    public List<Paper> getQueryPapers(int allPage,PaperQueryState paperQueryState, User user) {
         // TODO Auto-generated method stub
         List<Paper> papers=new ArrayList<>();
         Map<String, Object> sMap=new HashMap<String, Object>();
@@ -300,6 +300,13 @@ public class PaperServiceImp implements PaperService {
         }else {
             
             sMap.put("teacherId", user.getUid());
+            
+        }
+        if(allPage>0){
+            //总页数大于零
+            sMap.put("page", Integer.parseInt(paperQueryState.page));
+            sMap.put("pageNum", ConstantUtil.PAGE_NUM);
+            sMap.put("startNum", (Integer.parseInt(paperQueryState.page)-1)*ConstantUtil.PAGE_NUM);
             
         }
         Paper[] papers2= paperDao.getQueryPapersWithParms(sMap);
@@ -367,6 +374,40 @@ public class PaperServiceImp implements PaperService {
             papers.add(user_paper);
         }
         return papers;
+    }
+
+    @Override
+    public int getAllQueryPage(  Map<String, Object> sMap,PaperQueryState paperQueryState,User user, int pageNum) {
+        // TODO Auto-generated method stub
+
+        int records= paperDao.getQueryPaperNumsWithParms(sMap);
+        System.out.println("recoreds:"+records+" pageNum:"+pageNum);
+        return records/pageNum+(records%pageNum>0?1:0);
+    }
+
+    @Override
+    public int getAllQueryPage(PaperQueryState paperQueryState, User user, int pageNum) {
+        // TODO Auto-generated method stub
+        Map<String, Object> sMap=new HashMap<String, Object>();
+        sMap.put("uid",user.getUid() );
+        if(StringUtil.isBlank(paperQueryState.title) == false){
+            sMap.put("title",paperQueryState.title );
+            
+        }
+        if(StringUtil.isBlank(paperQueryState.date) == false){
+            sMap.put("date",paperQueryState.date );
+            
+        }
+        if(user.getPosition() == ConstantUtil.STUDENT){
+            
+            sMap.put("studentId", user.getUid());
+            
+        }else {
+            
+            sMap.put("teacherId", user.getUid());
+            
+        }
+        return getAllQueryPage(sMap, paperQueryState, user, pageNum);
     }
     
     

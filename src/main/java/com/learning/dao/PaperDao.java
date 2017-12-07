@@ -40,4 +40,14 @@ public interface PaperDao {
     public int deleteOnePaperStudentNotDone(int pid);
     
     public User[] getUsersMsgByPid(int pid);
+    
+    /**
+     * 
+     * 获取满足查询条件的所有卷子数量
+     * 
+     * */
+    public int getQueryPaperNumsWithParms(Map<String, Object> map);
+    
+    
+    
 }

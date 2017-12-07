@@ -497,8 +497,33 @@ public class MainController {
         if(paper ==null){
             return "redirect:/main";
         }else {
-            List<Paper> list=paperServiceImp.getQueryPapers(paper, getUser(req));
+            int allPage= paperServiceImp.getAllQueryPage(paper,getUser(req), ConstantUtil.PAGE_NUM);
+            System.out.println("allPage:"+allPage);
+            try {
+                
+                int page=Integer.parseInt(paper.page);
+                if(allPage>0){
+                    if(page<1 || page > allPage){
+                        //不在范围内
+                      paper.page="1";//放在首页
+                   }
+                }else {
+                    //总页数没有
+                    paper.page="-1";
+                    
+                }
+            } catch (Exception e) {
+                // TODO: handle exceptione
+                e.printStackTrace();
+                LOGGER.error(e.getMessage());
+                paper.page="1";//没有带页参数,那就默认第一页
+            }
+            List<Paper> list=paperServiceImp.getQueryPapers(allPage,paper, getUser(req));
             req.setAttribute("paperList", list);
+            req.setAttribute("allPage",allPage);
+            req.setAttribute("page", Integer.parseInt(paper.page));
+            req.setAttribute("paperState", paper);
+           
             
         }
         

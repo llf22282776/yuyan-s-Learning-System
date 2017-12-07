@@ -29,6 +29,7 @@ public class ConstantUtil {
     public static final String AUDIO_PATH="audio/";
     public static final String WEBM_POSTFIX=".webm";
     public static final String TIME_STR = "%d分 %d秒";
+    public static final int PAGE_NUM=15;//查询时每页的页数
     public static String formatTime(long ms) {
 
         int ss = 1000;

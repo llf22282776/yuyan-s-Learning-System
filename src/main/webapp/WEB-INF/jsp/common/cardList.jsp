@@ -28,3 +28,30 @@
 						
 						   
 </c:forEach>
+	<c:if test="${allPage !=null && allPage >=1}">
+		<ul class="pagination">
+			<li class="previous"><a   class="qPageItem qPagePre fui-arrow-left"></a></li>
+			<!--中间这里展示-->
+			<c:forEach
+					begin="0"
+					end="${allPage-1}"
+					varStatus="status"
+			>
+				<c:choose>
+					<c:when test="${page == status.index+1}">
+						<!--需要设置active-->
+						<li class="active nowActive"><a class=" qPageItem" date="${paperState.date}" title="${paperState.title}" allPage="${allPage}" page="${status.index +1}" >${status.index +1}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a class="qPageItem" date="${paperState.date}" title="${paperState.title}" allPage="${allPage}" page="${status.index +1}" >${status.index +1}</a></li>
+
+					</c:otherwise>
+				</c:choose>
+
+			</c:forEach>
+			<li class="next"><a  class="qPageItem qPageNext fui-arrow-right"></a></li>
+		</ul>
+	</c:if>
+
+
+

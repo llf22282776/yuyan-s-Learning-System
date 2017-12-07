@@ -65,7 +65,7 @@
 
 	</select>
 	<select id="getQueryPapersWithParms" resultType="com.learning.pojo.Paper">
-
+		
 
 		<choose>
 			<when test="teacherId != null">
@@ -103,9 +103,42 @@
 			ABS(TO_DAYS( #{date} ) - TO_DAYS(up.endTime)) &lt;=2 </if>
 		<if test="studentId != null "> AND up.uid = #{studentId}</if>
 		<if test="teacherId != null ">group by p.pid</if>
-		order by p.pid desc;
-
+		order by p.pid desc
+		<if test="page != null and page != -1">limit #{startNum},#{pageNum}</if>
+		;
 	</select>
+	
+	<select id="getQueryPaperNumsWithParms" resultType="int">
+	select count(*) from (
+		<choose>
+			<when test="teacherId != null">
+				SELECT
+				p.pid pid
+				FROM paper p,user_paper up ,user u WHERE
+				p.pid = up.pid AND
+				up.uid = u.uid
+			</when>
+			<otherwise>
+				SELECT
+				p.pid pid
+				FROM paper p,user_paper up ,user u WHERE
+				p.pid = up.pid AND
+				up.uid = u.uid
+			</otherwise>
+		</choose>
+		 
+		<if test="title != null and date == null"> AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%'))</if>
+
+		<if test="title == null and date != null"> AND ABS(TO_DAYS( #{date} ) - TO_DAYS(up.endTime)) &lt;=2
+		</if>
+
+		<if test="title != null and date != null">AND p.pname LIKE CONCAT('%',CONCAT(#{title},'%')) AND
+			ABS(TO_DAYS( #{date} ) - TO_DAYS(up.endTime)) &lt;=2 </if>
+		<if test="studentId != null "> AND up.uid = #{studentId}</if>
+	    <if test="teacherId != null ">group by p.pid</if>
+		) as result;
+	</select>
+	
 	<select id="getUser_papersByPid" resultType="com.learning.pojo.User_paper">
 		SELECT * FROM
 		user_paper

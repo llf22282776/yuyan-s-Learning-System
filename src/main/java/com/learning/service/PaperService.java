@@ -1,6 +1,7 @@
 package com.learning.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -80,8 +81,9 @@ public interface PaperService {
      * 获取做过的试卷列表
      * 学生返回自己的
      * 老师返回做过的"只要做过就行"
+     * @param allPage 
      * */
-     public List<Paper> getQueryPapers(PaperQueryState paperQueryState,User user);
+     public List<Paper> getQueryPapers(int allPage, PaperQueryState paperQueryState,User user);
     
     /**
      * 
@@ -111,5 +113,18 @@ public interface PaperService {
      * */
     public List<User> getUserPapersWithPid(int pid);
     
+    /**
+     * 
+     * 获取该查询条件的总页数
+     * 
+     * */
+    int getAllQueryPage(Map<String      , Object> sMap,PaperQueryState pState,User user,int pageNum);
+    
+    /**
+     * 
+     * 获取该查询条件的总页数
+     * 
+     * */
+    int getAllQueryPage(PaperQueryState pState,User user,int pageNum);
     
 }

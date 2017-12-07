@@ -5,7 +5,8 @@
 
 var queryState={
 		date:"",
-        title:""
+        title:"",
+        page:""
 		
 		
 		
@@ -65,7 +66,8 @@ function submitClick(thisEle){
             clearPaperListAreaAndAdd(data);
         	//2.给card挂事件
             bindCardEvent();
-        	
+        	//3.清理查询条件
+            clearQueryState();
         },
         error:function(){
         	swal("","网络错误，无法获得列表","error");
@@ -92,6 +94,23 @@ function queryInputChanging(thisEle){
 
 
 }
+
+/**
+ * 清理查询条件
+ *
+ * */
+function clearQueryState(){
+    queryState={
+        date:"",
+        title:"",
+        page:""
+
+
+
+    };
+
+}
+
 /**
  * 时间选择器被单击 
  * 
@@ -137,9 +156,68 @@ function bindCardEvent(){
 
 
     })
-	
-	
+	//现在要绑定翻页事件
+	if($("#queryContainer").find(".pagination").length>0){
+        //有翻页的组件
+        $("#queryContainer").find(".pagination").find(".qPageItem").unbind('click');
+        $("#queryContainer").find(".pagination").find(".qPageItem").click(function(){
+             if( pageItemClick($(this))){
+                 $("#querySubmitButton").click();
+             }
+        })
+
+
+    }
 }
+
+/**
+ * 翻页选项被单击事件
+ *
+ * */
+function pageItemClick(thisEle){
+    //如果是前翻页和后翻页
+    if(thisEle.hasClass("qPagePre")){
+        //如果现在的页数就是1，返回就行
+        var aEle=thisEle.closest("ul").find("li.nowActive").eq(0).find("a").eq(0);
+        if(parseInt(aEle.attr("page")) <= 1){
+            return false;
+        }else {
+            queryState.date = aEle.attr("date");
+            queryState.title=aEle.attr("title");
+            queryState.page=parseInt(aEle.attr("page"))-1;
+
+        }
+
+    }else if(thisEle.hasClass("qPageNext")){
+        //后翻页
+        var aEle=thisEle.closest("ul").find("li.nowActive").eq(0).find("a").eq(0);
+        if(parseInt(aEle.attr("page")) >= parseInt(aEle.attr("allPage"))){
+            return false;
+        }else {
+            queryState.date = aEle.attr("date");
+            queryState.title=aEle.attr("title");
+            queryState.page=parseInt(aEle.attr("page"))+1;
+
+
+
+        }
+
+    }else if(thisEle.closest("li").hasClass("nowActive")){
+        //本也直接返回
+            return false;
+    }else {
+        //其他页面
+        queryState.date = thisEle.attr("date");
+        queryState.title=thisEle.attr("title");
+        queryState.page=parseInt(thisEle.attr("page"));
+
+
+    }
+    //点击下查询按钮
+    return true;
+    
+}
+
 function queryPaperCardClick(thisEle){
     swal({
         title : '提示',
@@ -149,7 +227,7 @@ function queryPaperCardClick(thisEle){
         confirmButtonText : '是的',
         cancelButtonText : '取消',
     }).then(function(){
-       // location.href=BasePath+"/checkPaperDetail?"+"pid="+thisEle.find(".paperPidDiv").text();
+
     	$('.tempA').remove();
     	var url=BasePath+"/checkPaperDetail?"+"pid="+thisEle.find(".paperPidDiv").text();
 		var tempA=$("<a style='display:none' class='tempA' target='_blank' href='"+url+"' >asd<a/>");
