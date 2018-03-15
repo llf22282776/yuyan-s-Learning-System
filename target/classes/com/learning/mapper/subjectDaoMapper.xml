@@ -126,9 +126,6 @@
 		s.totalScore totalScore,
 		us.score score,
 		us.totalSecond totalSecond
-		
-		
-		
 		FROM subject s,user_paper_subject us WHERE 
 		s.sid = us .sid AND 
 		us.uid = #{0} AND

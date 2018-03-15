@@ -107,20 +107,17 @@
 		
 	</select>
 		<select id="getChooseElementMixs" resultMap="elementMixMap">
-
-		SELECT
-
+				SELECT
 			c.cid cid,
 			c.text text,
-			c.chooseId chooseId,
-			c.answerId answerId
+			uc.chooseId chooseId,
+			sc.answerId answerId
 		FROM user_paper_subject_choose uc,choose c,subject_choose sc WHERE
-			uc.cid = c.cid AND 
 			sc.sid = uc.sid AND 
 			sc.cid = c.cid AND
-			uc.uid =#{0} AND
-			uc.pid = #{1}AND
-			uc.sid = #{2} order by c.cid
+			uc.uid = #{0} AND
+			uc.pid = #{1} AND
+			uc.sid = #{2} order by c.cid;
 		
 	</select>
 
