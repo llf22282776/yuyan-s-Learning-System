@@ -407,7 +407,7 @@
 			</div>
 			<div style="display: block" class="jumbotron contentDiv tempDiv">
 				<div class="" style="text-align: center">
-					<h3>欢迎来带小可爱梁宇雁的在线课堂~</h3>
+					<h3>欢迎来在线课堂~</h3>
 					<h3>^_^</h3>
 					<h3></h3>
 				</div>
